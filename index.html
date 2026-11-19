@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NEng Eva — Student Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-cream: #f5f4ed;
+      --card-bg: #faf9f4;
+      --card-pure: #ffffff;
+      --teal-dark: #3e5b61;
+      --teal-hover: #2f474c;
+      --teal-mid: #678c93;
+      --teal-soft: #e3ecee;
+      --ochre: #dcd695;
+      --ochre-strong: #cfc776;
+      --ochre-soft: #f3f0d7;
+      --blue-ice: #d3dce0;
+      --text-main: #262e2b;
+      --text-muted: #626d69;
+      --border-line: #8c9692;
+      --border-soft: #d5d7ce;
+      --danger: #c93b2b;
+      --danger-soft: #fbeae8;
+      --success: #2f6f5e;
+      --success-soft: #e4f2ed;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-cream);
+      color: var(--text-main);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: clip;
+    }
+    .hidden { display: none !important; }
+
+    /* TOPBAR */
+    .topbar {
+      background: var(--card-bg);
+      border-bottom: 1.5px solid var(--border-line);
+      padding: 11px 18px;
+      position: sticky;
+      top: 0;
+      z-index: 30;
+    }
+    .topbar-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .brand { display: flex; align-items: center; gap: 11px; }
+    .brand-monogram {
+      width: 36px; height: 36px;
+      background: var(--teal-dark); color: #fff;
+      font-family: 'Lora', Georgia, serif; font-weight: 700; font-size: 15px;
+      display: grid; place-items: center;
+      border: 1.5px solid var(--text-main); flex-shrink: 0;
+    }
+    .editorial-title {
+      font-family: 'Lora', Georgia, serif; font-size: 20px; font-weight: 700;
+      color: var(--text-main); line-height: 1.15;
+    }
+    .editorial-title .accent-word { color: var(--teal-dark); }
+    .editorial-sub { font-size: 11.5px; color: var(--text-muted); }
+
+    /* CONTAINER & PANELS */
+    .container {
+      width: 100%; max-width: 960px; margin: 0 auto;
+      padding: 18px 16px 48px; flex: 1;
+    }
+    .panel-box {
+      background: var(--card-bg); border: 1px solid var(--border-line);
+      padding: 18px 20px; margin-bottom: 14px;
+    }
+    .panel-heading {
+      display: inline-flex; align-items: center;
+      font-size: 14.5px; font-weight: 800; color: var(--text-main);
+      padding-bottom: 4px; margin-bottom: 14px;
+      border-bottom: 1.5px solid var(--teal-dark);
+      position: relative; padding-right: 16px;
+    }
+    .panel-heading::after {
+      content: ''; position: absolute; right: -4px; bottom: -4.5px;
+      width: 6.5px; height: 6.5px; border-radius: 50%;
+      border: 1.5px solid var(--teal-dark); background: var(--card-bg);
+    }
+
+    /* BUTTONS & FORM CONTROLS */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      padding: 9px 14px; border-radius: 5px;
+      font-family: inherit; font-size: 13px; font-weight: 700;
+      border: 1px solid transparent; cursor: pointer; text-decoration: none;
+      transition: 0.15s; white-space: nowrap; -webkit-tap-highlight-color: transparent;
+    }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-primary { background: var(--teal-dark); color: #fff; border-color: var(--teal-dark); }
+    .btn-primary:hover:not(:disabled) { background: var(--teal-hover); }
+    .btn-success { background: var(--ochre); color: var(--text-main); border-color: #b7b064; }
+    .btn-success:hover:not(:disabled) { background: var(--ochre-strong); }
+    .btn-danger { background: var(--danger); color: #fff; border-color: var(--danger); }
+    .btn-danger-soft { background: var(--danger-soft); color: var(--danger); border-color: #e6b4ae; }
+    .btn-outline { background: var(--card-pure); color: var(--text-main); border-color: var(--border-line); }
+    .btn-outline:hover:not(:disabled) { background: #efeee6; }
+    .btn-xs { padding: 4px 9px; font-size: 11px; border-radius: 4px; }
+    .btn-sm { padding: 6px 11px; font-size: 12px; }
+    .btn-block { width: 100%; padding: 11px 16px; font-size: 13.5px; }
+    .form-group { margin-bottom: 13px; }
+    .form-label {
+      display: block; font-size: 11.5px; font-weight: 800; color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: 0.35px; margin-bottom: 5px;
+    }
+    .form-control {
+      width: 100%; padding: 10px 12px;
+      border: 1px solid var(--border-line); border-radius: 5px;
+      font-family: inherit; font-size: 14px; color: var(--text-main);
+      background: var(--card-pure);
+    }
+    .form-control:focus {
+      outline: none; border-color: var(--teal-dark);
+      box-shadow: 0 0 0 2px rgba(62, 91, 97, 0.16);
+    }
+    .pin-input { letter-spacing: 6px; font-size: 18px; font-weight: 800; text-align: center; }
+
+    /* ALERTS & BANNERS */
+    .alert-error {
+      background: var(--danger-soft); color: var(--danger);
+      border: 1px solid #e6b4ae; padding: 10px 13px; border-radius: 5px;
+      font-size: 13px; font-weight: 600; margin-bottom: 13px;
+    }
+    .info-banner {
+      background: var(--ochre-soft); color: var(--text-main);
+      border: 1px solid #c9c177; padding: 10px 13px; border-radius: 5px;
+      font-size: 12.5px; margin-bottom: 13px;
+    }
+    .success-banner {
+      background: var(--success-soft); color: var(--success);
+      border: 1px solid #9ecab9; padding: 11px 14px; border-radius: 5px;
+      font-size: 13px; font-weight: 700; margin-bottom: 13px;
+    }
+
+    /* LOGIN / SETUP CARD */
+    .setup-wrap { max-width: 480px; margin: 16px auto; }
+    .meta-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+    .badge {
+      display: inline-block; padding: 3px 8px; border-radius: 4px;
+      font-size: 11px; font-weight: 800; white-space: nowrap;
+    }
+    .badge-neutral { background: #ecece4; color: var(--text-main); border: 1px solid var(--border-soft); }
+    .badge-teal { background: var(--teal-soft); color: var(--teal-dark); border: 1px solid #b8cdd1; }
+    .badge-passed { background: var(--success-soft); color: var(--success); border: 1px solid #b6dacd; }
+    .badge-remedial { background: var(--danger-soft); color: var(--danger); border: 1px solid #e6b4ae; }
+    .badge-warn { background: var(--ochre-soft); color: #786e1c; border: 1px solid #cfc776; }
+
+    /* EXAM STATUS BAR */
+    .exam-status-bar {
+      background: var(--card-bg); border: 1px solid var(--teal-dark);
+      border-left: 4px solid var(--teal-dark); padding: 10px 14px; margin-bottom: 12px;
+      display: flex; flex-wrap: wrap; align-items: center;
+      justify-content: space-between; gap: 8px;
+    }
+    .exam-meta-left { font-size: 12.5px; }
+    .exam-meta-right { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .timer-pill {
+      background: var(--teal-dark); color: #fff;
+      font-weight: 800; font-size: 12px; padding: 4px 10px; border-radius: 4px;
+      font-variant-numeric: tabular-nums;
+    }
+    .timer-pill.urgent { background: var(--danger); }
+
+    /* QUESTION NAVIGATOR GRID */
+    .nav-strip {
+      background: var(--card-pure); border: 1px solid var(--border-soft);
+      padding: 10px 12px; margin-bottom: 12px;
+    }
+    .nav-grid { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 7px; }
+    .q-nav-btn {
+      min-width: 32px; height: 30px; padding: 0 6px; border-radius: 4px;
+      border: 1px solid var(--border-line); background: var(--card-pure);
+      color: var(--text-main); font-family: inherit; font-size: 12px; font-weight: 700;
+      cursor: pointer; transition: 0.12s;
+    }
+    .q-nav-btn.answered { background: var(--teal-soft); border-color: var(--teal-dark); color: var(--teal-dark); }
+    .q-nav-btn.flagged { border-color: #b79c1d; background: var(--ochre-soft); color: #6c5d11; }
+    .q-nav-btn.current {
+      background: var(--teal-dark); border-color: var(--teal-dark); color: #fff;
+      box-shadow: 0 0 0 2px rgba(62, 91, 97, 0.25);
+    }
+
+    /* PASSAGE & QUESTION CARD */
+    .passage-card {
+      background: #f2f1e8; border: 1px solid var(--border-line);
+      border-left: 4px solid var(--teal-mid); padding: 12px 14px; margin-bottom: 12px;
+    }
+    .passage-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .passage-body {
+      margin-top: 9px; padding-top: 9px; border-top: 1px solid var(--border-soft);
+      font-size: 14px; line-height: 1.62; white-space: pre-line; max-width: 78ch;
+    }
+    .question-card {
+      background: var(--card-pure); border: 1px solid var(--border-line);
+      padding: 16px 18px; margin-bottom: 12px;
+    }
+    .q-card-header {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 8px; flex-wrap: wrap; padding-bottom: 9px; margin-bottom: 12px;
+      border-bottom: 1px solid #ecece4;
+    }
+    .q-stem {
+      font-size: 15px; font-weight: 600; line-height: 1.55; margin-bottom: 14px;
+      white-space: pre-line; max-width: 78ch;
+    }
+    .passage-body img, .q-stem img, .opt-text img, .review-stem img {
+      display: block; max-width: 100%; max-height: 280px; width: auto; height: auto;
+      margin: 8px 0; border: 1px solid var(--border-soft); border-radius: 4px;
+    }
+    .passage-body audio, .q-stem audio {
+      width: 100%; max-width: 440px; height: 36px; margin: 8px 0;
+    }
+
+    /* OPTIONS */
+    .options-list { display: flex; flex-direction: column; gap: 8px; }
+    .option-item {
+      display: flex; align-items: flex-start; gap: 11px;
+      padding: 11px 13px; border: 1.5px solid var(--border-soft);
+      background: var(--bg-cream); border-radius: 6px; cursor: pointer;
+      transition: 0.14s; user-select: none; -webkit-tap-highlight-color: transparent;
+    }
+    .option-item:hover { border-color: var(--teal-mid); background: #f0f4f4; }
+    .option-item.selected { border-color: var(--teal-dark); background: var(--teal-soft); }
+    .option-key-badge {
+      min-width: 26px; height: 26px; border-radius: 5px;
+      border: 1.5px solid var(--border-line); background: var(--card-pure);
+      display: grid; place-items: center; font-size: 12px; font-weight: 800;
+      flex-shrink: 0; margin-top: 1px;
+    }
+    .option-item.selected .option-key-badge {
+      background: var(--teal-dark); border-color: var(--teal-dark); color: #fff;
+    }
+    .opt-text {
+      font-size: 14px; line-height: 1.46; padding-top: 2px; word-break: break-word;
+    }
+
+    /* MATRIX TABLE */
+    .table-wrap {
+      width: 100%; overflow-x: auto; border: 1px solid var(--border-line);
+      background: var(--card-pure);
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { padding: 9px 10px; border: 1px solid var(--border-soft); text-align: left; vertical-align: middle; }
+    thead th { background: var(--teal-dark); color: #fff; font-size: 12px; font-weight: 700; }
+    .matrix-radio-cell { text-align: center; cursor: pointer; }
+    .matrix-radio-cell input[type="radio"] {
+      width: 18px; height: 18px; accent-color: var(--teal-dark); cursor: pointer;
+    }
+
+    /* EXAM FOOTER NAV */
+    .exam-footer-nav {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 10px; flex-wrap: wrap;
+    }
+
+    /* RESULT SUMMARY */
+    .score-hero {
+      text-align: center; padding: 18px 14px; background: var(--card-pure);
+      border: 1.5px solid var(--teal-dark); margin-bottom: 14px;
+    }
+    .score-big {
+      font-family: 'Lora', Georgia, serif; font-size: 44px; font-weight: 700;
+      line-height: 1.1; margin: 6px 0;
+    }
+    .score-big.passed { color: var(--success); }
+    .score-big.remedial { color: var(--danger); }
+    .result-stats-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 8px; margin-bottom: 14px;
+    }
+    .res-stat-box {
+      background: var(--card-pure); border: 1px solid var(--border-soft);
+      padding: 10px; text-align: center;
+    }
+    .res-stat-label {
+      font-size: 10.5px; font-weight: 800; color: var(--text-muted);
+      text-transform: uppercase;
+    }
+    .res-stat-val { font-size: 17px; font-weight: 800; margin-top: 2px; }
+    .review-card {
+      background: var(--card-pure); border: 1px solid var(--border-soft);
+      border-left: 4px solid var(--border-line); padding: 12px 14px; margin-bottom: 9px;
+    }
+    .review-card.is-correct { border-left-color: var(--success); }
+    .review-card.is-partial { border-left-color: #c2a829; }
+    .review-card.is-incorrect { border-left-color: var(--danger); }
+    .review-stem {
+      font-size: 13.5px; font-weight: 600; margin: 6px 0 8px; white-space: pre-line;
+    }
+    .review-ans-row {
+      font-size: 12.5px; padding: 5px 9px; border-radius: 4px;
+      background: var(--bg-cream); border: 1px solid var(--border-soft);
+      margin-bottom: 5px;
+    }
+    .review-explanation {
+      margin-top: 6px; font-size: 12.5px; background: var(--ochre-soft);
+      border: 1px solid #d5ce88; padding: 7px 10px; border-radius: 4px;
+    }
+
+    /* MODALS & OVERLAY */
+    .overlay {
+      position: fixed; inset: 0; background: rgba(38, 46, 43, 0.62);
+      backdrop-filter: blur(2px); display: grid; place-items: center;
+      z-index: 60; padding: 16px;
+    }
+    .modal-box {
+      background: var(--card-bg); border: 1.5px solid var(--teal-dark);
+      padding: 20px; max-width: 440px; width: 100%;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
+    }
+    .modal-box.warning-border { border: 2px solid var(--danger); border-top: 6px solid var(--danger); }
+    .spinner {
+      width: 34px; height: 34px; border: 4px solid var(--blue-ice);
+      border-top-color: var(--teal-dark); border-radius: 50%;
+      animation: spin 0.8s linear infinite; margin: 0 auto 10px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .toast {
+      position: fixed; bottom: 18px; right: 18px;
+      background: var(--teal-dark); color: #fff; padding: 10px 15px;
+      border-radius: 5px; font-size: 12.5px; font-weight: 600; z-index: 70;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.22);
+    }
+    @media (max-width: 640px) {
+      .result-stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .panel-box { padding: 14px; }
+      .question-card { padding: 13px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="brand-monogram">NE</div>
+        <div>
+          <h1 id="appHeaderTitle" class="editorial-title"><span class="accent-word">NEng Eva</span> Student Portal</h1>
+          <div class="editorial-sub">Online Assessment &amp; Adaptive Practice</div>
+        </div>
+      </div>
+      <div>
+        <a href="dashboard.html" class="btn btn-outline btn-sm">Teacher Dashboard</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- 1. STUDENT IDENTITY & TEST SELECTION -->
+    <section id="setupSection" class="setup-wrap hidden">
+      <div class="panel-box">
+        <div class="panel-heading">Start Assessment</div>
+        <div id="setupMetaPills" class="meta-pills"></div>
+        <div id="setupErrorBox" class="alert-error hidden"></div>
+        <form id="startTestForm">
+          <div class="form-group">
+            <label class="form-label" for="selectKelas">Class</label>
+            <select id="selectKelas" class="form-control" required>
+              <option value="">-- Select Your Class --</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="selectSiswa">Student Name</label>
+            <select id="selectSiswa" class="form-control" disabled required>
+              <option value="">-- Select Class First --</option>
+            </select>
+          </div>
+          <div id="studentPinGroup" class="form-group hidden">
+            <label class="form-label" for="inputStudentPin">Student PIN (6-Digit Birth Date: ddmmyy)</label>
+            <input
+              type="password"
+              id="inputStudentPin"
+              class="form-control pin-input"
+              inputmode="numeric"
+              maxlength="6"
+              placeholder="••••••"
+              autocomplete="off"
+            />
+            <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">
+              Example: 26 December 2011 &rarr; <strong>261211</strong>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="selectPaket">Test Package</label>
+            <select id="selectPaket" class="form-control" required>
+              <option value="">-- Select Test Package --</option>
+            </select>
+          </div>
+          <button type="submit" id="btnStartTest" class="btn btn-primary btn-block">Start Test</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- 2. ACTIVE EXAM WORKSPACE -->
+    <section id="examSection" class="hidden">
+      <div class="exam-status-bar">
+        <div class="exam-meta-left">
+          <strong id="examStudentLabel">Student</strong>
+          <div id="examPackageLabel" style="font-size: 11.5px; color: var(--text-muted);">Package</div>
+        </div>
+        <div class="exam-meta-right">
+          <span id="examProgressBadge" class="badge badge-teal">0 / 0 Answered</span>
+          <span id="examTabSwitchBadge" class="badge badge-neutral">Tab Switches: 0</span>
+          <span id="examTimerBadge" class="timer-pill">00:00</span>
+        </div>
+      </div>
+      <div class="nav-strip">
+        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 11.5px; color: var(--text-muted);">
+          <strong>Question Navigator</strong>
+          <span>Tap a number to jump</span>
+        </div>
+        <div id="questionNavGrid" class="nav-grid"></div>
+      </div>
+      <div id="passageContainer" class="passage-card hidden">
+        <div class="passage-head">
+          <span class="badge badge-teal">READING PASSAGE / STIMULUS</span>
+          <button type="button" id="btnTogglePassage" class="btn btn-outline btn-xs">Hide Passage</button>
+        </div>
+        <div id="passageBody" class="passage-body"></div>
+      </div>
+      <div class="question-card">
+        <div class="q-card-header">
+          <div style="display: flex; align-items: center; gap: 7px; flex-wrap: wrap;">
+            <span id="currentQBadge" class="badge badge-teal">Question 1</span>
+            <span id="currentQTypeBadge" class="badge badge-neutral">Multiple Choice</span>
+          </div>
+          <button type="button" id="btnFlagQuestion" class="btn btn-outline btn-xs">Flag for Review</button>
+        </div>
+        <div id="questionStem" class="q-stem"></div>
+        <div id="questionInputArea"></div>
+      </div>
+      <div class="exam-footer-nav">
+        <button type="button" id="btnPrevQ" class="btn btn-outline">&larr; Previous</button>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <button type="button" id="btnNextQ" class="btn btn-primary">Next &rarr;</button>
+          <button type="button" id="btnOpenSubmitModal" class="btn btn-success">Submit Answers</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. RESULT & REVIEW SCREEN -->
+    <section id="resultSection" class="hidden">
+      <div class="panel-box">
+        <div class="panel-heading">Assessment Result</div>
+        <div class="score-hero">
+          <div id="resultStudentMeta" style="font-size: 12.5px; color: var(--text-muted); font-weight: 700;"></div>
+          <div id="resultScoreBig" class="score-big">0</div>
+          <div id="resultStatusBadge"></div>
+        </div>
+        <div id="resultNoticeArea"></div>
+        <div class="result-stats-grid">
+          <div class="res-stat-box">
+            <div class="res-stat-label">Correct</div>
+            <div class="res-stat-val" id="resStatCorrect">0/0</div>
+          </div>
+          <div class="res-stat-box">
+            <div class="res-stat-label">Passing (KKM)</div>
+            <div class="res-stat-val" id="resStatKkm">80</div>
+          </div>
+          <div class="res-stat-box">
+            <div class="res-stat-label">Attempt</div>
+            <div class="res-stat-val" id="resStatAttempt">#1</div>
+          </div>
+          <div class="res-stat-box">
+            <div class="res-stat-label">Tab Switches</div>
+            <div class="res-stat-val" id="resStatTabs">0</div>
+          </div>
+        </div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;">
+          <button type="button" id="btnBackToPortal" class="btn btn-primary">Back to Portal</button>
+          <button type="button" id="btnRetakeTest" class="btn btn-success hidden">Retake / Remedial</button>
+        </div>
+        <div class="panel-heading">Answer Review</div>
+        <div id="keyHiddenBanner" class="info-banner hidden">
+          Answer keys and explanations are currently hidden by your teacher.
+        </div>
+        <div id="resultReviewList"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- MODAL: TAB-SWITCH WARNING -->
+  <div id="tabWarningModal" class="overlay hidden">
+    <div class="modal-box warning-border">
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+        <span class="badge badge-remedial" style="font-size: 11.5px;">SECURITY WARNING</span>
+        <span id="tabWarningCountPill" class="badge badge-warn">Violation #1</span>
+      </div>
+      <h3 style="font-size: 17px; font-weight: 800; color: var(--danger); margin-bottom: 6px;">
+        Tab Switch / App Exit Detected!
+      </h3>
+      <p id="tabWarningMessage" style="font-size: 13px; color: var(--text-main); margin-bottom: 14px;">
+        You left the assessment window. This activity has been recorded and will be reported to your teacher. Please stay on this page until you submit your test.
+      </p>
+      <button type="button" id="btnAcknowledgeTabWarning" class="btn btn-danger btn-block">
+        I Understand, Return to Test
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL: CONFIRM SUBMIT -->
+  <div id="submitConfirmModal" class="overlay hidden">
+    <div class="modal-box">
+      <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 6px;">Submit Assessment?</h3>
+      <p id="submitConfirmText" style="font-size: 13px; color: var(--text-muted); margin-bottom: 14px;"></p>
+      <div style="display: flex; gap: 8px; justify-content: flex-end;">
+        <button type="button" id="btnCancelSubmit" class="btn btn-outline">Cancel</button>
+        <button type="button" id="btnConfirmSubmit" class="btn btn-primary">Yes, Submit Now</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOADING OVERLAY -->
+  <div id="loadingOverlay" class="overlay">
+    <div class="modal-box" style="max-width: 320px; text-align: center;">
+      <div class="spinner"></div>
+      <div id="loadingText" style="font-weight: 700; font-size: 13.5px;">Loading Student Portal...</div>
+    </div>
+  </div>
+
+  <div id="toastBox" class="toast hidden"></div>
+
+  <script>
+    // =========================================================================
+    // GOOGLE APPS SCRIPT API CONFIGURATION
+    // =========================================================================
+    const API_URL = 'https://script.google.com/macros/s/AKfycby1WiRhGdIHsaA6brxkaOVWn4mqS5cV3naYfKZmOJErpRJl0wkTUbSMIUrJLkTzkoPO/exec';
+
+    // =========================================================================
+    // SAFARI-SAFE STORAGE & STRING NORMALIZATION HELPERS
+    // =========================================================================
+    function safeGetStorage(key) {
+      try { return window.localStorage.getItem(key); } catch (e) { return null; }
+    }
+    function safeSetStorage(key, value) {
+      try { window.localStorage.setItem(key, value); } catch (e) {}
+    }
+    function safeRemoveStorage(key) {
+      try { window.localStorage.removeItem(key); } catch (e) {}
+    }
+    function normalizeApostrophes(str) {
+      return String(str === null || str === undefined ? '' : str)
+        .replace(/[\u2018\u2019\u201A\u201B\u2032\u2035\u0060\u00B4\u02BC\uFF07]/g, "'")
+        .replace(/[\u201C\u201D\u201E\u201F\u2033\u2036\uFF02]/g, '"')
+        .replace(/\u00A0/g, ' ');
+    }
+    function escapeHtml(str) {
+      return normalizeApostrophes(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    // ===== NEW: hanya izinkan http/https untuk media (anti-XSS) =====
+    function safeUrl(url) {
+      const s = String(url || '').trim();
+      return /^https?:\/\//i.test(s) ? s : '';
+    }
+
+    /**
+     * Merender teks kaya:
+     * - Mengamankan HTML berbahaya sambil tetap merender <b>, <strong>, <u>, <i>, <em>
+     * - Mendukung format [b]...[/b], [u]...[/u], **tebal**, dan __garis bawah__
+     * - Mendukung [IMG: url] dan [AUDIO: url] (hanya http/https)
+     */
+    function formatRichMedia(rawText) {
+      let text = escapeHtml(rawText || '');
+
+      text = text
+        .replace(/&lt;(\/?(?:b|strong|u|i|em))&gt;/gi, '<$1>')
+        .replace(/\[b\]([\s\S]*?)\[\/b\]/gi, '<strong>$1</strong>')
+        .replace(/\[u\]([\s\S]*?)\[\/u\]/gi, '<u>$1</u>')
+        .replace(/\[i\]([\s\S]*?)\[\/i\]/gi, '<em>$1</em>')
+        .replace(/\*\*([^\*\n]+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/(^|[^_])__([^_\n](?:[^_\n]|_[^_\n])*?)__(?=[^_]|$)/g, '$1<u>$2</u>');
+
+      // Media stimulus — hanya http/https
+      text = text.replace(/\[IMG:\s*([^\]]+)\]/gi, (_, u) => {
+        const s = safeUrl(u.trim());
+        return s ? `<br><img src="${s}" alt="Stimulus Image" loading="lazy"><br>` : '';
+      });
+      text = text.replace(/\[AUDIO:\s*([^\]]+)\]/gi, (_, u) => {
+        const s = safeUrl(u.trim());
+        return s ? `<br><audio controls preload="none" src="${s}"></audio><br>` : '';
+      });
+      text = text.replace(/(^|\s)(https?:\/\/\S+\.(?:png|jpe?g|gif|webp)(?:\?\S*)?)/gi, (_, p, u) => {
+        const s = safeUrl(u);
+        return s ? `${p}<br><img src="${s}" alt="Image" loading="lazy"><br>` : `${p}${u}`;
+      });
+      text = text.replace(/(^|\s)(https?:\/\/\S+\.(?:mp3|wav|ogg|m4a)(?:\?\S*)?)/gi, (_, p, u) => {
+        const s = safeUrl(u);
+        return s ? `${p}<br><audio controls preload="none" src="${s}"></audio><br>` : `${p}${u}`;
+      });
+
+      return text;
+    }
+
+    // =========================================================================
+    // APPLICATION STATE
+    // =========================================================================
+    const state = {
+      config: {
+        KKM: 80,
+        MAX_ATTEMPTS: 3,
+        SCORE_METHOD: 'HIGHEST',
+        APP_TITLE: 'NEng Eva — Student Portal',
+        SHOW_KEY: 'HIDE',
+        REQUIRE_STUDENT_PIN: 'NO',
+        TIME_LIMIT_MIN: 0
+      },
+      classes: [],
+      testPackages: [],
+      allTestPackages: [],
+      kelas: '',
+      namaSiswa: '',
+      pin: '',
+      paketId: '',
+      paketName: '',
+      questions: [],
+      currentIndex: 0,
+      answers: {},
+      flagged: {},
+      tabSwitches: 0,
+      elapsedSec: 0,
+      timerInterval: null,
+      examActive: false,
+      submitting: false,
+      lastTabWarnMs: 0
+    };
+
+    const TYPE_LABELS = {
+      PG: 'Multiple Choice',
+      PGK: 'Multiple Response',
+      BS: 'True / False',
+      MENJODOHKAN: 'Matching',
+      MATRIKS: 'Matrix / Category',
+      IS: 'Short Answer'
+    };
+
+    const $ = (id) => document.getElementById(id);
+
+    // =========================================================================
+    // API CALLER
+    // =========================================================================
+    async function callApi(action, ...args) {
+      if (window.location && window.location.protocol === 'file:') {
+        throw new Error('Aplikasi tidak dapat dibuka dari file lokal. Buka menggunakan tautan HTTPS asli di Safari.');
+      }
+      let response;
+      try {
+        response = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ action, args })
+        });
+      } catch (networkErr) {
+        throw new Error(
+          'Gagal terhubung ke server (' + (networkErr && networkErr.message ? networkErr.message : 'Network error') +
+          '). Jika menggunakan Safari di iPhone/iPad/Mac, buka tautan asli langsung di aplikasi Safari dan pastikan pemblokir pelacakan/iklan tidak memblokir script.google.com.'
+        );
+      }
+      if (!response.ok) {
+        throw new Error('Server merespons dengan status ' + response.status + '.');
+      }
+      const data = await response.json();
+      if (data && data.status === 'error') {
+        throw new Error(data.message || 'Terjadi kesalahan pada server.');
+      }
+      return data;
+    }
+
+    function showLoading(msg) {
+      $('loadingText').textContent = msg || 'Loading...';
+      $('loadingOverlay').classList.remove('hidden');
+    }
+    function hideLoading() {
+      $('loadingOverlay').classList.add('hidden');
+    }
+    let toastTimer = null;
+    function showToast(msg) {
+      const el = $('toastBox');
+      el.textContent = msg;
+      el.classList.remove('hidden');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => el.classList.add('hidden'), 3200);
+    }
+    function playWarningBeep() {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(660, ctx.currentTime);
+        gain.gain.setValueAtTime(0.12, ctx.currentTime);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.18);
+      } catch (e) {}
+    }
+
+    // =========================================================================
+    // INITIALIZATION & SETUP FORM
+    // =========================================================================
+    async function initPortal() {
+      showLoading('Loading NEng Eva Student Portal...');
+      try {
+        const res = await callApi('getInitialData');
+        state.config = Object.assign(state.config, res.config || {});
+        state.classes = res.classes || [];
+        state.testPackages = res.testPackages || [];
+        state.allTestPackages = res.allTestPackages || res.testPackages || [];
+        if (state.config.APP_TITLE) {
+          document.title = state.config.APP_TITLE;
+        }
+        renderSetupForm();
+        $('setupSection').classList.remove('hidden');
+      } catch (err) {
+        $('setupSection').classList.remove('hidden');
+        showSetupError(err.message);
+      } finally {
+        hideLoading();
+      }
+    }
+
+    function showSetupError(msg) {
+      const box = $('setupErrorBox');
+      if (msg) {
+        box.textContent = msg;
+        box.classList.remove('hidden');
+      } else {
+        box.classList.add('hidden');
+      }
+    }
+
+    function renderSetupForm() {
+      const pills = [
+        `<span class="badge badge-teal">Passing Score (KKM): ${state.config.KKM}</span>`,
+        `<span class="badge badge-neutral">Max Attempts: ${state.config.MAX_ATTEMPTS}x</span>`
+      ];
+      if (state.config.TIME_LIMIT_MIN > 0) {
+        pills.push(`<span class="badge badge-warn">Time Limit: ${state.config.TIME_LIMIT_MIN} min</span>`);
+      }
+      $('setupMetaPills').innerHTML = pills.join('');
+
+      $('selectKelas').innerHTML = '<option value="">-- Select Your Class --</option>' +
+        state.classes.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
+
+      updatePackageDropdown(false);
+
+      const needPin = String(state.config.REQUIRE_STUDENT_PIN || 'NO').toUpperCase() === 'YES';
+      $('studentPinGroup').classList.toggle('hidden', !needPin);
+      $('inputStudentPin').required = needPin;
+    }
+
+    function updatePackageDropdown(includeInactiveForDummy) {
+      const list = includeInactiveForDummy ? state.allTestPackages : state.testPackages;
+      const prev = $('selectPaket').value;
+      $('selectPaket').innerHTML = '<option value="">-- Select Test Package --</option>' +
+        list.map(p => {
+          const tag = p.status !== 'ACTIVE' ? ' [INACTIVE]' : '';
+          return `<option value="${escapeHtml(p.id)}">${escapeHtml(p.name)} (${escapeHtml(p.id)})${tag}</option>`;
+        }).join('');
+      if (prev) $('selectPaket').value = prev;
+    }
+
+    // ===== NEW: guard request id agar respons kelas lama diabaikan =====
+    let classChangeReqId = 0;
+
+    async function handleClassChange() {
+      const kelas = $('selectKelas').value;
+      const siswaSel = $('selectSiswa');
+      showSetupError('');
+
+      if (!kelas) {
+        siswaSel.innerHTML = '<option value="">-- Select Class First --</option>';
+        siswaSel.disabled = true;
+        updatePackageDropdown(false);
+        return;
+      }
+
+      const isDummyClass = kelas.trim() === '1111';
+      updatePackageDropdown(isDummyClass);
+
+      siswaSel.disabled = true;
+      siswaSel.innerHTML = '<option value="">Loading students...</option>';
+
+      const reqId = ++classChangeReqId;
+      try {
+        const res = await callApi('getStudentsByClass', kelas);
+        if (reqId !== classChangeReqId) return;
+        const students = res.students || [];
+        siswaSel.innerHTML = '<option value="">-- Select Your Name --</option>' +
+          students.map(n => `<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`).join('');
+        siswaSel.disabled = false;
+      } catch (err) {
+        if (reqId !== classChangeReqId) return;
+        siswaSel.innerHTML = '<option value="">-- Failed to Load Students --</option>';
+        showSetupError(err.message);
+      }
+    }
+
+    // =========================================================================
+    // START EXAM & DRAFT PERSISTENCE
+    // =========================================================================
+    function getDraftStorageKey() {
+      return 'neng_eva_draft_' + [state.kelas, state.namaSiswa, state.paketId].join('|').toLowerCase();
+    }
+    function saveLocalDraft() {
+      if (!state.examActive) return;
+      safeSetStorage(getDraftStorageKey(), JSON.stringify({
+        answers: state.answers,
+        flagged: state.flagged,
+        tabSwitches: state.tabSwitches,
+        currentIndex: state.currentIndex
+      }));
+    }
+    function loadLocalDraft() {
+      const raw = safeGetStorage(getDraftStorageKey());
+      if (!raw) return;
+      try {
+        const parsed = JSON.parse(raw);
+        if (parsed && typeof parsed === 'object') {
+          if (parsed.answers) state.answers = parsed.answers;
+          if (parsed.flagged) state.flagged = parsed.flagged;
+          if (typeof parsed.tabSwitches === 'number') state.tabSwitches = parsed.tabSwitches;
+          if (typeof parsed.currentIndex === 'number') state.currentIndex = parsed.currentIndex;
+        }
+      } catch (e) {}
+    }
+    function clearLocalDraft() {
+      safeRemoveStorage(getDraftStorageKey());
+    }
+
+    function resolvePassagesForExam(rawList) {
+      let currentPassage = '';
+      return (rawList || []).map((q, idx) => {
+        const copy = Object.assign({}, q);
+        copy._qKey = copy.noSoal || String(idx + 1);
+        const rawP = normalizeApostrophes(copy.teksBacaan).trim();
+        if (rawP === '-' || rawP.toUpperCase() === 'NONE' || rawP.toUpperCase() === 'NO PASSAGE') {
+          currentPassage = '';
+          copy._passage = '';
+        } else if (rawP !== '') {
+          currentPassage = rawP;
+          copy._passage = currentPassage;
+        } else {
+          copy._passage = currentPassage;
+        }
+        return copy;
+      });
+    }
+
+    async function handleStartTest(e) {
+      e.preventDefault();
+      showSetupError('');
+      const kelas = normalizeApostrophes($('selectKelas').value).trim();
+      const namaSiswa = normalizeApostrophes($('selectSiswa').value).trim();
+      const paketId = normalizeApostrophes($('selectPaket').value).trim();
+      const pin = $('inputStudentPin').value.trim();
+
+      if (!kelas || !namaSiswa || !paketId) {
+        showSetupError('Please select your class, name, and test package.');
+        return;
+      }
+
+      showLoading('Preparing your test questions...');
+      try {
+        const res = await callApi('getQuestions', paketId, kelas, namaSiswa, pin);
+        const questions = resolvePassagesForExam(res.questions || []);
+        if (questions.length === 0) {
+          throw new Error('No questions are available in this test package.');
+        }
+        state.kelas = kelas;
+        state.namaSiswa = namaSiswa;
+        state.pin = pin;
+        state.paketId = paketId;
+        const pkgObj = state.allTestPackages.find(p => p.id === paketId);
+        state.paketName = pkgObj ? pkgObj.name : paketId;
+        state.questions = questions;
+        state.answers = {};
+        state.flagged = {};
+        state.tabSwitches = 0;
+        state.currentIndex = 0;
+        state.elapsedSec = Math.max(0, Number(res.elapsedSec) || 0);
+        state.examActive = true;
+        loadLocalDraft();
+        if (state.currentIndex >= state.questions.length) {
+          state.currentIndex = 0;
+        }
+        enterExamScreen();
+      } catch (err) {
+        showSetupError(err.message);
+      } finally {
+        hideLoading();
+      }
+    }
+
+    function enterExamScreen() {
+      $('setupSection').classList.add('hidden');
+      $('resultSection').classList.add('hidden');
+      $('examSection').classList.remove('hidden');
+      $('examStudentLabel').textContent = `${state.namaSiswa} (${state.kelas})`;
+      $('examPackageLabel').textContent = `${state.paketName} (${state.paketId})`;
+      updateTabSwitchBadge();
+      startExamTimer();
+      renderCurrentQuestion();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // =========================================================================
+    // TIMER & TAB-SWITCH WARNING SYSTEM
+    // =========================================================================
+    function formatSeconds(sec) {
+      const s = Math.max(0, Math.floor(sec));
+      const hrs = Math.floor(s / 3600);
+      const mins = Math.floor((s % 3600) / 60);
+      const secs = s % 60;
+      const pad = (n) => (n < 10 ? '0' + n : String(n));
+      return hrs > 0 ? `${pad(hrs)}:${pad(mins)}:${pad(secs)}` : `${pad(mins)}:${pad(secs)}`;
+    }
+
+    function startExamTimer() {
+      clearInterval(state.timerInterval);
+      const limitSec = (Number(state.config.TIME_LIMIT_MIN) || 0) * 60;
+      const tick = () => {
+        if (!state.examActive) return;
+        state.elapsedSec++;
+        const badge = $('examTimerBadge');
+        if (limitSec > 0) {
+          const remaining = Math.max(0, limitSec - state.elapsedSec);
+          badge.textContent = 'Time Left: ' + formatSeconds(remaining);
+          badge.classList.toggle('urgent', remaining <= 120);
+          if (remaining === 0 && !state.submitting) {
+            clearInterval(state.timerInterval);
+            showToast('Time is up! Submitting your answers automatically...');
+            executeSubmitAnswers(true);
+          }
+        } else {
+          badge.textContent = formatSeconds(state.elapsedSec);
+          badge.classList.remove('urgent');
+        }
+      };
+      tick();
+      state.timerInterval = setInterval(tick, 1000);
+    }
+
+    function updateTabSwitchBadge() {
+      const badge = $('examTabSwitchBadge');
+      badge.textContent = `Tab Switches: ${state.tabSwitches}`;
+      badge.className = state.tabSwitches > 0 ? 'badge badge-warn' : 'badge badge-neutral';
+    }
+
+    // ===== NEW: jangan tandai pelanggaran saat modal submit/warning sedang terbuka =====
+    function registerTabExitViolation() {
+      if (!state.examActive || state.submitting) return;
+      if (!$('submitConfirmModal').classList.contains('hidden')) return;
+      if (!$('tabWarningModal').classList.contains('hidden')) return;
+
+      const now = Date.now();
+      if (now - state.lastTabWarnMs < 1500) return;
+      state.lastTabWarnMs = now;
+
+      state.tabSwitches++;
+      updateTabSwitchBadge();
+      saveLocalDraft();
+      playWarningBeep();
+
+      $('tabWarningCountPill').textContent = `Violation #${state.tabSwitches}`;
+      $('tabWarningMessage').textContent =
+        `You left the assessment tab/window (${state.tabSwitches}x recorded). This activity is logged and reported to your teacher. Please stay on this page until you submit your test.`;
+      $('tabWarningModal').classList.remove('hidden');
+    }
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) registerTabExitViolation();
+    });
+    window.addEventListener('blur', () => {
+      registerTabExitViolation();
+    });
+
+    // =========================================================================
+    // QUESTION RENDERING & ANSWER CAPTURE
+    // =========================================================================
+    function isQuestionAnswered(q) {
+      const ans = state.answers[q._qKey];
+      const t = String(q.tipeSoal || 'PG').toUpperCase();
+      if (t === 'PGK') return Array.isArray(ans) && ans.length > 0;
+      if (t === 'MATRIKS') return Array.isArray(ans) && ans.some(v => v && String(v).trim() !== '');
+      return ans !== undefined && ans !== null && String(ans).trim() !== '';
+    }
+
+    function renderNavigator() {
+      let answeredCount = 0;
+      state.questions.forEach(q => { if (isQuestionAnswered(q)) answeredCount++; });
+      $('examProgressBadge').textContent = `${answeredCount} / ${state.questions.length} Answered`;
+
+      $('questionNavGrid').innerHTML = state.questions.map((q, idx) => {
+        const cls = ['q-nav-btn'];
+        if (idx === state.currentIndex) cls.push('current');
+        else if (state.flagged[q._qKey]) cls.push('flagged');
+        else if (isQuestionAnswered(q)) cls.push('answered');
+        return `<button type="button" class="${cls.join(' ')}" onclick="jumpToQuestion(${idx})">${escapeHtml(q._qKey)}</button>`;
+      }).join('');
+    }
+
+    function jumpToQuestion(idx) {
+      if (idx < 0 || idx >= state.questions.length) return;
+      pauseExamAudio();
+      state.currentIndex = idx;
+      saveLocalDraft();
+      renderCurrentQuestion();
+    }
+
+    function pauseExamAudio() {
+      document.querySelectorAll('#examSection audio').forEach(a => {
+        try { a.pause(); } catch (e) {}
+      });
+    }
+
+    function renderCurrentQuestion() {
+      const q = state.questions[state.currentIndex];
+      if (!q) return;
+      renderNavigator();
+
+      const passageBox = $('passageContainer');
+      if (q._passage) {
+        passageBox.classList.remove('hidden');
+        $('passageBody').innerHTML = formatRichMedia(q._passage);
+      } else {
+        passageBox.classList.add('hidden');
+        $('passageBody').innerHTML = '';
+      }
+
+      const t = String(q.tipeSoal || 'PG').toUpperCase();
+      $('currentQBadge').textContent = `Question ${q._qKey} of ${state.questions.length}`;
+      $('currentQTypeBadge').textContent = TYPE_LABELS[t] || t;
+
+      const isFlagged = Boolean(state.flagged[q._qKey]);
+      $('btnFlagQuestion').textContent = isFlagged ? 'Flagged ★' : 'Flag for Review';
+      $('btnFlagQuestion').className = isFlagged ? 'btn btn-success btn-xs' : 'btn btn-outline btn-xs';
+
+      const inputArea = $('questionInputArea');
+      const curAns = state.answers[q._qKey];
+
+      if (t === 'MATRIKS') {
+        renderMatrixQuestion(q, curAns, inputArea);
+      } else if (t === 'IS') {
+        $('questionStem').innerHTML = formatRichMedia(q.pertanyaan);
+        inputArea.innerHTML = `
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label" for="shortAnswerInput">Your Answer</label>
+            <input type="text" id="shortAnswerInput" class="form-control"
+              placeholder="Type your answer here..."
+              value="${escapeHtml(curAns || '')}"
+              autocomplete="off" />
+          </div>
+        `;
+        const inp = $('shortAnswerInput');
+        inp.addEventListener('input', () => {
+          state.answers[q._qKey] = inp.value;
+          saveLocalDraft();
+          renderNavigator();
+        });
+      } else if (t === 'PGK') {
+        $('questionStem').innerHTML = formatRichMedia(q.pertanyaan);
+        const selectedArr = Array.isArray(curAns) ? curAns : [];
+        const letters = ['A', 'B', 'C', 'D', 'E'].filter(l => q.options && q.options[l] && q.options[l] !== '-');
+        inputArea.innerHTML = `
+          <div style="font-size: 12px; color: var(--teal-dark); font-weight: 700; margin-bottom: 8px;">
+            Select one or more correct options:
+          </div>
+          <div class="options-list">
+            ${letters.map(l => {
+              const checked = selectedArr.indexOf(l) !== -1;
+              return `
+                <div class="option-item ${checked ? 'selected' : ''}" onclick="togglePgkOption('${l}')">
+                  <div class="option-key-badge">${checked ? '✓' : l}</div>
+                  <div class="opt-text">${formatRichMedia(q.options[l])}</div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        `;
+      } else {
+        // PG, BS, MENJODOHKAN
+        $('questionStem').innerHTML = formatRichMedia(q.pertanyaan);
+        const opts = Object.assign({}, q.options || {});
+        if (t === 'BS') {
+          if (!opts.A || opts.A === '-') opts.A = 'True';
+          if (!opts.B || opts.B === '-') opts.B = 'False';
+        }
+        const letters = (t === 'BS' ? ['A', 'B'] : ['A', 'B', 'C', 'D', 'E'])
+          .filter(l => opts[l] && opts[l] !== '-');
+        inputArea.innerHTML = `
+          <div class="options-list">
+            ${letters.map(l => {
+              const isSel = curAns === l;
+              return `
+                <div class="option-item ${isSel ? 'selected' : ''}" onclick="selectSingleOption('${l}')">
+                  <div class="option-key-badge">${l}</div>
+                  <div class="opt-text">${formatRichMedia(opts[l])}</div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        `;
+      }
+
+      $('btnPrevQ').disabled = state.currentIndex === 0;
+      const isLast = state.currentIndex === state.questions.length - 1;
+      $('btnNextQ').classList.toggle('hidden', isLast);
+    }
+
+    function selectSingleOption(letter) {
+      const q = state.questions[state.currentIndex];
+      if (!q) return;
+      state.answers[q._qKey] = letter;
+      saveLocalDraft();
+      renderCurrentQuestion();
+    }
+
+    function togglePgkOption(letter) {
+      const q = state.questions[state.currentIndex];
+      if (!q) return;
+      const cur = Array.isArray(state.answers[q._qKey]) ? state.answers[q._qKey].slice() : [];
+      const pos = cur.indexOf(letter);
+      if (pos === -1) cur.push(letter);
+      else cur.splice(pos, 1);
+      state.answers[q._qKey] = cur;
+      saveLocalDraft();
+      renderCurrentQuestion();
+    }
+
+    function renderMatrixQuestion(q, curAns, container) {
+      let raw = String(q.pertanyaan || '');
+      let headers = [];
+      const headerMatch = raw.match(/\[(?:HEADER:\s*)?([^\]]+)\]/i);
+      if (headerMatch) {
+        headers = headerMatch[1].split('|').map(s => s.trim()).filter(Boolean);
+        raw = raw.replace(headerMatch[0], '').trim();
+      }
+      const parts = raw.split(/[\|\n]/).map(s => s.trim()).filter(Boolean);
+      const promptText = parts.length > 1 ? parts[0] : 'Choose the appropriate category for each statement:';
+      const statements = parts.length > 1 ? parts.slice(1) : parts;
+
+      const filledLetters = ['A', 'B', 'C', 'D', 'E'].filter(l => {
+        const v = String((q.options && q.options[l]) || '').trim();
+        return v !== '' && v !== '-';
+      });
+      const colLabels = filledLetters.length > 0
+        ? filledLetters.map(l => q.options[l].trim())
+        : (headers.length > 1 ? headers.slice(1) : ['True', 'False']);
+      const letters = colLabels.map((_, i) => String.fromCharCode(65 + i));
+      const firstColTitle = headers.length > 0 ? headers[0] : 'Statement';
+
+      const rowAnswers = Array.isArray(curAns) ? curAns.slice() : [];
+      while (rowAnswers.length < statements.length) rowAnswers.push('');
+
+      $('questionStem').innerHTML = formatRichMedia(promptText);
+      container.innerHTML = `
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>${escapeHtml(firstColTitle)}</th>
+                ${colLabels.map(lbl => `<th style="text-align:center;">${escapeHtml(lbl)}</th>`).join('')}
+              </tr>
+            </thead>
+            <tbody>
+              ${statements.map((stmt, rIdx) => `
+                <tr>
+                  <td>${formatRichMedia(stmt)}</td>
+                  ${letters.map(l => {
+                    const checked = rowAnswers[rIdx] === l;
+                    return `
+                      <td class="matrix-radio-cell" onclick="selectMatrixCell(${rIdx}, '${l}', ${statements.length})">
+                        <input type="radio" name="matrix_${escapeHtml(q._qKey)}_${rIdx}" ${checked ? 'checked' : ''} />
+                      </td>
+                    `;
+                  }).join('')}
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function selectMatrixCell(rowIdx, letter, totalRows) {
+      const q = state.questions[state.currentIndex];
+      if (!q) return;
+      const arr = Array.isArray(state.answers[q._qKey]) ? state.answers[q._qKey].slice() : [];
+      while (arr.length < totalRows) arr.push('');
+      arr[rowIdx] = letter;
+      state.answers[q._qKey] = arr;
+      saveLocalDraft();
+      renderCurrentQuestion();
+    }
+
+    // =========================================================================
+    // SUBMIT ANSWERS & RENDER RESULT
+    // =========================================================================
+    function openSubmitConfirmation() {
+      let unanswered = 0;
+      state.questions.forEach(q => { if (!isQuestionAnswered(q)) unanswered++; });
+      $('submitConfirmText').textContent = unanswered > 0
+        ? `You still have ${unanswered} unanswered question(s). Are you sure you want to submit your answers now?`
+        : 'All questions have been answered. Are you sure you want to submit your assessment now?';
+      $('submitConfirmModal').classList.remove('hidden');
+    }
+
+    async function executeSubmitAnswers(isAutoTimeout) {
+      if (state.submitting) return;
+      state.submitting = true;
+      state.examActive = false;
+      clearInterval(state.timerInterval);
+      pauseExamAudio();
+      $('submitConfirmModal').classList.add('hidden');
+      $('tabWarningModal').classList.add('hidden');
+
+      showLoading(isAutoTimeout ? 'Time expired! Grading your answers...' : 'Submitting and grading your answers...');
+      try {
+        const res = await callApi('submitAnswers', {
+          kelas: state.kelas,
+          namaSiswa: state.namaSiswa,
+          paketId: state.paketId,
+          answers: state.answers,
+          tabSwitches: state.tabSwitches
+        });
+        clearLocalDraft();
+        renderResultScreen(res);
+      } catch (err) {
+        state.examActive = true;
+        startExamTimer();
+        alert(err.message);
+      } finally {
+        state.submitting = false;
+        hideLoading();
+      }
+    }
+
+    function renderResultScreen(res) {
+      $('examSection').classList.add('hidden');
+      $('resultSection').classList.remove('hidden');
+
+      $('resultStudentMeta').textContent = `${state.namaSiswa} (${state.kelas}) • ${state.paketName}`;
+      const scoreEl = $('resultScoreBig');
+      scoreEl.textContent = Number(res.finalScore).toFixed(2);
+      scoreEl.className = 'score-big ' + (res.isPassed ? 'passed' : 'remedial');
+      $('resultStatusBadge').innerHTML = res.isPassed
+        ? '<span class="badge badge-passed" style="font-size:12.5px; padding:4px 12px;">PASSED (KKM ACHIEVED)</span>'
+        : '<span class="badge badge-remedial" style="font-size:12.5px; padding:4px 12px;">BELOW KKM (REMEDIAL)</span>';
+
+      const notices = [];
+      if (res.remedialCapped) {
+        notices.push(`
+          <div class="info-banner">
+            <strong>Remedial Score Policy:</strong> Your raw score on this remedial attempt was <strong>${Number(res.rawScore).toFixed(2)}</strong>. Because it exceeded the passing threshold, your final score is automatically set to the KKM (<strong>${res.kkm}</strong>). You have passed and do not need to retake this test.
+          </div>
+        `);
+      } else if (res.isPassed) {
+        notices.push(`
+          <div class="success-banner">
+            Congratulations! You have achieved the passing score (KKM: ${res.kkm}). You do not need to retake or take remedial for this package.
+          </div>
+        `);
+      }
+      $('resultNoticeArea').innerHTML = notices.join('');
+
+      $('resStatCorrect').textContent = `${res.correctCount}/${res.totalQuestions}`;
+      $('resStatKkm').textContent = res.kkm;
+      $('resStatAttempt').textContent = `#${res.attempt} of ${res.maxAttempts}`;
+      $('resStatTabs').textContent = state.tabSwitches;
+
+      const isDummy = state.kelas.trim() === '1111' || state.namaSiswa.trim().toLowerCase() === 'dummy';
+      const canRetake = isDummy || (!res.isPassed && Number(res.attempt) < Number(res.maxAttempts));
+      $('btnRetakeTest').classList.toggle('hidden', !canRetake);
+
+      const showKey = Boolean(res.showKey);
+      $('keyHiddenBanner').classList.toggle('hidden', showKey);
+
+      const details = res.details || [];
+      $('resultReviewList').innerHTML = details.map(d => {
+        const st = String(d.status || '').toUpperCase();
+        const cardCls = st === 'CORRECT' ? 'is-correct' : (st === 'PARTIAL' ? 'is-partial' : 'is-incorrect');
+        const badgeHtml = st === 'CORRECT'
+          ? '<span class="badge badge-passed">CORRECT</span>'
+          : (st === 'PARTIAL'
+            ? '<span class="badge badge-warn">PARTIAL</span>'
+            : '<span class="badge badge-remedial">INCORRECT</span>');
+
+        const keyRowHtml = showKey && d.keyAns
+          ? `<div class="review-ans-row" style="background:var(--success-soft); border-color:#9ecab9;">
+               <strong>Answer Key:</strong> ${escapeHtml(d.keyAns)}
+             </div>`
+          : '';
+
+        const expRowHtml = showKey && d.pembahasan
+          ? `<div class="review-explanation">
+               <strong>Explanation:</strong> ${formatRichMedia(d.pembahasan)}
+             </div>`
+          : '';
+
+        return `
+          <div class="review-card ${cardCls}">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;">
+              <span class="badge badge-neutral">Question ${escapeHtml(d.noSoal)}</span>
+              ${badgeHtml}
+            </div>
+            <div class="review-stem">${formatRichMedia(d.pertanyaan)}</div>
+            <div class="review-ans-row">
+              <strong>Your Answer:</strong> ${escapeHtml(d.studentAns)}
+            </div>
+            ${keyRowHtml}
+            ${expRowHtml}
+          </div>
+        `;
+      }).join('');
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // =========================================================================
+    // EVENT LISTENERS
+    // =========================================================================
+    $('selectKelas').addEventListener('change', handleClassChange);
+    $('startTestForm').addEventListener('submit', handleStartTest);
+
+    $('btnTogglePassage').addEventListener('click', () => {
+      const body = $('passageBody');
+      const isHidden = body.classList.toggle('hidden');
+      $('btnTogglePassage').textContent = isHidden ? 'Show Passage' : 'Hide Passage';
+    });
+
+    $('btnFlagQuestion').addEventListener('click', () => {
+      const q = state.questions[state.currentIndex];
+      if (!q) return;
+      state.flagged[q._qKey] = !state.flagged[q._qKey];
+      saveLocalDraft();
+      renderCurrentQuestion();
+    });
+
+    $('btnPrevQ').addEventListener('click', () => jumpToQuestion(state.currentIndex - 1));
+    $('btnNextQ').addEventListener('click', () => jumpToQuestion(state.currentIndex + 1));
+    $('btnOpenSubmitModal').addEventListener('click', openSubmitConfirmation);
+    $('btnCancelSubmit').addEventListener('click', () => $('submitConfirmModal').classList.add('hidden'));
+    $('btnConfirmSubmit').addEventListener('click', () => executeSubmitAnswers(false));
+
+    $('btnAcknowledgeTabWarning').addEventListener('click', () => {
+      $('tabWarningModal').classList.add('hidden');
+    });
+
+    $('btnBackToPortal').addEventListener('click', () => {
+      $('resultSection').classList.add('hidden');
+      $('setupSection').classList.remove('hidden');
+      showSetupError('');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    $('btnRetakeTest').addEventListener('click', () => {
+      $('resultSection').classList.add('hidden');
+      $('setupSection').classList.remove('hidden');
+      showSetupError('');
+      $('startTestForm').dispatchEvent(new Event('submit', { cancelable: true }));
+    });
+
+    // Boot portal
+    initPortal();
+  </script>
+</body>
+</html>
