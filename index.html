@@ -28,6 +28,9 @@
       --danger-soft: #fbeae8;
       --success: #2f6f5e;
       --success-soft: #e4f2ed;
+      --dummy-gold: #d4a017;
+      --dummy-bg: #fff3cd;
+      --dummy-text: #7a5c00;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { -webkit-text-size-adjust: 100%; }
@@ -43,7 +46,6 @@
     }
     .hidden { display: none !important; }
 
-    /* TOPBAR */
     .topbar {
       background: var(--card-bg);
       border-bottom: 1.5px solid var(--border-line);
@@ -76,7 +78,6 @@
     .editorial-title .accent-word { color: var(--teal-dark); }
     .editorial-sub { font-size: 11.5px; color: var(--text-muted); }
 
-    /* CONTAINER & PANELS */
     .container {
       width: 100%; max-width: 960px; margin: 0 auto;
       padding: 18px 16px 48px; flex: 1;
@@ -98,7 +99,6 @@
       border: 1.5px solid var(--teal-dark); background: var(--card-bg);
     }
 
-    /* BUTTONS & FORM CONTROLS */
     .btn {
       display: inline-flex; align-items: center; justify-content: center; gap: 6px;
       padding: 9px 14px; border-radius: 5px;
@@ -135,7 +135,6 @@
     }
     .pin-input { letter-spacing: 6px; font-size: 18px; font-weight: 800; text-align: center; }
 
-    /* ALERTS & BANNERS */
     .alert-error {
       background: var(--danger-soft); color: var(--danger);
       border: 1px solid #e6b4ae; padding: 10px 13px; border-radius: 5px;
@@ -152,7 +151,20 @@
       font-size: 13px; font-weight: 700; margin-bottom: 13px;
     }
 
-    /* LOGIN / SETUP CARD */
+    /* DUMMY BANNER */
+    .dummy-banner {
+      background: var(--dummy-bg);
+      border: 1.5px solid var(--dummy-gold);
+      border-left: 5px solid var(--dummy-gold);
+      color: var(--dummy-text);
+      padding: 10px 14px;
+      border-radius: 5px;
+      font-size: 12.5px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .dummy-banner::before { content: '🧪 '; }
+
     .setup-wrap { max-width: 480px; margin: 16px auto; }
     .meta-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
     .badge {
@@ -164,8 +176,8 @@
     .badge-passed { background: var(--success-soft); color: var(--success); border: 1px solid #b6dacd; }
     .badge-remedial { background: var(--danger-soft); color: var(--danger); border: 1px solid #e6b4ae; }
     .badge-warn { background: var(--ochre-soft); color: #786e1c; border: 1px solid #cfc776; }
+    .badge-dummy { background: var(--dummy-bg); color: var(--dummy-text); border: 1px solid var(--dummy-gold); }
 
-    /* EXAM STATUS BAR */
     .exam-status-bar {
       background: var(--card-bg); border: 1px solid var(--teal-dark);
       border-left: 4px solid var(--teal-dark); padding: 10px 14px; margin-bottom: 12px;
@@ -181,7 +193,6 @@
     }
     .timer-pill.urgent { background: var(--danger); }
 
-    /* QUESTION NAVIGATOR GRID */
     .nav-strip {
       background: var(--card-pure); border: 1px solid var(--border-soft);
       padding: 10px 12px; margin-bottom: 12px;
@@ -200,7 +211,6 @@
       box-shadow: 0 0 0 2px rgba(62, 91, 97, 0.25);
     }
 
-    /* PASSAGE & QUESTION CARD */
     .passage-card {
       background: #f2f1e8; border: 1px solid var(--border-line);
       border-left: 4px solid var(--teal-mid); padding: 12px 14px; margin-bottom: 12px;
@@ -231,7 +241,6 @@
       width: 100%; max-width: 440px; height: 36px; margin: 8px 0;
     }
 
-    /* OPTIONS */
     .options-list { display: flex; flex-direction: column; gap: 8px; }
     .option-item {
       display: flex; align-items: flex-start; gap: 11px;
@@ -254,7 +263,6 @@
       font-size: 14px; line-height: 1.46; padding-top: 2px; word-break: break-word;
     }
 
-    /* MATRIX TABLE */
     .table-wrap {
       width: 100%; overflow-x: auto; border: 1px solid var(--border-line);
       background: var(--card-pure);
@@ -267,13 +275,33 @@
       width: 18px; height: 18px; accent-color: var(--teal-dark); cursor: pointer;
     }
 
-    /* EXAM FOOTER NAV */
     .exam-footer-nav {
       display: flex; align-items: center; justify-content: space-between;
       gap: 10px; flex-wrap: wrap;
     }
 
-    /* RESULT SUMMARY */
+    /* DUMMY QUICK ACTIONS */
+    #dummyQuickActions {
+      background: var(--dummy-bg);
+      border: 1px solid var(--dummy-gold);
+      border-radius: 5px;
+      padding: 10px 14px;
+      margin-top: 12px;
+    }
+    #dummyQuickActions .dqa-title {
+      font-size: 11.5px;
+      font-weight: 800;
+      color: var(--dummy-text);
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      margin-bottom: 7px;
+    }
+    #dummyQuickActions .dqa-row {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
     .score-hero {
       text-align: center; padding: 18px 14px; background: var(--card-pure);
       border: 1.5px solid var(--teal-dark); margin-bottom: 14px;
@@ -317,7 +345,6 @@
       border: 1px solid #d5ce88; padding: 7px 10px; border-radius: 4px;
     }
 
-    /* MODALS & OVERLAY */
     .overlay {
       position: fixed; inset: 0; background: rgba(38, 46, 43, 0.62);
       backdrop-filter: blur(2px); display: grid; place-items: center;
@@ -349,7 +376,6 @@
   </style>
 </head>
 <body>
-  <!-- TOPBAR -->
   <header class="topbar">
     <div class="topbar-inner">
       <div class="brand">
@@ -366,10 +392,13 @@
   </header>
 
   <main class="container">
-    <!-- 1. STUDENT IDENTITY & TEST SELECTION -->
+    <!-- SETUP -->
     <section id="setupSection" class="setup-wrap hidden">
       <div class="panel-box">
         <div class="panel-heading">Start Assessment</div>
+        <div id="dummyModeBanner" class="dummy-banner hidden">
+          DUMMY MODE AKTIF — Mode uji coba. Batasan dilewati. Data akan masuk ke sheet Hasil dengan Kelas = 1111.
+        </div>
         <div id="setupMetaPills" class="meta-pills"></div>
         <div id="setupErrorBox" class="alert-error hidden"></div>
         <form id="startTestForm">
@@ -411,7 +440,7 @@
       </div>
     </section>
 
-    <!-- 2. ACTIVE EXAM WORKSPACE -->
+    <!-- EXAM -->
     <section id="examSection" class="hidden">
       <div class="exam-status-bar">
         <div class="exam-meta-left">
@@ -456,9 +485,18 @@
           <button type="button" id="btnOpenSubmitModal" class="btn btn-success">Submit Answers</button>
         </div>
       </div>
+
+      <!-- DUMMY QUICK ACTIONS -->
+      <div id="dummyQuickActions" class="hidden">
+        <div class="dqa-title">🧪 Dummy Quick Actions</div>
+        <div class="dqa-row">
+          <button type="button" id="btnFillRandom" class="btn btn-outline btn-xs">Fill Random Answers</button>
+          <button type="button" id="btnFillBlank" class="btn btn-outline btn-xs">Clear All Answers</button>
+        </div>
+      </div>
     </section>
 
-    <!-- 3. RESULT & REVIEW SCREEN -->
+    <!-- RESULT -->
     <section id="resultSection" class="hidden">
       <div class="panel-box">
         <div class="panel-heading">Assessment Result</div>
@@ -489,6 +527,7 @@
         <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;">
           <button type="button" id="btnBackToPortal" class="btn btn-primary">Back to Portal</button>
           <button type="button" id="btnRetakeTest" class="btn btn-success hidden">Retake / Remedial</button>
+          <button type="button" id="btnClearDummyData" class="btn btn-danger-soft hidden">Clear My Dummy Data</button>
         </div>
         <div class="panel-heading">Answer Review</div>
         <div id="keyHiddenBanner" class="info-banner hidden">
@@ -499,7 +538,7 @@
     </section>
   </main>
 
-  <!-- MODAL: TAB-SWITCH WARNING -->
+  <!-- TAB WARNING MODAL -->
   <div id="tabWarningModal" class="overlay hidden">
     <div class="modal-box warning-border">
       <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
@@ -518,7 +557,7 @@
     </div>
   </div>
 
-  <!-- MODAL: CONFIRM SUBMIT -->
+  <!-- SUBMIT CONFIRM MODAL -->
   <div id="submitConfirmModal" class="overlay hidden">
     <div class="modal-box">
       <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 6px;">Submit Assessment?</h3>
@@ -530,7 +569,7 @@
     </div>
   </div>
 
-  <!-- LOADING OVERLAY -->
+  <!-- LOADING -->
   <div id="loadingOverlay" class="overlay">
     <div class="modal-box" style="max-width: 320px; text-align: center;">
       <div class="spinner"></div>
@@ -541,13 +580,10 @@
   <div id="toastBox" class="toast hidden"></div>
 
   <script>
-    // =========================================================================
-    // GOOGLE APPS SCRIPT API CONFIGURATION
-    // =========================================================================
     const API_URL = 'https://script.google.com/macros/s/AKfycby1WiRhGdIHsaA6brxkaOVWn4mqS5cV3naYfKZmOJErpRJl0wkTUbSMIUrJLkTzkoPO/exec';
 
     // =========================================================================
-    // SAFARI-SAFE STORAGE & STRING NORMALIZATION HELPERS
+    // STORAGE & STRING HELPERS
     // =========================================================================
     function safeGetStorage(key) {
       try { return window.localStorage.getItem(key); } catch (e) { return null; }
@@ -572,22 +608,12 @@
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#39;');
     }
-
-    // ===== NEW: hanya izinkan http/https untuk media (anti-XSS) =====
     function safeUrl(url) {
       const s = String(url || '').trim();
       return /^https?:\/\//i.test(s) ? s : '';
     }
-
-    /**
-     * Merender teks kaya:
-     * - Mengamankan HTML berbahaya sambil tetap merender <b>, <strong>, <u>, <i>, <em>
-     * - Mendukung format [b]...[/b], [u]...[/u], **tebal**, dan __garis bawah__
-     * - Mendukung [IMG: url] dan [AUDIO: url] (hanya http/https)
-     */
     function formatRichMedia(rawText) {
       let text = escapeHtml(rawText || '');
-
       text = text
         .replace(/&lt;(\/?(?:b|strong|u|i|em))&gt;/gi, '<$1>')
         .replace(/\[b\]([\s\S]*?)\[\/b\]/gi, '<strong>$1</strong>')
@@ -595,8 +621,6 @@
         .replace(/\[i\]([\s\S]*?)\[\/i\]/gi, '<em>$1</em>')
         .replace(/\*\*([^\*\n]+?)\*\*/g, '<strong>$1</strong>')
         .replace(/(^|[^_])__([^_\n](?:[^_\n]|_[^_\n])*?)__(?=[^_]|$)/g, '$1<u>$2</u>');
-
-      // Media stimulus — hanya http/https
       text = text.replace(/\[IMG:\s*([^\]]+)\]/gi, (_, u) => {
         const s = safeUrl(u.trim());
         return s ? `<br><img src="${s}" alt="Stimulus Image" loading="lazy"><br>` : '';
@@ -613,12 +637,11 @@
         const s = safeUrl(u);
         return s ? `${p}<br><audio controls preload="none" src="${s}"></audio><br>` : `${p}${u}`;
       });
-
       return text;
     }
 
     // =========================================================================
-    // APPLICATION STATE
+    // STATE
     // =========================================================================
     const state = {
       config: {
@@ -647,7 +670,11 @@
       timerInterval: null,
       examActive: false,
       submitting: false,
-      lastTabWarnMs: 0
+      lastTabWarnMs: 0,
+
+      // DUMMY
+      unlockCode: '',
+      dummyUnlocked: false
     };
 
     const TYPE_LABELS = {
@@ -676,18 +703,11 @@
           body: JSON.stringify({ action, args })
         });
       } catch (networkErr) {
-        throw new Error(
-          'Gagal terhubung ke server (' + (networkErr && networkErr.message ? networkErr.message : 'Network error') +
-          '). Jika menggunakan Safari di iPhone/iPad/Mac, buka tautan asli langsung di aplikasi Safari dan pastikan pemblokir pelacakan/iklan tidak memblokir script.google.com.'
-        );
+        throw new Error('Gagal terhubung ke server (' + (networkErr && networkErr.message ? networkErr.message : 'Network error') + '). Pastikan Anda membuka tautan HTTPS asli di Safari.');
       }
-      if (!response.ok) {
-        throw new Error('Server merespons dengan status ' + response.status + '.');
-      }
+      if (!response.ok) throw new Error('Server merespons dengan status ' + response.status + '.');
       const data = await response.json();
-      if (data && data.status === 'error') {
-        throw new Error(data.message || 'Terjadi kesalahan pada server.');
-      }
+      if (data && data.status === 'error') throw new Error(data.message || 'Terjadi kesalahan pada server.');
       return data;
     }
 
@@ -716,29 +736,62 @@
         osc.type = 'triangle';
         osc.frequency.setValueAtTime(660, ctx.currentTime);
         gain.gain.setValueAtTime(0.12, ctx.currentTime);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.18);
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.start(); osc.stop(ctx.currentTime + 0.18);
       } catch (e) {}
     }
 
     // =========================================================================
-    // INITIALIZATION & SETUP FORM
+    // DUMMY DETECTION
+    // =========================================================================
+    function isDummyMode() {
+      return state.dummyUnlocked &&
+        (state.kelas.trim() === '1111' || state.namaSiswa.trim().toLowerCase() === 'dummy');
+    }
+    function toggleDummyQuickActions() {
+      $('dummyQuickActions').classList.toggle('hidden', !isDummyMode());
+    }
+    function updateDummyBanner() {
+      $('dummyModeBanner').classList.toggle('hidden', !state.dummyUnlocked);
+    }
+
+    // =========================================================================
+    // INIT
     // =========================================================================
     async function initPortal() {
       showLoading('Loading NEng Eva Student Portal...');
       try {
-        const res = await callApi('getInitialData');
+        // Ambil kode dummy dari URL atau sessionStorage
+        const params = new URLSearchParams(window.location.search);
+        let unlockCode = params.get('dummy') || '';
+        if (unlockCode === '1' || unlockCode === 'true') {
+          unlockCode = sessionStorage.getItem('neng_eva_dummy_code') || '';
+        }
+        if (!unlockCode) {
+          unlockCode = sessionStorage.getItem('neng_eva_dummy_code') || '';
+        }
+
+        state.unlockCode = unlockCode;
+
+        const res = await callApi('getInitialData', unlockCode);
         state.config = Object.assign(state.config, res.config || {});
         state.classes = res.classes || [];
         state.testPackages = res.testPackages || [];
         state.allTestPackages = res.allTestPackages || res.testPackages || [];
-        if (state.config.APP_TITLE) {
-          document.title = state.config.APP_TITLE;
+        state.dummyUnlocked = Boolean(res.dummyUnlocked);
+
+        if (state.config.APP_TITLE) document.title = state.config.APP_TITLE;
+
+        if (unlockCode && !state.dummyUnlocked) {
+          sessionStorage.removeItem('neng_eva_dummy_code');
+          state.unlockCode = '';
+        } else if (unlockCode && state.dummyUnlocked) {
+          sessionStorage.setItem('neng_eva_dummy_code', unlockCode);
         }
+
         renderSetupForm();
         $('setupSection').classList.remove('hidden');
+        updateDummyBanner();
       } catch (err) {
         $('setupSection').classList.remove('hidden');
         showSetupError(err.message);
@@ -749,12 +802,8 @@
 
     function showSetupError(msg) {
       const box = $('setupErrorBox');
-      if (msg) {
-        box.textContent = msg;
-        box.classList.remove('hidden');
-      } else {
-        box.classList.add('hidden');
-      }
+      if (msg) { box.textContent = msg; box.classList.remove('hidden'); }
+      else box.classList.add('hidden');
     }
 
     function renderSetupForm() {
@@ -765,6 +814,9 @@
       if (state.config.TIME_LIMIT_MIN > 0) {
         pills.push(`<span class="badge badge-warn">Time Limit: ${state.config.TIME_LIMIT_MIN} min</span>`);
       }
+      if (state.dummyUnlocked) {
+        pills.push(`<span class="badge badge-dummy">🧪 DUMMY MODE</span>`);
+      }
       $('setupMetaPills').innerHTML = pills.join('');
 
       $('selectKelas').innerHTML = '<option value="">-- Select Your Class --</option>' +
@@ -773,12 +825,12 @@
       updatePackageDropdown(false);
 
       const needPin = String(state.config.REQUIRE_STUDENT_PIN || 'NO').toUpperCase() === 'YES';
-      $('studentPinGroup').classList.toggle('hidden', !needPin);
-      $('inputStudentPin').required = needPin;
+      $('studentPinGroup').classList.toggle('hidden', !needPin || state.dummyUnlocked);
+      $('inputStudentPin').required = needPin && !state.dummyUnlocked;
     }
 
     function updatePackageDropdown(includeInactiveForDummy) {
-      const list = includeInactiveForDummy ? state.allTestPackages : state.testPackages;
+      const list = (includeInactiveForDummy && state.dummyUnlocked) ? state.allTestPackages : state.testPackages;
       const prev = $('selectPaket').value;
       $('selectPaket').innerHTML = '<option value="">-- Select Test Package --</option>' +
         list.map(p => {
@@ -788,7 +840,6 @@
       if (prev) $('selectPaket').value = prev;
     }
 
-    // ===== NEW: guard request id agar respons kelas lama diabaikan =====
     let classChangeReqId = 0;
 
     async function handleClassChange() {
@@ -796,22 +847,21 @@
       const siswaSel = $('selectSiswa');
       showSetupError('');
 
+      const isDummyClass = state.dummyUnlocked && kelas.trim() === '1111';
+      updatePackageDropdown(isDummyClass);
+
       if (!kelas) {
         siswaSel.innerHTML = '<option value="">-- Select Class First --</option>';
         siswaSel.disabled = true;
-        updatePackageDropdown(false);
         return;
       }
-
-      const isDummyClass = kelas.trim() === '1111';
-      updatePackageDropdown(isDummyClass);
 
       siswaSel.disabled = true;
       siswaSel.innerHTML = '<option value="">Loading students...</option>';
 
       const reqId = ++classChangeReqId;
       try {
-        const res = await callApi('getStudentsByClass', kelas);
+        const res = await callApi('getStudentsByClass', kelas, state.unlockCode);
         if (reqId !== classChangeReqId) return;
         const students = res.students || [];
         siswaSel.innerHTML = '<option value="">-- Select Your Name --</option>' +
@@ -825,7 +875,7 @@
     }
 
     // =========================================================================
-    // START EXAM & DRAFT PERSISTENCE
+    // DRAFT PERSISTENCE
     // =========================================================================
     function getDraftStorageKey() {
       return 'neng_eva_draft_' + [state.kelas, state.namaSiswa, state.paketId].join('|').toLowerCase();
@@ -875,6 +925,9 @@
       });
     }
 
+    // =========================================================================
+    // START EXAM
+    // =========================================================================
     async function handleStartTest(e) {
       e.preventDefault();
       showSetupError('');
@@ -890,11 +943,10 @@
 
       showLoading('Preparing your test questions...');
       try {
-        const res = await callApi('getQuestions', paketId, kelas, namaSiswa, pin);
+        const res = await callApi('getQuestions', paketId, kelas, namaSiswa, pin, state.unlockCode);
         const questions = resolvePassagesForExam(res.questions || []);
-        if (questions.length === 0) {
-          throw new Error('No questions are available in this test package.');
-        }
+        if (questions.length === 0) throw new Error('No questions are available in this test package.');
+
         state.kelas = kelas;
         state.namaSiswa = namaSiswa;
         state.pin = pin;
@@ -909,9 +961,7 @@
         state.elapsedSec = Math.max(0, Number(res.elapsedSec) || 0);
         state.examActive = true;
         loadLocalDraft();
-        if (state.currentIndex >= state.questions.length) {
-          state.currentIndex = 0;
-        }
+        if (state.currentIndex >= state.questions.length) state.currentIndex = 0;
         enterExamScreen();
       } catch (err) {
         showSetupError(err.message);
@@ -926,6 +976,20 @@
       $('examSection').classList.remove('hidden');
       $('examStudentLabel').textContent = `${state.namaSiswa} (${state.kelas})`;
       $('examPackageLabel').textContent = `${state.paketName} (${state.paketId})`;
+
+      // Banner dummy di dalam exam section
+      let banner = $('examDummyBanner');
+      if (isDummyMode()) {
+        if (!banner) {
+          banner = document.createElement('div');
+          banner.id = 'examDummyBanner';
+          banner.className = 'dummy-banner';
+          banner.textContent = 'DUMMY MODE ACTIVE — Data akan masuk ke sheet Hasil. Hapus setelah uji.';
+          $('examSection').insertBefore(banner, $('examSection').firstChild);
+        }
+      } else if (banner) banner.remove();
+
+      toggleDummyQuickActions();
       updateTabSwitchBadge();
       startExamTimer();
       renderCurrentQuestion();
@@ -933,7 +997,7 @@
     }
 
     // =========================================================================
-    // TIMER & TAB-SWITCH WARNING SYSTEM
+    // TIMER & TAB WARNING
     // =========================================================================
     function formatSeconds(sec) {
       const s = Math.max(0, Math.floor(sec));
@@ -943,7 +1007,6 @@
       const pad = (n) => (n < 10 ? '0' + n : String(n));
       return hrs > 0 ? `${pad(hrs)}:${pad(mins)}:${pad(secs)}` : `${pad(mins)}:${pad(secs)}`;
     }
-
     function startExamTimer() {
       clearInterval(state.timerInterval);
       const limitSec = (Number(state.config.TIME_LIMIT_MIN) || 0) * 60;
@@ -968,14 +1031,11 @@
       tick();
       state.timerInterval = setInterval(tick, 1000);
     }
-
     function updateTabSwitchBadge() {
       const badge = $('examTabSwitchBadge');
       badge.textContent = `Tab Switches: ${state.tabSwitches}`;
       badge.className = state.tabSwitches > 0 ? 'badge badge-warn' : 'badge badge-neutral';
     }
-
-    // ===== NEW: jangan tandai pelanggaran saat modal submit/warning sedang terbuka =====
     function registerTabExitViolation() {
       if (!state.examActive || state.submitting) return;
       if (!$('submitConfirmModal').classList.contains('hidden')) return;
@@ -984,27 +1044,20 @@
       const now = Date.now();
       if (now - state.lastTabWarnMs < 1500) return;
       state.lastTabWarnMs = now;
-
       state.tabSwitches++;
       updateTabSwitchBadge();
       saveLocalDraft();
       playWarningBeep();
-
       $('tabWarningCountPill').textContent = `Violation #${state.tabSwitches}`;
       $('tabWarningMessage').textContent =
         `You left the assessment tab/window (${state.tabSwitches}x recorded). This activity is logged and reported to your teacher. Please stay on this page until you submit your test.`;
       $('tabWarningModal').classList.remove('hidden');
     }
-
-    document.addEventListener('visibilitychange', () => {
-      if (document.hidden) registerTabExitViolation();
-    });
-    window.addEventListener('blur', () => {
-      registerTabExitViolation();
-    });
+    document.addEventListener('visibilitychange', () => { if (document.hidden) registerTabExitViolation(); });
+    window.addEventListener('blur', () => { registerTabExitViolation(); });
 
     // =========================================================================
-    // QUESTION RENDERING & ANSWER CAPTURE
+    // QUESTION RENDERING
     // =========================================================================
     function isQuestionAnswered(q) {
       const ans = state.answers[q._qKey];
@@ -1013,12 +1066,10 @@
       if (t === 'MATRIKS') return Array.isArray(ans) && ans.some(v => v && String(v).trim() !== '');
       return ans !== undefined && ans !== null && String(ans).trim() !== '';
     }
-
     function renderNavigator() {
       let answeredCount = 0;
       state.questions.forEach(q => { if (isQuestionAnswered(q)) answeredCount++; });
       $('examProgressBadge').textContent = `${answeredCount} / ${state.questions.length} Answered`;
-
       $('questionNavGrid').innerHTML = state.questions.map((q, idx) => {
         const cls = ['q-nav-btn'];
         if (idx === state.currentIndex) cls.push('current');
@@ -1027,7 +1078,6 @@
         return `<button type="button" class="${cls.join(' ')}" onclick="jumpToQuestion(${idx})">${escapeHtml(q._qKey)}</button>`;
       }).join('');
     }
-
     function jumpToQuestion(idx) {
       if (idx < 0 || idx >= state.questions.length) return;
       pauseExamAudio();
@@ -1035,13 +1085,9 @@
       saveLocalDraft();
       renderCurrentQuestion();
     }
-
     function pauseExamAudio() {
-      document.querySelectorAll('#examSection audio').forEach(a => {
-        try { a.pause(); } catch (e) {}
-      });
+      document.querySelectorAll('#examSection audio').forEach(a => { try { a.pause(); } catch (e) {} });
     }
-
     function renderCurrentQuestion() {
       const q = state.questions[state.currentIndex];
       if (!q) return;
@@ -1076,8 +1122,7 @@
             <label class="form-label" for="shortAnswerInput">Your Answer</label>
             <input type="text" id="shortAnswerInput" class="form-control"
               placeholder="Type your answer here..."
-              value="${escapeHtml(curAns || '')}"
-              autocomplete="off" />
+              value="${escapeHtml(curAns || '')}" autocomplete="off" />
           </div>
         `;
         const inp = $('shortAnswerInput');
@@ -1107,7 +1152,6 @@
           </div>
         `;
       } else {
-        // PG, BS, MENJODOHKAN
         $('questionStem').innerHTML = formatRichMedia(q.pertanyaan);
         const opts = Object.assign({}, q.options || {});
         if (t === 'BS') {
@@ -1135,7 +1179,6 @@
       const isLast = state.currentIndex === state.questions.length - 1;
       $('btnNextQ').classList.toggle('hidden', isLast);
     }
-
     function selectSingleOption(letter) {
       const q = state.questions[state.currentIndex];
       if (!q) return;
@@ -1143,7 +1186,6 @@
       saveLocalDraft();
       renderCurrentQuestion();
     }
-
     function togglePgkOption(letter) {
       const q = state.questions[state.currentIndex];
       if (!q) return;
@@ -1155,7 +1197,6 @@
       saveLocalDraft();
       renderCurrentQuestion();
     }
-
     function renderMatrixQuestion(q, curAns, container) {
       let raw = String(q.pertanyaan || '');
       let headers = [];
@@ -1210,7 +1251,6 @@
         </div>
       `;
     }
-
     function selectMatrixCell(rowIdx, letter, totalRows) {
       const q = state.questions[state.currentIndex];
       if (!q) return;
@@ -1223,7 +1263,38 @@
     }
 
     // =========================================================================
-    // SUBMIT ANSWERS & RENDER RESULT
+    // DUMMY QUICK ACTIONS
+    // =========================================================================
+    function fillRandomAnswers() {
+      if (!isDummyMode()) return;
+      state.questions.forEach(q => {
+        const t = String(q.tipeSoal || 'PG').toUpperCase();
+        if (t === 'IS') {
+          state.answers[q._qKey] = 'dummy ' + Math.floor(Math.random() * 100);
+        } else if (t === 'MATRIKS') {
+          state.answers[q._qKey] = Array.from({ length: 3 }, () => Math.random() > 0.5 ? 'A' : 'B');
+        } else if (t === 'PGK') {
+          const letters = ['A', 'B', 'C', 'D', 'E'].filter(l => q.options && q.options[l] && q.options[l] !== '-');
+          state.answers[q._qKey] = letters.filter(() => Math.random() > 0.5);
+        } else {
+          const letters = ['A', 'B', 'C', 'D', 'E'].filter(l => q.options && q.options[l] && q.options[l] !== '-');
+          if (letters.length) state.answers[q._qKey] = letters[Math.floor(Math.random() * letters.length)];
+        }
+      });
+      saveLocalDraft();
+      renderCurrentQuestion();
+      showToast('Random answers filled. Ready to submit.');
+    }
+    function clearAllAnswers() {
+      if (!isDummyMode()) return;
+      state.answers = {};
+      saveLocalDraft();
+      renderCurrentQuestion();
+      showToast('All answers cleared.');
+    }
+
+    // =========================================================================
+    // SUBMIT & RESULT
     // =========================================================================
     function openSubmitConfirmation() {
       let unanswered = 0;
@@ -1233,7 +1304,6 @@
         : 'All questions have been answered. Are you sure you want to submit your assessment now?';
       $('submitConfirmModal').classList.remove('hidden');
     }
-
     async function executeSubmitAnswers(isAutoTimeout) {
       if (state.submitting) return;
       state.submitting = true;
@@ -1250,7 +1320,8 @@
           namaSiswa: state.namaSiswa,
           paketId: state.paketId,
           answers: state.answers,
-          tabSwitches: state.tabSwitches
+          tabSwitches: state.tabSwitches,
+          unlockCode: state.unlockCode
         });
         clearLocalDraft();
         renderResultScreen(res);
@@ -1263,7 +1334,6 @@
         hideLoading();
       }
     }
-
     function renderResultScreen(res) {
       $('examSection').classList.add('hidden');
       $('resultSection').classList.remove('hidden');
@@ -1290,6 +1360,13 @@
           </div>
         `);
       }
+      if (isDummyMode()) {
+        notices.push(`
+          <div class="dummy-banner">
+            Ini adalah hasil DUMMY. Data masuk ke sheet Hasil dengan Kelas = 1111. Gunakan tombol "Clear My Dummy Data" di bawah untuk membersihkan.
+          </div>
+        `);
+      }
       $('resultNoticeArea').innerHTML = notices.join('');
 
       $('resStatCorrect').textContent = `${res.correctCount}/${res.totalQuestions}`;
@@ -1297,9 +1374,10 @@
       $('resStatAttempt').textContent = `#${res.attempt} of ${res.maxAttempts}`;
       $('resStatTabs').textContent = state.tabSwitches;
 
-      const isDummy = state.kelas.trim() === '1111' || state.namaSiswa.trim().toLowerCase() === 'dummy';
+      const isDummy = isDummyMode();
       const canRetake = isDummy || (!res.isPassed && Number(res.attempt) < Number(res.maxAttempts));
       $('btnRetakeTest').classList.toggle('hidden', !canRetake);
+      $('btnClearDummyData').classList.toggle('hidden', !isDummy);
 
       const showKey = Boolean(res.showKey);
       $('keyHiddenBanner').classList.toggle('hidden', showKey);
@@ -1313,19 +1391,14 @@
           : (st === 'PARTIAL'
             ? '<span class="badge badge-warn">PARTIAL</span>'
             : '<span class="badge badge-remedial">INCORRECT</span>');
-
         const keyRowHtml = showKey && d.keyAns
           ? `<div class="review-ans-row" style="background:var(--success-soft); border-color:#9ecab9;">
                <strong>Answer Key:</strong> ${escapeHtml(d.keyAns)}
-             </div>`
-          : '';
-
+             </div>` : '';
         const expRowHtml = showKey && d.pembahasan
           ? `<div class="review-explanation">
                <strong>Explanation:</strong> ${formatRichMedia(d.pembahasan)}
-             </div>`
-          : '';
-
+             </div>` : '';
         return `
           <div class="review-card ${cardCls}">
             <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;">
@@ -1370,10 +1443,7 @@
     $('btnOpenSubmitModal').addEventListener('click', openSubmitConfirmation);
     $('btnCancelSubmit').addEventListener('click', () => $('submitConfirmModal').classList.add('hidden'));
     $('btnConfirmSubmit').addEventListener('click', () => executeSubmitAnswers(false));
-
-    $('btnAcknowledgeTabWarning').addEventListener('click', () => {
-      $('tabWarningModal').classList.add('hidden');
-    });
+    $('btnAcknowledgeTabWarning').addEventListener('click', () => $('tabWarningModal').classList.add('hidden'));
 
     $('btnBackToPortal').addEventListener('click', () => {
       $('resultSection').classList.add('hidden');
@@ -1381,7 +1451,6 @@
       showSetupError('');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
-
     $('btnRetakeTest').addEventListener('click', () => {
       $('resultSection').classList.add('hidden');
       $('setupSection').classList.remove('hidden');
@@ -1389,7 +1458,24 @@
       $('startTestForm').dispatchEvent(new Event('submit', { cancelable: true }));
     });
 
-    // Boot portal
+    $('btnFillRandom').addEventListener('click', fillRandomAnswers);
+    $('btnFillBlank').addEventListener('click', clearAllAnswers);
+
+    $('btnClearDummyData').addEventListener('click', async () => {
+      if (!isDummyMode()) return;
+      if (!confirm('Hapus semua baris data dummy (Kelas=1111 atau Nama=dummy) dari sheet Hasil? Tindakan ini tidak bisa dibatalkan.')) return;
+      showLoading('Clearing dummy data...');
+      try {
+        const res = await callApi('clearDummyResults');
+        showToast(res.message || 'Dummy data cleared.');
+      } catch (err) {
+        showToast(err.message);
+      } finally {
+        hideLoading();
+      }
+    });
+
+    // Boot
     initPortal();
   </script>
 </body>
