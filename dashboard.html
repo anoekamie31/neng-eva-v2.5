@@ -1,1041 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NEng Eva Dashboard</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      --bg-cream: #f5f4ed;
-      --card-bg: #faf9f4;
-      --card-pure: #ffffff;
-      --teal-dark: #3e5b61;
-      --teal-hover: #2f474c;
-      --teal-mid: #678c93;
-      --teal-soft: #e3ecee;
-      --ochre: #dcd695;
-      --ochre-strong: #cfc776;
-      --ochre-soft: #f3f0d7;
-      --blue-ice: #d3dce0;
-      --text-main: #262e2b;
-      --text-muted: #626d69;
-      --border-line: #8c9692;
-      --border-soft: #d5d7ce;
-      --danger: #c93b2b;
-      --danger-soft: #fbeae8;
-      --success: #2f6f5e;
-      --success-soft: #e4f2ed;
-      --topbar-h: 62px;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { -webkit-text-size-adjust: 100%; }
-    body {
-      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--bg-cream);
-      color: var(--text-main);
-      line-height: 1.48;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      overflow-x: clip;
-    }
-    .hidden { display: none !important; }
-
-    /* COMPACT EDITORIAL TOPBAR */
-    .topbar {
-      background: var(--card-bg);
-      border-bottom: 1.5px solid var(--border-line);
-      padding: 11px 20px;
-      position: sticky;
-      top: 0;
-      z-index: 30;
-    }
-    .topbar-inner {
-      max-width: 1280px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-    .brand { display: flex; align-items: center; gap: 11px; }
-    .brand-monogram {
-      width: 36px; height: 36px;
-      background: var(--teal-dark); color: #fff;
-      font-family: 'Lora', Georgia, serif; font-weight: 700; font-size: 15px;
-      display: grid; place-items: center;
-      border: 1.5px solid var(--text-main); flex-shrink: 0;
-    }
-    .editorial-title {
-      font-family: 'Lora', Georgia, serif;
-      font-size: 21px; font-weight: 700; color: var(--text-main); line-height: 1.15;
-    }
-    .editorial-title .accent-word { color: var(--teal-dark); }
-    .editorial-sub { font-size: 11.5px; color: var(--text-muted); }
-    .header-right-cluster { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-    .dot-matrix-decor {
-      display: grid; grid-template-columns: repeat(5, 4px); gap: 4px;
-      opacity: 0.65; margin-left: 4px;
-    }
-    .dot-matrix-decor span {
-      width: 4px; height: 4px; border-radius: 50%;
-      background: var(--text-main); display: block;
-    }
-
-    /* CONTAINER */
-    .container {
-      width: 100%; max-width: 1280px; margin: 0 auto;
-      padding: 16px 18px 44px; flex: 1;
-    }
-
-    /* EDITORIAL PANEL CARD */
-    .panel-box {
-      background: var(--card-bg);
-      border: 1px solid var(--border-line);
-      padding: 14px 16px; margin-bottom: 14px;
-    }
-    .panel-heading {
-      display: inline-flex; align-items: center;
-      font-size: 14px; font-weight: 800; color: var(--text-main);
-      padding-bottom: 4px; margin-bottom: 12px;
-      border-bottom: 1.5px solid var(--teal-dark);
-      position: relative; padding-right: 16px;
-    }
-    .panel-heading::after {
-      content: ''; position: absolute; right: -4px; bottom: -4.5px;
-      width: 6.5px; height: 6.5px; border-radius: 50%;
-      border: 1.5px solid var(--teal-dark); background: var(--card-bg);
-    }
-
-    /* BUTTONS & INPUTS */
-    .btn {
-      display: inline-flex; align-items: center; justify-content: center; gap: 5px;
-      padding: 7px 12px; border-radius: 5px;
-      font-family: inherit; font-size: 12.5px; font-weight: 700;
-      border: 1px solid transparent; cursor: pointer; text-decoration: none;
-      transition: 0.15s; white-space: nowrap; -webkit-tap-highlight-color: transparent;
-    }
-    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-    .btn-primary { background: var(--teal-dark); color: #fff; border-color: var(--teal-dark); }
-    .btn-primary:hover:not(:disabled) { background: var(--teal-hover); }
-    .btn-success { background: var(--ochre); color: var(--text-main); border-color: #b7b064; }
-    .btn-success:hover:not(:disabled) { background: var(--ochre-strong); }
-    .btn-danger-soft { background: var(--danger-soft); color: var(--danger); border-color: #e6b4ae; }
-    .btn-danger-soft:hover:not(:disabled) { background: #f7dad6; }
-    .btn-outline { background: var(--card-pure); color: var(--text-main); border-color: var(--border-line); }
-    .btn-outline:hover:not(:disabled) { background: #efeee6; }
-    .btn-outline.active-toggle { background: var(--teal-dark); color: #fff; border-color: var(--teal-dark); }
-    .btn-xs { padding: 4px 8px; font-size: 11px; border-radius: 4px; }
-    .btn-sm { padding: 5px 10px; font-size: 11.5px; }
-    .btn-block { width: 100%; padding: 10px 14px; font-size: 13px; }
-    .form-control {
-      width: 100%; padding: 7px 10px;
-      border: 1px solid var(--border-line); border-radius: 5px;
-      font-family: inherit; font-size: 12.5px; color: var(--text-main);
-      background: var(--card-pure);
-    }
-    .form-control:focus {
-      outline: none; border-color: var(--teal-dark);
-      box-shadow: 0 0 0 2px rgba(62, 91, 97, 0.16);
-    }
-
-    /* TOGGLE SWITCH */
-    .toggle-row-header {
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 12px; margin-bottom: 5px;
-    }
-    .switch-control {
-      position: relative; display: inline-block;
-      width: 46px; height: 24px; flex-shrink: 0;
-    }
-    .switch-control input { opacity: 0; width: 0; height: 0; }
-    .switch-slider {
-      position: absolute; cursor: pointer; inset: 0;
-      background-color: #c8cbc2; border: 1px solid var(--border-line);
-      border-radius: 999px; transition: 0.2s;
-    }
-    .switch-slider::before {
-      position: absolute; content: "";
-      height: 18px; width: 18px; left: 2px; bottom: 2px;
-      background-color: #ffffff; border-radius: 50%;
-      transition: 0.2s; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.22);
-    }
-    .switch-control input:checked + .switch-slider {
-      background-color: var(--teal-dark); border-color: var(--teal-dark);
-    }
-    .switch-control input:checked + .switch-slider::before { transform: translateX(22px); }
-
-    /* LOGIN BOX */
-    .login-wrap { max-width: 410px; margin: 32px auto; }
-    .pin-input {
-      letter-spacing: 6px; font-size: 18px; font-weight: 800;
-      text-align: center; padding: 11px;
-    }
-    .alert-error {
-      background: var(--danger-soft); color: var(--danger);
-      border: 1px solid #e6b4ae; padding: 9px 12px; border-radius: 5px;
-      font-size: 12.5px; font-weight: 600; margin-bottom: 12px;
-    }
-    .info-banner {
-      background: var(--ochre-soft); color: var(--text-main);
-      border: 1px solid #c9c177; padding: 9px 12px; border-radius: 5px;
-      font-size: 12.5px; margin-bottom: 12px;
-    }
-
-    /* COMPACT FILTER BAR */
-    .filter-strip {
-      background: var(--card-bg);
-      border: 1px solid var(--border-line);
-      padding: 10px 14px; margin-bottom: 14px;
-    }
-    .filter-grid {
-      display: grid; grid-template-columns: 1.3fr 1fr 1fr 1.2fr auto;
-      gap: 10px; align-items: end;
-    }
-    .filter-label {
-      display: block; font-size: 10.5px; font-weight: 800; color: var(--text-muted);
-      text-transform: uppercase; letter-spacing: 0.35px; margin-bottom: 3px;
-    }
-
-    /* KPI STRIP */
-    .kpi-strip {
-      display: grid; grid-template-columns: repeat(4, 1fr);
-      gap: 10px; margin-bottom: 14px;
-    }
-    .kpi-card {
-      background: var(--card-bg); border: 1px solid var(--border-line);
-      padding: 10px 13px; display: flex; align-items: center; gap: 11px;
-    }
-    .kpi-circle-icon {
-      width: 36px; height: 36px; border-radius: 50%;
-      background: var(--teal-dark); color: #fff;
-      display: grid; place-items: center; flex-shrink: 0;
-    }
-    .kpi-label {
-      font-size: 11px; font-weight: 800; color: var(--text-muted);
-      text-transform: uppercase; letter-spacing: 0.25px;
-    }
-    .kpi-val {
-      font-size: 21px; font-weight: 800; color: var(--text-main);
-      line-height: 1.15; font-variant-numeric: tabular-nums;
-    }
-    .kpi-sub { font-size: 11px; color: var(--text-muted); }
-
-    /* CHARTS ROW */
-    .charts-row {
-      display: grid; grid-template-columns: 1.15fr 0.85fr 1fr;
-      gap: 12px; margin-bottom: 14px;
-    }
-    .gauge-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      gap: 8px;
-    }
-    .gauge-item {
-      background: var(--card-pure); border: 1px solid var(--border-soft);
-      padding: 7px 6px 6px; text-align: center; cursor: pointer; transition: 0.14s;
-    }
-    .gauge-item:hover { border-color: var(--teal-dark); background: #f2f5f5; }
-    .gauge-item.active-pkg { border: 1.5px solid var(--teal-dark); background: var(--teal-soft); }
-    .gauge-title {
-      font-size: 11.5px; font-weight: 800; color: var(--text-main);
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    }
-    .gauge-sub { font-size: 10.5px; color: var(--text-muted); }
-    .chart-legend-inline {
-      display: flex; justify-content: center; gap: 10px;
-      font-size: 11px; font-weight: 700; margin-bottom: 6px; flex-wrap: wrap;
-    }
-    .chart-legend-inline span { display: inline-flex; align-items: center; gap: 4px; }
-    .legend-swatch {
-      width: 8px; height: 8px; border-radius: 2px; display: inline-block;
-    }
-    .donut-flex {
-      display: flex; align-items: center; justify-content: center;
-      gap: 12px; flex-wrap: wrap;
-    }
-    .donut-legend-list {
-      display: flex; flex-direction: column; gap: 4px;
-      font-size: 11px; min-width: 110px;
-    }
-    .donut-leg-item {
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 8px; padding: 2px 6px;
-      background: var(--card-pure); border: 1px solid var(--border-soft);
-    }
-
-    /* NAVIGATION TABS */
-    .tabs-bar {
-      display: flex; gap: 4px; overflow-x: auto;
-      border-bottom: 2px solid var(--teal-dark); margin-bottom: 12px;
-    }
-    .tab-btn {
-      background: #eae9df; border: 1px solid var(--border-soft); border-bottom: none;
-      padding: 7px 13px;
-      font-family: inherit; font-size: 12.5px; font-weight: 700; color: var(--text-muted);
-      cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
-      white-space: nowrap; transition: 0.14s;
-    }
-    .tab-btn:hover { color: var(--text-main); background: #e1dfd3; }
-    .tab-btn.active { color: #fff; background: var(--teal-dark); border-color: var(--teal-dark); }
-    .tab-badge {
-      font-size: 10.5px; font-weight: 800; padding: 1px 6px;
-      border-radius: 999px; background: var(--ochre); color: var(--text-main);
-    }
-
-    /* TABLES */
-    .table-toolbar {
-      display: flex; flex-wrap: wrap; align-items: center;
-      justify-content: space-between; gap: 8px; margin-bottom: 10px;
-    }
-    .table-wrap {
-      width: 100%; overflow-x: auto;
-      border: 1px solid var(--border-line); background: var(--card-pure);
-    }
-    table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
-    th, td {
-      padding: 7px 9px; text-align: left;
-      border: 1px solid var(--border-soft); vertical-align: middle;
-    }
-    thead th:first-child { background: var(--ochre); color: var(--text-main); font-weight: 800; }
-    thead th:not(:first-child) { background: var(--teal-dark); color: #ffffff; font-weight: 700; }
-    th { font-size: 11px; letter-spacing: 0.2px; white-space: nowrap; }
-    th.sortable-th { cursor: pointer; user-select: none; transition: 0.14s; }
-    thead th.sortable-th:first-child:hover { background: var(--ochre-strong); }
-    thead th.sortable-th:not(:first-child):hover { background: var(--teal-hover); }
-    .sort-arrow { display: inline-block; font-size: 9.5px; margin-left: 4px; opacity: 0.55; }
-    th.sort-active .sort-arrow { opacity: 1; font-weight: 900; }
-    tbody tr:nth-child(even) { background: #f8f8f3; }
-    tbody tr:hover { background: #eef3f4; }
-    .score-low-alert { color: var(--danger); font-weight: 800; }
-    .q-snippet-cell {
-      max-width: 340px; white-space: normal; word-break: break-word; line-height: 1.38;
-    }
-    .action-cell { white-space: nowrap; width: 1%; }
-
-    /* BADGES */
-    .badge {
-      display: inline-block; padding: 2px 7px; border-radius: 4px;
-      font-size: 10.5px; font-weight: 800; white-space: nowrap;
-    }
-    .badge-passed { background: var(--success-soft); color: var(--success); border: 1px solid #b6dacd; }
-    .badge-remedial { background: var(--danger-soft); color: var(--danger); border: 1px solid #e6b4ae; }
-    .badge-warn { background: var(--ochre-soft); color: #786e1c; border: 1px solid #cfc776; }
-    .badge-neutral { background: #ecece4; color: var(--text-main); border: 1px solid var(--border-soft); }
-    .badge-teal { background: var(--teal-soft); color: var(--teal-dark); border: 1px solid #b8cdd1; }
-
-    /* DIFFICULTY BAR & ITEM ANALYSIS */
-    .diff-bar {
-      width: 56px; height: 6px; background: var(--blue-ice);
-      border-radius: 999px; overflow: hidden; display: inline-block;
-      vertical-align: middle; margin-right: 4px;
-    }
-    .diff-fill { height: 100%; background: var(--teal-dark); }
-    .analysis-summary-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr);
-      gap: 10px; margin-bottom: 12px;
-    }
-    .analysis-sum-card {
-      border: 1px solid var(--border-line); padding: 9px 12px;
-      background: var(--card-pure); display: flex; align-items: center;
-      justify-content: space-between; gap: 8px;
-    }
-    .analysis-sum-card span { font-size: 11.5px; font-weight: 700; color: var(--text-muted); }
-    .analysis-sum-card strong { font-size: 16px; font-weight: 800; white-space: nowrap; }
-    .detail-drawer-row td {
-      background: #f3f2ea !important; padding: 12px 14px;
-      border-bottom: 2px solid var(--teal-dark);
-    }
-    .distractor-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
-      gap: 8px; margin-top: 8px;
-    }
-    .dist-box {
-      background: var(--card-pure); border: 1px solid var(--border-soft);
-      padding: 8px 10px;
-    }
-    .dist-box.is-key { border-color: var(--success); background: var(--success-soft); }
-    .dist-box.is-danger { border-color: var(--danger); background: var(--danger-soft); }
-    .dist-bar-track {
-      width: 100%; height: 5px; background: var(--blue-ice);
-      border-radius: 999px; overflow: hidden; margin: 4px 0;
-    }
-    .dist-bar-fill { height: 100%; background: var(--teal-mid); }
-    .dist-box.is-key .dist-bar-fill { background: var(--success); }
-    .dist-box.is-danger .dist-bar-fill { background: var(--danger); }
-
-    /* SETTINGS GRID */
-    .settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-    .setting-row {
-      padding: 12px; border: 1px solid var(--border-soft);
-      background: var(--card-pure); margin-bottom: 10px;
-    }
-    .setting-row h4 { font-size: 13px; font-weight: 800; margin-bottom: 3px; }
-    .setting-row p { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; }
-
-    /* PREVIEW PANEL */
-    .preview-sticky-bar {
-      position: sticky; top: var(--topbar-h); z-index: 20;
-      background: var(--card-bg); border: 1px solid var(--teal-dark);
-      border-left: 4px solid var(--teal-dark); padding: 9px 12px; margin-bottom: 10px;
-      box-shadow: 0 4px 12px rgba(38, 46, 43, 0.08);
-    }
-    .preview-bar-top {
-      display: flex; flex-wrap: wrap; align-items: center;
-      justify-content: space-between; gap: 8px;
-    }
-    .preview-title-cluster { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
-    .preview-jump-strip {
-      display: flex; align-items: center; gap: 4px; flex-wrap: wrap;
-      margin-top: 7px; padding-top: 7px; border-top: 1px dashed var(--border-soft);
-    }
-    .jump-pill {
-      min-width: 24px; height: 22px; padding: 0 5px;
-      border-radius: 4px; border: 1px solid var(--border-line);
-      background: var(--card-pure); font-family: inherit; font-size: 11px;
-      font-weight: 700; color: var(--text-main); cursor: pointer; transition: 0.12s;
-    }
-    .jump-pill:hover { background: var(--teal-dark); color: #fff; border-color: var(--teal-dark); }
-    .jump-pill.has-issue { background: var(--danger-soft); color: var(--danger); border-color: var(--danger); }
-    .jump-pill.has-issue:hover { background: var(--danger); color: #fff; }
-
-    .passage-group-card {
-      background: #f2f1e8; border: 1px solid var(--border-line);
-      border-left: 3.5px solid var(--teal-mid); padding: 9px 12px;
-      margin-top: 10px; margin-bottom: 7px;
-    }
-    .passage-group-head {
-      display: flex; align-items: center; justify-content: space-between; gap: 8px;
-    }
-    .passage-group-body {
-      margin-top: 7px; padding-top: 7px; border-top: 1px solid var(--border-soft);
-      font-size: 13px; line-height: 1.56; color: var(--text-main);
-      white-space: pre-line; max-width: 84ch;
-    }
-
-    .preview-q {
-      border: 1px solid var(--border-soft); border-left: 3px solid var(--teal-dark);
-      padding: 9px 12px; margin-bottom: 7px; background: var(--card-pure);
-      scroll-margin-top: 155px; transition: border-color 0.15s;
-    }
-    .preview-q:hover { border-color: var(--border-line); }
-    .preview-q.has-issue { border-left: 4px solid var(--danger); background: #fffcfc; }
-    .preview-q-head {
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 8px; flex-wrap: wrap; margin-bottom: 6px; padding-bottom: 5px;
-      border-bottom: 1px solid #ecece4; font-size: 11.5px;
-    }
-    .preview-q-num {
-      display: inline-flex; align-items: center; justify-content: center;
-      background: var(--teal-dark); color: #fff; font-weight: 800;
-      font-size: 11px; padding: 1px 7px; border-radius: 3px;
-    }
-    .preview-q-stem {
-      font-size: 13.5px; font-weight: 600; color: var(--text-main);
-      line-height: 1.46; margin-bottom: 7px; white-space: pre-line; max-width: 84ch;
-    }
-    .preview-opts-grid { display: grid; grid-template-columns: 1fr; gap: 5px; }
-    .preview-opts-grid.two-col { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .opt-pill {
-      display: flex; align-items: flex-start; justify-content: space-between;
-      gap: 8px; padding: 5px 9px; font-size: 12.5px; line-height: 1.4;
-      border: 1px solid var(--border-soft); background: var(--bg-cream);
-      border-radius: 4px;
-    }
-    .opt-pill.is-key {
-      background: var(--success-soft); border-color: var(--success);
-      color: #1c4a3e; font-weight: 700;
-    }
-    .opt-pill-main {
-      display: flex; align-items: flex-start; gap: 7px;
-      min-width: 0; word-break: break-word;
-    }
-    .opt-letter-tag {
-      display: inline-grid; place-items: center;
-      min-width: 19px; height: 19px; border-radius: 3px;
-      background: var(--card-pure); border: 1px solid var(--border-line);
-      font-size: 10.5px; font-weight: 800; color: var(--text-main);
-      flex-shrink: 0; margin-top: 1px;
-    }
-    .opt-pill.is-key .opt-letter-tag {
-      background: var(--success); border-color: var(--success); color: #fff;
-    }
-    .opt-key-pill {
-      font-size: 10px; font-weight: 800; color: var(--success);
-      background: #ffffff; border: 1px solid #9ecab9;
-      padding: 1px 5px; border-radius: 3px;
-      white-space: nowrap; flex-shrink: 0;
-    }
-    .preview-explanation {
-      margin-top: 6px; font-size: 12px; line-height: 1.42;
-      color: var(--text-main); background: var(--ochre-soft);
-      border: 1px solid #d5ce88; padding: 5px 9px; border-radius: 4px;
-    }
-    .preview-issue-bar {
-      margin-top: 6px; font-size: 11.5px; font-weight: 700;
-      color: var(--danger); background: var(--danger-soft);
-      border: 1px solid #e6b4ae; padding: 5px 9px; border-radius: 4px;
-    }
-
-    .passage-group-body img, .preview-q-stem img, .opt-pill img,
-    .passage-preview-box img, .stem-preview-box img {
-      display: block; max-width: 100%; max-height: 250px;
-      width: auto; height: auto; margin: 6px 0;
-      border: 1px solid var(--border-soft); border-radius: 4px;
-    }
-    .passage-group-body audio, .preview-q-stem audio,
-    .passage-preview-box audio, .stem-preview-box audio {
-      width: 100%; max-width: 420px; height: 34px; margin: 6px 0;
-    }
-    .passage-preview-box {
-      background: var(--bg-cream); border: 1px solid var(--border-line);
-      padding: 10px 12px; margin-bottom: 10px;
-      font-size: 13px; color: var(--text-main); white-space: pre-line;
-    }
-
-    /* MODAL & OVERLAY */
-    .overlay {
-      position: fixed; inset: 0;
-      background: rgba(38, 46, 43, 0.55); backdrop-filter: blur(2px);
-      display: grid; place-items: center; z-index: 60; padding: 16px;
-    }
-    .modal-box {
-      background: var(--card-bg); border: 1.5px solid var(--teal-dark);
-      padding: 18px 20px; max-width: 820px; width: 100%;
-      max-height: 90vh; overflow-y: auto;
-      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.24);
-    }
-    .spinner {
-      width: 34px; height: 34px; border: 4px solid var(--blue-ice);
-      border-top-color: var(--teal-dark); border-radius: 50%;
-      animation: spin 0.8s linear infinite; margin: 0 auto 10px;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .toast {
-      position: fixed; bottom: 18px; right: 18px;
-      background: var(--teal-dark); color: #fff;
-      padding: 10px 15px; border-radius: 5px;
-      font-size: 12.5px; font-weight: 600; z-index: 70;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.22);
-    }
-
-    @media (max-width: 1040px) {
-      .charts-row { grid-template-columns: 1fr; }
-      .filter-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-    @media (max-width: 720px) {
-      .kpi-strip { grid-template-columns: repeat(2, 1fr); }
-      .settings-grid { grid-template-columns: 1fr; }
-      .analysis-summary-grid { grid-template-columns: 1fr; }
-      .filter-grid { grid-template-columns: 1fr; }
-      .preview-opts-grid.two-col { grid-template-columns: 1fr; }
-      .preview-sticky-bar { position: static; }
-    }
-  </style>
-</head>
-<body>
-  <!-- COMPACT TOPBAR -->
-  <header class="topbar">
-    <div class="topbar-inner">
-      <div class="brand">
-        <div class="brand-monogram">NE</div>
-        <div>
-          <h1 class="editorial-title"><span class="accent-word">NEng Eva</span> Dashboard</h1>
-          <div class="editorial-sub">Student Performance Analysis, Item Quality &amp; Security Controls</div>
-        </div>
-      </div>
-      <div class="header-right-cluster">
-        <button type="button" id="btnToggleCharts" class="btn btn-outline hidden">Hide Charts</button>
-        <button type="button" id="btnRefresh" class="btn btn-outline hidden">Refresh</button>
-        <a href="index.html" class="btn btn-success">Student Portal</a>
-        <button type="button" id="btnLogout" class="btn btn-danger-soft hidden">Log Out</button>
-        <div class="dot-matrix-decor" aria-hidden="true">
-          <span></span><span></span><span></span><span></span><span></span>
-          <span></span><span></span><span></span><span></span><span></span>
-        </div>
-      </div>
-    </div>
-  </header>
-
-  <main class="container">
-    <!-- 1. TEACHER LOGIN -->
-    <section id="loginSection" class="login-wrap hidden">
-      <div class="panel-box">
-        <div class="panel-heading">Teacher Login</div>
-        <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 14px;">
-          Enter your Teacher PIN to access test analytics, item analysis, and security controls.
-        </p>
-        <div id="loginError" class="alert-error hidden"></div>
-        <form id="loginForm">
-          <div style="margin-bottom: 14px;">
-            <label class="filter-label" for="inputTeacherPin">Teacher PIN</label>
-            <input
-              type="password"
-              id="inputTeacherPin"
-              class="form-control pin-input"
-              placeholder="••••••"
-              autocomplete="off"
-              required
-            />
-          </div>
-          <button type="submit" id="btnTeacherLogin" class="btn btn-primary btn-block">Log In</button>
-        </form>
-      </div>
-    </section>
-
-    <!-- 2. DASHBOARD WORKSPACE -->
-    <section id="dashboardSection" class="hidden">
-      <!-- FILTER STRIP -->
-      <div class="filter-strip">
-        <div class="filter-grid">
-          <div>
-            <label class="filter-label" for="filterPaket">Test Package</label>
-            <select id="filterPaket" class="form-control">
-              <option value="">All Packages</option>
-            </select>
-          </div>
-          <div>
-            <label class="filter-label" for="filterKelas">Class</label>
-            <select id="filterKelas" class="form-control">
-              <option value="">All Classes</option>
-            </select>
-          </div>
-          <div>
-            <label class="filter-label" for="filterDays">Time Range</label>
-            <select id="filterDays" class="form-control">
-              <option value="0">All Time</option>
-              <option value="1">Last 24 Hours</option>
-              <option value="7">Last 7 Days</option>
-              <option value="30">Last 30 Days</option>
-            </select>
-          </div>
-          <div>
-            <label class="filter-label" for="filterSearch">Search Student</label>
-            <input type="text" id="filterSearch" class="form-control" placeholder="Type student name..." />
-          </div>
-          <div>
-            <button type="button" id="btnExportCsv" class="btn btn-primary btn-block">Export CSV</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- KPI STRIP -->
-      <div class="kpi-strip">
-        <div class="kpi-card">
-          <div class="kpi-circle-icon" aria-hidden="true">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-          </div>
-          <div>
-            <div class="kpi-label">Completed</div>
-            <div class="kpi-val" id="kpiUniqueDone">0</div>
-            <div class="kpi-sub" id="kpiTotalStudentsSub">Out of 0 registered</div>
-          </div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-circle-icon" aria-hidden="true">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-          </div>
-          <div>
-            <div class="kpi-label">Passing Rate</div>
-            <div class="kpi-val" id="kpiPassRate">0%</div>
-            <div class="kpi-sub" id="kpiKkmInfo">Passing Score: 80</div>
-          </div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-circle-icon" aria-hidden="true">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-          </div>
-          <div>
-            <div class="kpi-label">Average Score</div>
-            <div class="kpi-val" id="kpiAvgScore">0.00</div>
-            <div class="kpi-sub" id="kpiTotalAttemptsSub">0 total attempts</div>
-          </div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-circle-icon" aria-hidden="true">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          </div>
-          <div>
-            <div class="kpi-label">Pending Students</div>
-            <div class="kpi-val" id="kpiNotDone">-</div>
-            <div class="kpi-sub" id="kpiMissingSub">Select package</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- CHARTS ROW -->
-      <div id="chartsRowSection" class="charts-row">
-        <div class="panel-box" style="margin-bottom: 0;">
-          <div class="panel-heading">Average Package Score</div>
-          <div id="packageGaugesContainer" class="gauge-grid">
-            <div style="font-size: 12px; color: var(--text-muted);">Loading package averages...</div>
-          </div>
-        </div>
-        <div class="panel-box" style="margin-bottom: 0;">
-          <div class="panel-heading">Students by Class</div>
-          <div id="classDonutContainer">
-            <div style="font-size: 12px; color: var(--text-muted);">Loading class breakdown...</div>
-          </div>
-        </div>
-        <div class="panel-box" style="margin-bottom: 0;">
-          <div class="panel-heading">Results by Package</div>
-          <div class="chart-legend-inline">
-            <span><i class="legend-swatch" style="background: var(--teal-dark);"></i> Passed</span>
-            <span><i class="legend-swatch" style="background: var(--ochre);"></i> Remedial</span>
-            <span><i class="legend-swatch" style="background: var(--blue-ice);"></i> Not Taken</span>
-          </div>
-          <div id="packageBarChartContainer">
-            <div style="font-size: 12px; color: var(--text-muted);">Loading package comparison...</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- WORKSPACE PANEL -->
-      <div class="panel-box" style="margin-bottom: 0;">
-        <div class="tabs-bar">
-          <button type="button" class="tab-btn active" data-tab="results">Test Results</button>
-          <button type="button" class="tab-btn" data-tab="missing">
-            Pending Students <span class="tab-badge" id="badgeMissingCount">0</span>
-          </button>
-          <button type="button" class="tab-btn" data-tab="active">
-            Active Sessions <span class="tab-badge" id="badgeActiveCount">0</span>
-          </button>
-          <button type="button" class="tab-btn" data-tab="analysis">Item Analysis</button>
-          <button type="button" class="tab-btn" data-tab="packages">Packages</button>
-          <button type="button" class="tab-btn" data-tab="settings">PIN &amp; Validator</button>
-        </div>
-
-        <!-- TAB 1: TEST RESULTS -->
-        <div id="tab-results" class="tab-panel">
-          <div class="table-toolbar">
-            <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
-              <select id="filterStatus" class="form-control" style="width: auto;">
-                <option value="">All Statuses</option>
-                <option value="PASSED">PASSED</option>
-                <option value="REMEDIAL">REMEDIAL</option>
-              </select>
-              <select id="filterAttemptMode" class="form-control" style="width: auto;">
-                <option value="ALL">All Attempts</option>
-                <option value="LATEST">Latest Attempt per Student</option>
-              </select>
-              <select id="filterSortBy" class="form-control" style="width: auto;" title="Sort results table">
-                <option value="timestamp_desc">Sort: Latest Submission</option>
-                <option value="timestamp_asc">Sort: Earliest Submission</option>
-                <option value="skorAkhir_desc">Sort: Highest Score</option>
-                <option value="skorAkhir_asc">Sort: Lowest Score</option>
-                <option value="name_asc">Sort: Student Name (A–Z)</option>
-                <option value="name_desc">Sort: Student Name (Z–A)</option>
-                <option value="kelas_asc">Sort: Class (A–Z)</option>
-                <option value="durasi_asc">Sort: Fastest Time</option>
-                <option value="durasi_desc">Sort: Longest Time</option>
-                <option value="pindahTab_desc">Sort: Most Tab Switches</option>
-              </select>
-            </div>
-            <div style="font-size: 12px; color: var(--text-muted); font-weight: 700;" id="resultsCountLabel">0 records displayed</div>
-          </div>
-          <div class="table-wrap">
-            <table id="resultsTable">
-              <thead>
-                <tr>
-                  <th class="sortable-th" data-sort="name">Student Name<span class="sort-arrow">⇅</span></th>
-                  <th class="sortable-th" data-sort="kelas">Class<span class="sort-arrow">⇅</span></th>
-                  <th class="sortable-th" data-sort="paketId">Package<span class="sort-arrow">⇅</span></th>
-                  <th class="sortable-th" data-sort="percobaanKe">Att.<span class="sort-arrow">⇅</span></th>
-                  <th class="sortable-th" data-sort="jumlahBenar">Correct<span class="sort-arrow">⇅</span></th>
-                  <th class="sortable-th" data-sort="skorAkhir">Score<span class="sort-arrow">⇅</span></th>
-                  <th class="sortable-th" data-sort="status">Status<span class="sort-arrow">⇅</span></th>
-                  <th class="sortable-th" data-sort="durasi">Time<span class="sort-arrow">⇅</span></th>
-                  <th class="sortable-th" data-sort="pindahTab">Tabs<span class="sort-arrow">⇅</span></th>
-                  <th class="sortable-th sort-active" data-sort="timestamp">Timestamp<span class="sort-arrow">▼</span></th>
-                  <th style="text-align:center;">Action</th>
-                </tr>
-              </thead>
-              <tbody id="resultsTableBody">
-                <tr><td colspan="11" style="text-align:center; color:var(--text-muted); padding:20px;">Loading test results...</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- TAB 2: PENDING STUDENTS -->
-        <div id="tab-missing" class="tab-panel hidden">
-          <div class="table-toolbar">
-            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-              <label class="filter-label" style="margin:0;">Select Package:</label>
-              <select id="missingPaketSelect" class="form-control" style="width: auto; min-width: 210px;">
-                <option value="">-- Select Test Package --</option>
-              </select>
-            </div>
-            <button type="button" id="btnCopyMissing" class="btn btn-outline btn-sm">Copy List (WhatsApp Format)</button>
-          </div>
-          <div id="missingNotice" class="info-banner">
-            Select a <strong>Test Package</strong> above (or in the filter bar) to see registered students who have not taken the test yet.
-          </div>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th style="width: 52px;">No.</th>
-                  <th>Student Name</th>
-                  <th>Class</th>
-                  <th>Test Package</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody id="missingTableBody">
-                <tr><td colspan="5" style="text-align:center; color:var(--text-muted); padding:20px;">Please select a test package first.</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- TAB 3: ACTIVE SESSIONS -->
-        <div id="tab-active" class="tab-panel hidden">
-          <div class="table-toolbar">
-            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-              <span style="font-size: 12.5px; color: var(--text-muted);">
-                Sessions older than <strong>120 min</strong> auto-expire.
-              </span>
-              <select id="activeSessionFilter" class="form-control" style="width: auto;">
-                <option value="ACTIVE_ONLY">Active Only (&le; 120 min)</option>
-                <option value="ALL">Show All (Include Expired &gt; 120 min)</option>
-              </select>
-            </div>
-            <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-              <button type="button" id="btnClearExpiredSessions" class="btn btn-danger-soft btn-sm">Clear Expired (&gt;120m)</button>
-              <button type="button" id="btnRefreshActive" class="btn btn-outline btn-sm">Refresh Sessions</button>
-            </div>
-          </div>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Student Name</th>
-                  <th>Class</th>
-                  <th>Package ID</th>
-                  <th>Time Elapsed</th>
-                  <th style="text-align:center;">Action</th>
-                </tr>
-              </thead>
-              <tbody id="activeSessionsBody">
-                <tr><td colspan="5" style="text-align:center; color:var(--text-muted); padding:20px;">No students are currently taking a test.</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- TAB 4: ITEM ANALYSIS -->
-        <div id="tab-analysis" class="tab-panel hidden">
-          <div class="table-toolbar">
-            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-              <label class="filter-label" style="margin:0;">Calculation Basis:</label>
-              <select id="analysisAttemptBasis" class="form-control" style="width: auto;">
-                <option value="FIRST">First Attempt Only (Unbiased)</option>
-                <option value="LATEST">Latest Attempt per Student</option>
-                <option value="ALL">All Attempts</option>
-              </select>
-            </div>
-            <button type="button" id="btnExportAnalysisCsv" class="btn btn-outline btn-sm">Export Analysis (CSV)</button>
-          </div>
-          <div id="analysisNotice" class="info-banner">
-            Select a specific <strong>Test Package</strong> in the filter bar above (or click any gauge card) to view difficulty (P), discrimination (D), answer distribution, and question previews.
-          </div>
-          <div id="analysisSummaryGrid" class="analysis-summary-grid hidden">
-            <div class="analysis-sum-card" style="border-left: 4px solid var(--success);">
-              <span>Good to Keep</span>
-              <strong id="sumLayakCount" style="color: var(--success);">0</strong>
-            </div>
-            <div class="analysis-sum-card" style="border-left: 4px solid #b5a632;">
-              <span>Needs Revision</span>
-              <strong id="sumRevisiCount" style="color: #8f821e;">0</strong>
-            </div>
-            <div class="analysis-sum-card" style="border-left: 4px solid var(--danger);">
-              <span>Check Key / Ambiguous</span>
-              <strong id="sumKunciCount" style="color: var(--danger);">0</strong>
-            </div>
-          </div>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th style="width:46px;">No.</th>
-                  <th>Type / Key</th>
-                  <th>Question</th>
-                  <th style="width:46px;">N</th>
-                  <th>Difficulty (P)</th>
-                  <th>Discrim. (D)</th>
-                  <th>Status</th>
-                  <th style="text-align:center;">Actions</th>
-                </tr>
-              </thead>
-              <tbody id="analysisTableBody">
-                <tr><td colspan="8" style="text-align:center; color:var(--text-muted); padding:20px;">Please select a test package first.</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- TAB 5: PACKAGE MANAGEMENT -->
-        <div id="tab-packages" class="tab-panel hidden">
-          <div class="table-toolbar">
-            <div style="font-size: 12.5px; color: var(--text-muted);">
-              Activate or deactivate test packages for students, preview answer keys, and check question completeness.
-            </div>
-            <button type="button" id="btnReloadPackages" class="btn btn-outline btn-sm">Refresh Packages</button>
-          </div>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Package ID</th>
-                  <th>Package Name</th>
-                  <th>Questions</th>
-                  <th>Attempts</th>
-                  <th>Status</th>
-                  <th style="text-align:center;">Actions</th>
-                </tr>
-              </thead>
-              <tbody id="packagesTableBody">
-                <tr><td colspan="6" style="text-align:center; color:var(--text-muted); padding:20px;">Loading package list...</td></tr>
-              </tbody>
-            </table>
-          </div>
-
-          <!-- PACKAGE PREVIEW PANEL -->
-          <div id="previewPanel" class="hidden" style="margin-top: 14px; padding-top: 12px; border-top: 1.5px solid var(--teal-dark);">
-            <div class="preview-sticky-bar">
-              <div class="preview-bar-top">
-                <div class="preview-title-cluster">
-                  <h3 id="previewTitle" style="font-size: 14px; font-weight: 800; color: var(--text-main);">Package Preview</h3>
-                  <span id="previewStatsBadges" style="display:inline-flex; gap:5px; flex-wrap:wrap;"></span>
-                </div>
-                <div style="display: flex; gap: 5px; flex-wrap: wrap; align-items: center;">
-                  <button type="button" id="btnTogglePreviewIssues" class="btn btn-outline btn-xs hidden">Issues Only</button>
-                  <button type="button" id="btnToggleAllPassages" class="btn btn-outline btn-xs hidden">Collapse Passages</button>
-                  <button type="button" id="btnToggleAllExplanations" class="btn btn-outline btn-xs active-toggle">Explanations</button>
-                  <button type="button" id="btnRefreshPreview" class="btn btn-outline btn-xs">Reload</button>
-                  <button type="button" id="btnClosePreview" class="btn btn-danger-soft btn-xs">Close</button>
-                </div>
-              </div>
-              <div id="previewJumpBar" class="preview-jump-strip hidden"></div>
-            </div>
-            <div id="previewQuestionsList"></div>
-          </div>
-        </div>
-
-        <!-- TAB 6: SETTINGS -->
-        <div id="tab-settings" class="tab-panel hidden">
-          <div class="settings-grid">
-            <div style="border: 1px solid var(--border-line); padding: 14px; background: var(--card-bg);">
-              <div class="panel-heading">Security &amp; Student Portal Controls</div>
-              <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;">
-                Changes are saved directly to the <strong>Config</strong> sheet and apply immediately.
-              </p>
-              <div class="setting-row">
-                <h4>1. Student Login PIN (6-Digit Date of Birth)</h4>
-                <p>When enabled (<strong>YES</strong>), students must enter their 6-digit birth date (e.g., <code>26 December 2011</code> &rarr; <code>261211</code>).</p>
-                <select id="settingStudentPin" class="form-control">
-                  <option value="YES">YES — Require Student Birth-Date PIN</option>
-                  <option value="NO">NO — Disable Student PIN (Direct Login)</option>
-                </select>
-                <div style="margin-top: 7px; font-size: 11px; font-weight: 700; color: var(--teal-dark);" id="pinCoverageBadge">
-                  Checking student birth-date coverage...
-                </div>
-              </div>
-              <div class="setting-row">
-                <h4>2. Teacher Dashboard PIN</h4>
-                <p>When disabled (<strong>NO</strong>), the Teacher Dashboard opens directly without asking for a PIN.</p>
-                <select id="settingTeacherPin" class="form-control">
-                  <option value="YES">YES — Require Teacher PIN</option>
-                  <option value="NO">NO — Open Dashboard Without PIN</option>
-                </select>
-              </div>
-              <div class="setting-row">
-                <div class="toggle-row-header">
-                  <h4 style="margin-bottom:0;">3. Hide Answer Key in Student Portal</h4>
-                  <label class="switch-control" title="Toggle answer key visibility in Student Portal">
-                    <input type="checkbox" id="settingHideAnswerKey" checked />
-                    <span class="switch-slider"></span>
-                  </label>
-                </div>
-                <p style="margin-bottom:6px;">
-                  Default is <strong>Active (ON)</strong>: answer keys and explanations are hidden from students after submitting a test. Turn OFF to reveal answer keys to students.
-                </p>
-                <div id="hideKeyStatusText" style="font-size: 11.5px; font-weight: 800; color: var(--teal-dark);">
-                  Active (ON) — Answer keys &amp; explanations are HIDDEN from students.
-                </div>
-              </div>
-              <button type="button" id="btnSaveSecurity" class="btn btn-primary btn-block">Save Security Settings</button>
-            </div>
-            <div style="border: 1px solid var(--border-line); padding: 14px; background: var(--card-bg);">
-              <div class="panel-heading">Question Bank Validator</div>
-              <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;">
-                Automatically check <strong>Bank_Soal</strong> for duplicate question numbers, missing answer keys, or empty options.
-              </p>
-              <button type="button" id="btnRunValidation" class="btn btn-outline btn-block" style="margin-bottom: 10px;">
-                Validate Question Bank
-              </button>
-              <div id="validationResultList" style="font-size: 12px; color: var(--text-muted);">
-                Click the button above to audit all test packages.
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </section>
-  </main>
-
-  <!-- MODAL: STUDENT ANSWER DETAILS -->
-  <div id="detailModal" class="overlay hidden">
-    <div class="modal-box">
-      <div style="display: flex; justify-content: space-between; align-items: start; gap: 12px; margin-bottom: 10px;">
-        <div>
-          <h3 id="detailModalTitle" style="font-size: 16px; font-weight: 800;">Student Answer Details</h3>
-          <div id="detailModalMeta" style="font-size: 12px; color: var(--text-muted);"></div>
-        </div>
-        <button type="button" id="btnCloseDetailModal" class="btn btn-outline btn-xs">Close</button>
-      </div>
-      <div id="detailModalBody"></div>
-    </div>
-  </div>
-
-  <!-- MODAL: QUESTION PREVIEW -->
-  <div id="itemPreviewModal" class="overlay hidden">
-    <div class="modal-box" style="max-width: 820px;">
-      <div style="display: flex; justify-content: space-between; align-items: start; gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid var(--teal-dark); margin-bottom: 12px;">
-        <div>
-          <h3 id="itemPreviewTitle" style="font-size: 16px; font-weight: 800;">Question Preview</h3>
-          <div id="itemPreviewMeta" style="font-size: 12px; color: var(--text-muted); margin-top: 2px;"></div>
-        </div>
-        <button type="button" id="btnCloseItemPreviewModal" class="btn btn-outline btn-xs">Close</button>
-      </div>
-      <div id="itemPreviewBody"></div>
-    </div>
-  </div>
-
-  <!-- LOADING OVERLAY -->
-  <div id="loadingOverlay" class="overlay">
-    <div class="modal-box" style="max-width: 320px; text-align: center;">
-      <div class="spinner"></div>
-      <div id="loadingText" style="font-weight: 700; font-size: 13.5px;">Loading NEng Eva Dashboard...</div>
-    </div>
-  </div>
-
-  <div id="toastBox" class="toast hidden"></div>
-
-    <script>
-    // =========================================================================
-    // GOOGLE APPS SCRIPT API CONFIGURATION
-    // =========================================================================
+  <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycby1WiRhGdIHsaA6brxkaOVWn4mqS5cV3naYfKZmOJErpRJl0wkTUbSMIUrJLkTzkoPO/exec';
     const SESSION_EXPIRE_MINUTES = 120;
 
     // =========================================================================
-    // SAFARI-SAFE STORAGE & STRING NORMALIZATION HELPERS
+    // HELPERS
     // =========================================================================
     function safeGetStorage(key) {
       try { return window.localStorage.getItem(key); } catch (e) { return null; }
@@ -1054,19 +22,13 @@
     }
     function escapeHtml(str) {
       return normalizeApostrophes(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     }
     function escapeJsAttr(str) {
       return normalizeApostrophes(str)
-        .replace(/\\/g, '\\\\')
-        .replace(/'/g, "\\'")
-        .replace(/"/g, '&quot;')
-        .replace(/\n/g, '\\n')
-        .replace(/\r/g, '');
+        .replace(/\\/g, '\\\\').replace(/'/g, "\\'")
+        .replace(/"/g, '&quot;').replace(/\n/g, '\\n').replace(/\r/g, '');
     }
     function safeUrl(url) {
       const s = String(url || '').trim();
@@ -1074,7 +36,7 @@
     }
 
     // =========================================================================
-    // DASHBOARD STATE
+    // STATE
     // =========================================================================
     const dashState = {
       token: '',
@@ -1106,30 +68,29 @@
       previewShowExplanations: true,
       activeTab: 'results',
 
-      // cache & guards
       aggCache: new Map(),
       aggCacheKey: '',
       detailRequestId: 0,
       lastAnalysisKey: '',
       searchDebounce: null,
-      previewReqId: 0
+      previewReqId: 0,
+      dummyFilter: 'HIDE'  // NEW
     };
 
     const TYPE_LABELS = {
-      PG: 'Multiple Choice',
-      PGK: 'Multiple Response',
-      BS: 'True / False',
-      MENJODOHKAN: 'Matching',
-      MATRIKS: 'Matrix / Category',
-      IS: 'Short Answer'
+      PG: 'Multiple Choice', PGK: 'Multiple Response', BS: 'True / False',
+      MENJODOHKAN: 'Matching', MATRIKS: 'Matrix / Category', IS: 'Short Answer'
     };
-
     const EDITORIAL_PALETTE = ['#3e5b61', '#dcd695', '#678c93', '#d3dce0', '#8ea39d', '#c7be70'];
-
     const $ = (id) => document.getElementById(id);
 
+    function isDummyRow(r) {
+      return (r.kelas || '').trim() === '1111' ||
+             (r.namaSiswa || '').trim().toLowerCase() === 'dummy';
+    }
+
     // =========================================================================
-    // API CALLER & UTILITIES
+    // API CALLER
     // =========================================================================
     function getClientId() {
       let cid = safeGetStorage('neng_eva_client_id');
@@ -1139,10 +100,9 @@
       }
       return cid;
     }
-
     async function callApi(action, ...args) {
       if (window.location && window.location.protocol === 'file:') {
-        throw new Error('Aplikasi tidak dapat dibuka dari file lokal. Buka menggunakan tautan HTTPS asli di Safari.');
+        throw new Error('Aplikasi tidak dapat dibuka dari file lokal. Buka menggunakan tautan HTTPS asli.');
       }
       let response;
       try {
@@ -1152,29 +112,21 @@
           body: JSON.stringify({ action, args })
         });
       } catch (networkErr) {
-        throw new Error(
-          'Gagal terhubung ke server (' + (networkErr && networkErr.message ? networkErr.message : 'Network error') +
-          '). Jika menggunakan Safari di iPhone/iPad/Mac, buka tautan asli langsung di aplikasi Safari dan pastikan pemblokir pelacakan/iklan tidak memblokir script.google.com.'
-        );
+        throw new Error('Gagal terhubung ke server (' + (networkErr && networkErr.message ? networkErr.message : 'Network error') + ').');
       }
-      if (!response.ok) {
-        throw new Error('Failed to connect to the server (' + response.status + ').');
-      }
+      if (!response.ok) throw new Error('Failed to connect (' + response.status + ').');
       const data = await response.json();
       if (data && data.status === 'error') {
         if (data.code === 'UNAUTHORIZED') handleSessionExpired();
-        throw new Error(data.message || 'An unexpected server error occurred.');
+        throw new Error(data.message || 'Server error.');
       }
       return data;
     }
-
     function showLoading(text) {
       $('loadingText').textContent = text || 'Loading...';
       $('loadingOverlay').classList.remove('hidden');
     }
-    function hideLoading() {
-      $('loadingOverlay').classList.add('hidden');
-    }
+    function hideLoading() { $('loadingOverlay').classList.add('hidden'); }
     let toastTimer = null;
     function showToast(msg) {
       const el = $('toastBox');
@@ -1195,7 +147,6 @@
         .replace(/(^|[^_])__([^_\n](?:[^_\n]|_[^_\n])*?)__(?=[^_]|$)/g, '$1$2')
         .trim();
     }
-
     function formatRichMedia(rawText) {
       let text = escapeHtml(rawText || '');
       text = text
@@ -1205,10 +156,9 @@
         .replace(/\[i\]([\s\S]*?)\[\/i\]/gi, '<em>$1</em>')
         .replace(/\*\*([^\*\n]+?)\*\*/g, '<strong>$1</strong>')
         .replace(/(^|[^_])__([^_\n](?:[^_\n]|_[^_\n])*?)__(?=[^_]|$)/g, '$1<u>$2</u>');
-
       text = text.replace(/\[IMG:\s*([^\]]+)\]/gi, (_, u) => {
         const s = safeUrl(u.trim());
-        return s ? `<br><img src="${s}" alt="Stimulus Image" loading="lazy"><br>` : '';
+        return s ? `<br><img src="${s}" alt="Image" loading="lazy"><br>` : '';
       });
       text = text.replace(/\[AUDIO:\s*([^\]]+)\]/gi, (_, u) => {
         const s = safeUrl(u.trim());
@@ -1222,7 +172,6 @@
         const s = safeUrl(u);
         return s ? `${p}<br><audio controls preload="none" src="${s}"></audio><br>` : `${p}${u}`;
       });
-
       return text;
     }
 
@@ -1232,34 +181,25 @@
         const copy = Object.assign({}, q);
         const raw = normalizeApostrophes(copy.teksBacaan).trim();
         if (raw === '-' || raw.toUpperCase() === 'NONE' || raw.toUpperCase() === 'NO PASSAGE') {
-          activePassage = '';
-          copy._passage = '';
+          activePassage = ''; copy._passage = '';
         } else if (raw !== '') {
-          activePassage = raw;
-          copy._passage = activePassage;
+          activePassage = raw; copy._passage = activePassage;
         } else {
           copy._passage = activePassage;
         }
         return copy;
       });
     }
-
     function getPackageName(paketId) {
       const found = dashState.allPackages.find(p => p.id === paketId);
       return found ? found.name : paketId;
     }
-
     function parseTimestampValue(ts, fallbackId) {
       const s = String(ts || '').trim();
       const m = s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})(?:\s+(\d{1,2}):(\d{2})(?::(\d{2}))?)?/);
       if (m) {
-        const day = Number(m[1]);
-        const month = Number(m[2]) - 1;
-        const year = Number(m[3]);
-        const hour = Number(m[4] || 0);
-        const min = Number(m[5] || 0);
-        const sec = Number(m[6] || 0);
-        const parsed = new Date(year, month, day, hour, min, sec).getTime();
+        const parsed = new Date(Number(m[3]), Number(m[2]) - 1, Number(m[1]),
+          Number(m[4] || 0), Number(m[5] || 0), Number(m[6] || 0)).getTime();
         if (!Number.isNaN(parsed)) return parsed;
       }
       const direct = Date.parse(s);
@@ -1268,7 +208,7 @@
     }
 
     // =========================================================================
-    // AGGREGATION CACHE (chart performance)
+    // AGGREGATION CACHE
     // =========================================================================
     function buildPackageAggregates(kelasFilter) {
       const agg = new Map();
@@ -1277,6 +217,7 @@
       });
       dashState.rawRows.forEach(r => {
         if (kelasFilter && r.kelas !== kelasFilter) return;
+        if (isDummyRow(r)) return; // exclude dummy dari chart
         const bucket = agg.get(r.paketId);
         if (!bucket) return;
         const key = `${r.kelas}|${r.namaSiswa}`;
@@ -1294,7 +235,6 @@
       });
       return agg;
     }
-
     function getPackageAggregates(kelasFilter) {
       const key = kelasFilter || '__all__';
       if (dashState.aggCacheKey !== key) {
@@ -1305,7 +245,7 @@
     }
 
     // =========================================================================
-    // AUTHENTICATION & SESSION LIFECYCLE
+    // AUTH
     // =========================================================================
     async function initDashboard() {
       showLoading('Checking dashboard access...');
@@ -1321,22 +261,13 @@
         const savedToken = safeGetStorage('neng_eva_teacher_token');
         if (savedToken) {
           dashState.token = savedToken;
-          try {
-            await enterWorkspace();
-            return;
-          } catch (e) {
-            safeRemoveStorage('neng_eva_teacher_token');
-            dashState.token = '';
-          }
+          try { await enterWorkspace(); return; }
+          catch (e) { safeRemoveStorage('neng_eva_teacher_token'); dashState.token = ''; }
         }
         showLoginView();
-      } catch (err) {
-        showLoginView(err.message);
-      } finally {
-        hideLoading();
-      }
+      } catch (err) { showLoginView(err.message); }
+      finally { hideLoading(); }
     }
-
     function showLoginView(errMsg) {
       $('dashboardSection').classList.add('hidden');
       $('btnToggleCharts').classList.add('hidden');
@@ -1344,20 +275,14 @@
       $('btnLogout').classList.add('hidden');
       $('loginSection').classList.remove('hidden');
       const errBox = $('loginError');
-      if (errMsg) {
-        errBox.textContent = errMsg;
-        errBox.classList.remove('hidden');
-      } else {
-        errBox.classList.add('hidden');
-      }
+      if (errMsg) { errBox.textContent = errMsg; errBox.classList.remove('hidden'); }
+      else errBox.classList.add('hidden');
     }
-
     function handleSessionExpired() {
       safeRemoveStorage('neng_eva_teacher_token');
       dashState.token = '';
       showLoginView('Your session has expired. Please log in again.');
     }
-
     async function handleLoginSubmit(e) {
       e.preventDefault();
       const pin = $('inputTeacherPin').value.trim();
@@ -1373,20 +298,14 @@
       } catch (err) {
         $('loginError').textContent = err.message;
         $('loginError').classList.remove('hidden');
-      } finally {
-        hideLoading();
-      }
+      } finally { hideLoading(); }
     }
-
     async function handleLogout() {
-      try {
-        if (dashState.token) await callApi('teacherLogout', dashState.token);
-      } catch (e) {}
+      try { if (dashState.token) await callApi('teacherLogout', dashState.token); } catch (e) {}
       safeRemoveStorage('neng_eva_teacher_token');
       dashState.token = '';
       showLoginView('You have logged out of NEng Eva Dashboard.');
     }
-
     async function enterWorkspace() {
       $('loginSection').classList.add('hidden');
       $('dashboardSection').classList.remove('hidden');
@@ -1400,7 +319,7 @@
     }
 
     // =========================================================================
-    // DATA LOADING
+    // DATA LOAD
     // =========================================================================
     async function loadAllDashboardData() {
       showLoading('Loading test analytics & records...');
@@ -1416,17 +335,14 @@
         dashState.allPackages = dashRes.allPackages || [];
         dashState.kkm = Number(dashRes.kkm) || 80;
         dashState.security = Object.assign(dashState.security, dashRes.security || {});
-        dashState.aggCacheKey = ''; // invalidate cache
-        dashState.lastAnalysisKey = ''; // force re-render analysis
+        dashState.aggCacheKey = '';
+        dashState.lastAnalysisKey = '';
         populateFilterDropdowns();
         syncSecurityUI();
         renderActiveSessions(activeRes.sessions || []);
         applyFiltersAndRender();
-      } finally {
-        hideLoading();
-      }
+      } finally { hideLoading(); }
     }
-
     function populateFilterDropdowns() {
       const prevPaket = $('filterPaket').value;
       const prevKelas = $('filterKelas').value;
@@ -1437,9 +353,7 @@
       $('filterPaket').innerHTML = '<option value="">All Packages</option>' + paketOptions;
       if (prevPaket) $('filterPaket').value = prevPaket;
       $('missingPaketSelect').innerHTML = '<option value="">-- Select Test Package --</option>' + paketOptions;
-      if (prevMissingPaket || prevPaket) {
-        $('missingPaketSelect').value = prevPaket || prevMissingPaket;
-      }
+      if (prevMissingPaket || prevPaket) $('missingPaketSelect').value = prevPaket || prevMissingPaket;
       const classes = Object.keys(dashState.studentsByClass).sort();
       $('filterKelas').innerHTML = '<option value="">All Classes</option>' +
         classes.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
@@ -1447,7 +361,7 @@
     }
 
     // =========================================================================
-    // SORTING
+    // SORT
     // =========================================================================
     function sortResultRows(rows) {
       const field = dashState.sortField || 'timestamp';
@@ -1455,7 +369,6 @@
       const tsCache = new Map();
       rows.forEach(r => tsCache.set(r.id, parseTimestampValue(r.timestamp, r.id)));
       const getTs = (r) => tsCache.get(r.id) || 0;
-
       return rows.slice().sort((a, b) => {
         let cmp = 0;
         if (field === 'name') {
@@ -1470,9 +383,9 @@
         } else if (field === 'percobaanKe') {
           cmp = (Number(a.percobaanKe) || 0) - (Number(b.percobaanKe) || 0);
         } else if (field === 'jumlahBenar') {
-          const ratioA = a.totalSoal > 0 ? (Number(a.jumlahBenar) / Number(a.totalSoal)) : (Number(a.jumlahBenar) || 0);
-          const ratioB = b.totalSoal > 0 ? (Number(b.jumlahBenar) / Number(b.totalSoal)) : (Number(b.jumlahBenar) || 0);
-          cmp = ratioA - ratioB;
+          const ra = a.totalSoal > 0 ? (Number(a.jumlahBenar) / Number(a.totalSoal)) : (Number(a.jumlahBenar) || 0);
+          const rb = b.totalSoal > 0 ? (Number(b.jumlahBenar) / Number(b.totalSoal)) : (Number(b.jumlahBenar) || 0);
+          cmp = ra - rb;
         } else if (field === 'skorAkhir') {
           cmp = (Number(a.skorAkhir) || 0) - (Number(b.skorAkhir) || 0);
         } else if (field === 'durasi') {
@@ -1491,7 +404,6 @@
         return cmp * dir;
       });
     }
-
     function updateSortControlsUI() {
       const comboVal = `${dashState.sortField}_${dashState.sortDir}`;
       const dropdown = $('filterSortBy');
@@ -1501,14 +413,12 @@
         const isCurrent = th.dataset.sort === dashState.sortField;
         th.classList.toggle('sort-active', isCurrent);
         const arrow = th.querySelector('.sort-arrow');
-        if (arrow) {
-          arrow.textContent = isCurrent ? (dashState.sortDir === 'asc' ? '▲' : '▼') : '⇅';
-        }
+        if (arrow) arrow.textContent = isCurrent ? (dashState.sortDir === 'asc' ? '▲' : '▼') : '⇅';
       });
     }
 
     // =========================================================================
-    // FILTERING & MAIN RENDER PIPELINE
+    // FILTER PIPELINE
     // =========================================================================
     function applyFiltersAndRender() {
       const paketFilter = $('filterPaket').value;
@@ -1516,6 +426,8 @@
       const searchFilter = normalizeApostrophes($('filterSearch').value).trim().toLowerCase();
       const statusFilter = $('filterStatus').value;
       const attemptMode = $('filterAttemptMode').value;
+      const dummyFilter = $('filterDummyMode').value || 'HIDE';
+      dashState.dummyFilter = dummyFilter;
 
       if (paketFilter && $('missingPaketSelect').value !== paketFilter) {
         $('missingPaketSelect').value = paketFilter;
@@ -1525,6 +437,9 @@
         if (paketFilter && r.paketId !== paketFilter) return false;
         if (kelasFilter && r.kelas !== kelasFilter) return false;
         if (searchFilter && normalizeApostrophes(r.namaSiswa).toLowerCase().indexOf(searchFilter) === -1) return false;
+        const isDummy = isDummyRow(r);
+        if (dummyFilter === 'HIDE' && isDummy) return false;
+        if (dummyFilter === 'ONLY' && !isDummy) return false;
         return true;
       });
 
@@ -1559,13 +474,13 @@
     }
 
     // =========================================================================
-    // CHARTS — GAUGE / DONUT / BAR
+    // CHARTS
     // =========================================================================
     function renderPackageGauges(activePaketId, kelasFilter) {
       const container = $('packageGaugesContainer');
       const pkgs = dashState.allPackages || [];
       if (pkgs.length === 0) {
-        container.innerHTML = '<div style="font-size:12px; color:var(--text-muted);">No test packages found.</div>';
+        container.innerHTML = '<div style="font-size:12px; color:var(--text-muted);">No packages.</div>';
         return;
       }
       const agg = getPackageAggregates(kelasFilter);
@@ -1573,49 +488,44 @@
       const arcLength = Math.PI * arcRadius;
       container.innerHTML = pkgs.map((pkg, idx) => {
         const bucket = agg.get(pkg.id) || { studentCount: 0, bestMap: new Map() };
-        const studentCount = bucket.studentCount;
+        const sc = bucket.studentCount;
         let avg = 0;
-        if (studentCount > 0) {
+        if (sc > 0) {
           let sum = 0;
           bucket.bestMap.forEach(s => { sum += Number(s.skorAkhir) || 0; });
-          avg = Math.round((sum / studentCount) * 100) / 100;
+          avg = Math.round((sum / sc) * 100) / 100;
         }
         const pct = Math.max(0, Math.min(1, avg / 100));
         const dashOffset = (arcLength * (1 - pct)).toFixed(2);
-        const strokeColor = idx % 2 === 0 ? '#3e5b61' : '#b7ae59';
-        const isSelected = activePaketId === pkg.id;
-        const scoreLabel = studentCount > 0 ? avg.toFixed(1) : '—';
+        const color = idx % 2 === 0 ? '#3e5b61' : '#b7ae59';
+        const sel = activePaketId === pkg.id;
+        const label = sc > 0 ? avg.toFixed(1) : '—';
         return `
-          <div class="gauge-item ${isSelected ? 'active-pkg' : ''}" data-paket-id="${escapeHtml(pkg.id)}" title="Click to filter by ${escapeHtml(pkg.name)}">
+          <div class="gauge-item ${sel ? 'active-pkg' : ''}" data-paket-id="${escapeHtml(pkg.id)}" title="Click to filter">
             <div class="gauge-title">${escapeHtml(pkg.name)}</div>
-            <svg width="118" height="54" viewBox="0 0 160 72" style="display:block; margin: 0 auto;">
-              <path d="M 38 56 A 42 42 0 0 1 122 56" fill="none" stroke="#d3dce0" stroke-width="11" stroke-linecap="butt" />
-              <path d="M 38 56 A 42 42 0 0 1 122 56" fill="none" stroke="${strokeColor}" stroke-width="11" stroke-linecap="butt"
-                stroke-dasharray="${arcLength.toFixed(2)}" stroke-dashoffset="${dashOffset}" />
-              <polyline points="24,62 32,62 36,56" fill="none" stroke="#8c9692" stroke-width="1" />
-              <polyline points="136,62 128,62 124,56" fill="none" stroke="#8c9692" stroke-width="1" />
+            <svg width="118" height="54" viewBox="0 0 160 72" style="display:block; margin:0 auto;">
+              <path d="M 38 56 A 42 42 0 0 1 122 56" fill="none" stroke="#d3dce0" stroke-width="11"/>
+              <path d="M 38 56 A 42 42 0 0 1 122 56" fill="none" stroke="${color}" stroke-width="11"
+                stroke-dasharray="${arcLength.toFixed(2)}" stroke-dashoffset="${dashOffset}"/>
               <text x="15" y="65" font-size="10" font-weight="700" fill="#626d69" text-anchor="middle">0</text>
               <text x="145" y="65" font-size="10" font-weight="700" fill="#626d69" text-anchor="middle">100</text>
-              <text x="80" y="53" font-size="14" font-weight="800" fill="#262e2b" text-anchor="middle">${scoreLabel}</text>
+              <text x="80" y="53" font-size="14" font-weight="800" fill="#262e2b" text-anchor="middle">${label}</text>
             </svg>
-            <div class="gauge-sub">${escapeHtml(pkg.id)} &bull; ${studentCount} std</div>
-          </div>
-        `;
+            <div class="gauge-sub">${escapeHtml(pkg.id)} &bull; ${sc} std</div>
+          </div>`;
       }).join('');
     }
-
     function togglePackageFilterFromGauge(paketId) {
       const sel = $('filterPaket');
       sel.value = (sel.value === paketId) ? '' : paketId;
       if (sel.value) $('missingPaketSelect').value = sel.value;
       applyFiltersAndRender();
     }
-
     function renderClassDonutChart(kelasFilter) {
       const container = $('classDonutContainer');
       const allClasses = Object.keys(dashState.studentsByClass).sort();
       if (allClasses.length === 0) {
-        container.innerHTML = '<div style="font-size:12px; color:var(--text-muted); padding:10px 0;">No registered classes found.</div>';
+        container.innerHTML = '<div style="font-size:12px; color:var(--text-muted); padding:10px 0;">No classes.</div>';
         return;
       }
       const entries = allClasses.map((cls, idx) => ({
@@ -1624,110 +534,84 @@
         color: EDITORIAL_PALETTE[idx % EDITORIAL_PALETTE.length],
         dimmed: kelasFilter && kelasFilter !== cls
       }));
-      const total = entries.reduce((acc, e) => acc + e.count, 0);
+      const total = entries.reduce((a, e) => a + e.count, 0);
       if (total === 0) {
-        container.innerHTML = '<div style="font-size:12px; color:var(--text-muted); padding:10px 0;">0 students registered.</div>';
+        container.innerHTML = '<div style="font-size:12px; color:var(--text-muted); padding:10px 0;">0 students.</div>';
         return;
       }
       const cx = 85, cy = 85, r = 52;
-      const circumference = 2 * Math.PI * r;
-      let cumulative = 0;
-      const slicesSvg = entries.map(e => {
-        const len = (e.count / total) * circumference;
-        const offset = -cumulative;
-        cumulative += len;
-        return `
-          <circle cx="${cx}" cy="${cy}" r="${r}" fill="none"
-            stroke="${e.color}" stroke-width="26"
-            stroke-dasharray="${len.toFixed(2)} ${circumference.toFixed(2)}"
-            stroke-dashoffset="${offset.toFixed(2)}"
-            opacity="${e.dimmed ? '0.35' : '1'}"
-            transform="rotate(-90 ${cx} ${cy})" />
-        `;
+      const circ = 2 * Math.PI * r;
+      let cum = 0;
+      const slices = entries.map(e => {
+        const len = (e.count / total) * circ;
+        const off = -cum;
+        cum += len;
+        return `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${e.color}" stroke-width="26"
+          stroke-dasharray="${len.toFixed(2)} ${circ.toFixed(2)}" stroke-dashoffset="${off.toFixed(2)}"
+          opacity="${e.dimmed ? '0.35' : '1'}" transform="rotate(-90 ${cx} ${cy})"/>`;
       }).join('');
-      const legendHtml = entries.map(e => `
+      const legend = entries.map(e => `
         <div class="donut-leg-item" style="opacity:${e.dimmed ? '0.5' : '1'};">
           <span style="display:inline-flex; align-items:center; gap:5px; font-weight:700;">
             <i class="legend-swatch" style="background:${e.color};"></i>${escapeHtml(e.kelas)}
           </span>
           <span style="color:var(--text-muted); font-weight:800;">${e.count}</span>
-        </div>
-      `).join('');
+        </div>`).join('');
       container.innerHTML = `
         <div class="donut-flex">
           <svg width="118" height="118" viewBox="0 0 170 170" style="display:block; flex-shrink:0;">
-            ${slicesSvg}
+            ${slices}
             <text x="${cx}" y="${cy - 2}" text-anchor="middle" font-size="19" font-weight="800" fill="#262e2b">${total}</text>
             <text x="${cx}" y="${cy + 14}" text-anchor="middle" font-size="10.5" font-weight="700" fill="#626d69">Students</text>
           </svg>
-          <div class="donut-legend-list">${legendHtml}</div>
-        </div>
-      `;
+          <div class="donut-legend-list">${legend}</div>
+        </div>`;
     }
-
     function renderPackageBarChart(kelasFilter) {
       const container = $('packageBarChartContainer');
       const pkgs = (dashState.allPackages || []).slice(0, 6);
       if (pkgs.length === 0) {
-        container.innerHTML = '<div style="font-size:12px; color:var(--text-muted); padding:10px 0;">No test packages found.</div>';
+        container.innerHTML = '<div style="font-size:12px; color:var(--text-muted);">No packages.</div>';
         return;
       }
       const agg = getPackageAggregates(kelasFilter);
       const targetClasses = kelasFilter ? [kelasFilter] : Object.keys(dashState.studentsByClass);
       let rosterCount = 0;
       targetClasses.forEach(c => { rosterCount += (dashState.studentsByClass[c] || []).length; });
-
       const barsData = pkgs.map(pkg => {
-        const bucket = agg.get(pkg.id) || { passed: 0, remedial: 0, studentCount: 0 };
-        return {
-          id: pkg.id,
-          passed: bucket.passed,
-          remedial: bucket.remedial,
-          notTaken: Math.max(0, rosterCount - bucket.studentCount)
-        };
+        const b = agg.get(pkg.id) || { passed: 0, remedial: 0, studentCount: 0 };
+        return { id: pkg.id, passed: b.passed, remedial: b.remedial, notTaken: Math.max(0, rosterCount - b.studentCount) };
       });
-
       const maxVal = Math.max(5, rosterCount, ...barsData.flatMap(b => [b.passed, b.remedial, b.notTaken]));
       const svgW = 295, svgH = 122;
       const padL = 26, padR = 6, padT = 8, padB = 22;
-      const plotW = svgW - padL - padR;
-      const plotH = svgH - padT - padB;
-
-      let gridSvg = '';
+      const plotW = svgW - padL - padR, plotH = svgH - padT - padB;
+      let grid = '';
       for (let i = 0; i <= 3; i++) {
         const val = Math.round((maxVal / 3) * i);
         const y = padT + plotH - (plotH * (i / 3));
-        gridSvg += `
-          <line x1="${padL}" y1="${y.toFixed(1)}" x2="${svgW - padR}" y2="${y.toFixed(1)}" stroke="#d5d7ce" stroke-width="1" />
-          <text x="${padL - 4}" y="${(y + 3).toFixed(1)}" font-size="8.5" fill="#626d69" text-anchor="end">${val}</text>
-        `;
+        grid += `<line x1="${padL}" y1="${y.toFixed(1)}" x2="${svgW - padR}" y2="${y.toFixed(1)}" stroke="#d5d7ce"/>
+          <text x="${padL - 4}" y="${(y + 3).toFixed(1)}" font-size="8.5" fill="#626d69" text-anchor="end">${val}</text>`;
       }
       const groupW = plotW / barsData.length;
       const barW = Math.min(9, Math.max(4.5, (groupW - 8) / 3));
-      const groupsSvg = barsData.map((b, i) => {
+      const groups = barsData.map((b, i) => {
         const cx = padL + groupW * i + groupW / 2;
-        const hPass = (b.passed / maxVal) * plotH;
-        const hRem = (b.remedial / maxVal) * plotH;
-        const hNot = (b.notTaken / maxVal) * plotH;
-        const x1 = cx - barW * 1.5 - 1;
-        const x2 = cx - barW * 0.5;
-        const x3 = cx + barW * 0.5 + 1;
+        const hP = (b.passed / maxVal) * plotH;
+        const hR = (b.remedial / maxVal) * plotH;
+        const hN = (b.notTaken / maxVal) * plotH;
         return `
-          <rect x="${x1.toFixed(1)}" y="${(padT + plotH - hPass).toFixed(1)}" width="${barW}" height="${hPass.toFixed(1)}" fill="#3e5b61"><title>${escapeHtml(b.id)} Passed: ${b.passed}</title></rect>
-          <rect x="${x2.toFixed(1)}" y="${(padT + plotH - hRem).toFixed(1)}" width="${barW}" height="${hRem.toFixed(1)}" fill="#dcd695"><title>${escapeHtml(b.id)} Remedial: ${b.remedial}</title></rect>
-          <rect x="${x3.toFixed(1)}" y="${(padT + plotH - hNot).toFixed(1)}" width="${barW}" height="${hNot.toFixed(1)}" fill="#d3dce0"><title>${escapeHtml(b.id)} Not Taken: ${b.notTaken}</title></rect>
-          <text x="${cx.toFixed(1)}" y="${svgH - 6}" font-size="9" font-weight="700" fill="#262e2b" text-anchor="middle">${escapeHtml(b.id)}</text>
-        `;
+          <rect x="${(cx - barW * 1.5 - 1).toFixed(1)}" y="${(padT + plotH - hP).toFixed(1)}" width="${barW}" height="${hP.toFixed(1)}" fill="#3e5b61"/>
+          <rect x="${(cx - barW * 0.5).toFixed(1)}" y="${(padT + plotH - hR).toFixed(1)}" width="${barW}" height="${hR.toFixed(1)}" fill="#dcd695"/>
+          <rect x="${(cx + barW * 0.5 + 1).toFixed(1)}" y="${(padT + plotH - hN).toFixed(1)}" width="${barW}" height="${hN.toFixed(1)}" fill="#d3dce0"/>
+          <text x="${cx.toFixed(1)}" y="${svgH - 6}" font-size="9" font-weight="700" fill="#262e2b" text-anchor="middle">${escapeHtml(b.id)}</text>`;
       }).join('');
-
-      container.innerHTML = `
-        <svg width="100%" viewBox="0 0 ${svgW} ${svgH}" style="display:block;">
-          ${gridSvg}
-          <line x1="${padL}" y1="${padT}" x2="${padL}" y2="${padT + plotH}" stroke="#8c9692" stroke-width="1" />
-          <line x1="${padL}" y1="${padT + plotH}" x2="${svgW - padR}" y2="${padT + plotH}" stroke="#8c9692" stroke-width="1" />
-          ${groupsSvg}
-        </svg>
-      `;
+      container.innerHTML = `<svg width="100%" viewBox="0 0 ${svgW} ${svgH}" style="display:block;">
+        ${grid}
+        <line x1="${padL}" y1="${padT}" x2="${padL}" y2="${padT + plotH}" stroke="#8c9692"/>
+        <line x1="${padL}" y1="${padT + plotH}" x2="${svgW - padR}" y2="${padT + plotH}" stroke="#8c9692"/>
+        ${groups}
+      </svg>`;
     }
 
     // =========================================================================
@@ -1749,10 +633,8 @@
         const prev = studentBest.get(key);
         if (!prev || r.skorAkhir > prev.skorAkhir) studentBest.set(key, r);
       });
-
       const uniqueDone = studentBest.size;
       $('kpiUniqueDone').textContent = uniqueDone;
-
       if (paketFilter) {
         $('kpiNotDone').textContent = Math.max(0, totalRoster - uniqueDone);
         $('kpiMissingSub').textContent = `Package ${paketFilter}`;
@@ -1760,15 +642,14 @@
         $('kpiNotDone').textContent = '-';
         $('kpiMissingSub').textContent = 'Select package';
       }
-
       if (uniqueDone > 0) {
-        let sumScore = 0, passedCount = 0;
+        let sum = 0, passed = 0;
         studentBest.forEach(s => {
-          sumScore += Number(s.skorAkhir) || 0;
-          if (s.skorAkhir >= dashState.kkm || s.status === 'PASSED') passedCount++;
+          sum += Number(s.skorAkhir) || 0;
+          if (s.skorAkhir >= dashState.kkm || s.status === 'PASSED') passed++;
         });
-        $('kpiAvgScore').textContent = (Math.round((sumScore / uniqueDone) * 100) / 100).toFixed(2);
-        $('kpiPassRate').textContent = Math.round((passedCount / uniqueDone) * 100) + '%';
+        $('kpiAvgScore').textContent = (Math.round((sum / uniqueDone) * 100) / 100).toFixed(2);
+        $('kpiPassRate').textContent = Math.round((passed / uniqueDone) * 100) + '%';
       } else {
         $('kpiAvgScore').textContent = '0.00';
         $('kpiPassRate').textContent = '0%';
@@ -1782,11 +663,13 @@
       const tbody = $('resultsTableBody');
       $('resultsCountLabel').textContent = `${rows.length} record(s) displayed`;
       if (rows.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="11" style="text-align:center; color:var(--text-muted); padding:20px;">No test results match the selected filters.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="11" style="text-align:center; color:var(--text-muted); padding:20px;">No results match filters.</td></tr>';
         return;
       }
       tbody.innerHTML = rows.map(r => {
         const isPassed = r.status === 'PASSED';
+        const dummyRow = isDummyRow(r);
+        const dummyBadge = dummyRow ? ' <span class="badge badge-dummy">DUMMY</span>' : '';
         const statusBadge = isPassed
           ? '<span class="badge badge-passed">PASSED</span>'
           : '<span class="badge badge-remedial">REMEDIAL</span>';
@@ -1794,16 +677,15 @@
         const tabBadge = r.pindahTab > 0
           ? `<span class="badge badge-warn">${r.pindahTab}x</span>`
           : '<span style="color:var(--text-muted);">0</span>';
-        const isLowScore = Number(r.skorAkhir) < dashState.kkm;
-        const scoreDisplay = Number(r.skorAkhir).toFixed(2);
+        const isLow = Number(r.skorAkhir) < dashState.kkm;
         return `
           <tr>
-            <td><strong>${escapeHtml(r.namaSiswa)}</strong></td>
+            <td><strong>${escapeHtml(r.namaSiswa)}</strong>${dummyBadge}</td>
             <td>${escapeHtml(r.kelas)}</td>
             <td><span class="badge badge-neutral">${escapeHtml(r.paketId)}</span></td>
             <td>#${r.percobaanKe}</td>
             <td>${r.jumlahBenar}/${r.totalSoal}</td>
-            <td class="${isLowScore ? 'score-low-alert' : ''}" style="font-weight:800;">${scoreDisplay}</td>
+            <td class="${isLow ? 'score-low-alert' : ''}" style="font-weight:800;">${Number(r.skorAkhir).toFixed(2)}</td>
             <td>${statusBadge}</td>
             <td>${durasiText}</td>
             <td>${tabBadge}</td>
@@ -1811,8 +693,7 @@
             <td class="action-cell" style="text-align:center;">
               <button type="button" class="btn btn-outline btn-xs" data-detail-id="${r.id}">Details</button>
             </td>
-          </tr>
-        `;
+          </tr>`;
       }).join('');
       tbody.querySelectorAll('button[data-detail-id]').forEach(btn => {
         btn.addEventListener('click', () => openAttemptDetail(Number(btn.dataset.detailId)));
@@ -1823,47 +704,35 @@
       const row = dashState.rawRows.find(r => r.id === rowId);
       if (!row) return;
       const reqId = ++dashState.detailRequestId;
-
       $('detailModalTitle').textContent = `${row.namaSiswa} (${row.kelas})`;
-      $('detailModalMeta').textContent = `Package: ${getPackageName(row.paketId)} • Attempt #${row.percobaanKe} • Final Score: ${row.skorAkhir} (${row.status})`;
-      $('detailModalBody').innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-muted);">Loading answer breakdown...</div>';
+      $('detailModalMeta').textContent = `Package: ${getPackageName(row.paketId)} • Attempt #${row.percobaanKe} • Final: ${row.skorAkhir} (${row.status})`;
+      $('detailModalBody').innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-muted);">Loading...</div>';
       $('detailModal').classList.remove('hidden');
-
       try {
         const res = await callApi('getAttemptDetail', dashState.token, rowId);
         if (reqId !== dashState.detailRequestId) return;
         const details = res.details || [];
         if (details.length === 0) {
-          $('detailModalBody').innerHTML = '<p style="color:var(--text-muted);">Detailed answers are unavailable for this submission.</p>';
+          $('detailModalBody').innerHTML = '<p style="color:var(--text-muted);">No detailed answers.</p>';
           return;
         }
         $('detailModalBody').innerHTML = `
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr><th>No.</th><th>Type</th><th>Student Answer</th><th>Answer Key</th><th>Points</th><th>Result</th></tr>
-              </thead>
-              <tbody>
-                ${details.map(d => {
-                  const st = String(d.status || '').toUpperCase();
-                  const isOk = st === 'CORRECT';
-                  const isPart = st === 'PARTIAL';
-                  const badge = isOk
-                    ? '<span class="badge badge-passed">CORRECT</span>'
-                    : (isPart ? '<span class="badge badge-warn">PARTIAL</span>' : '<span class="badge badge-remedial">INCORRECT</span>');
-                  return `<tr>
-                    <td><strong>${escapeHtml(d.noSoal)}</strong></td>
-                    <td>${escapeHtml(d.tipeSoal)}</td>
-                    <td>${escapeHtml(d.studentAns)}</td>
-                    <td><strong>${escapeHtml(d.keyAns)}</strong></td>
-                    <td>${d.score}</td>
-                    <td>${badge}</td>
-                  </tr>`;
-                }).join('')}
-              </tbody>
-            </table>
-          </div>
-        `;
+          <div class="table-wrap"><table>
+            <thead><tr><th>No.</th><th>Type</th><th>Answer</th><th>Key</th><th>Pts</th><th>Result</th></tr></thead>
+            <tbody>${details.map(d => {
+              const st = String(d.status || '').toUpperCase();
+              const badge = st === 'CORRECT' ? '<span class="badge badge-passed">CORRECT</span>'
+                : (st === 'PARTIAL' ? '<span class="badge badge-warn">PARTIAL</span>' : '<span class="badge badge-remedial">INCORRECT</span>');
+              return `<tr>
+                <td><strong>${escapeHtml(d.noSoal)}</strong></td>
+                <td>${escapeHtml(d.tipeSoal)}</td>
+                <td>${escapeHtml(d.studentAns)}</td>
+                <td><strong>${escapeHtml(d.keyAns)}</strong></td>
+                <td>${d.score}</td>
+                <td>${badge}</td>
+              </tr>`;
+            }).join('')}</tbody>
+          </table></div>`;
       } catch (err) {
         if (reqId !== dashState.detailRequestId) return;
         $('detailModalBody').innerHTML = `<div class="alert-error">${escapeHtml(err.message)}</div>`;
@@ -1871,54 +740,51 @@
     }
 
     // =========================================================================
-    // PENDING STUDENTS
+    // MISSING STUDENTS
     // =========================================================================
     function renderMissingStudents() {
       const paketId = $('missingPaketSelect').value || $('filterPaket').value;
       const kelasFilter = $('filterKelas').value;
       const tbody = $('missingTableBody');
       const notice = $('missingNotice');
-
       if (!paketId) {
         dashState.missingList = [];
         $('badgeMissingCount').textContent = '0';
         notice.classList.remove('hidden');
-        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--text-muted); padding:20px;">Please select a test package first.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--text-muted); padding:20px;">Select package first.</td></tr>';
         return;
       }
       notice.classList.add('hidden');
       const doneSet = new Set();
       dashState.rawRows.forEach(r => {
-        if (r.paketId === paketId) doneSet.add(`${r.kelas}|${r.namaSiswa}`);
+        if (r.paketId === paketId && !isDummyRow(r)) doneSet.add(`${r.kelas}|${r.namaSiswa}`);
       });
       const missing = [];
       const classes = kelasFilter ? [kelasFilter] : Object.keys(dashState.studentsByClass).sort();
       classes.forEach(cls => {
-        const students = dashState.studentsByClass[cls] || [];
-        students.forEach(nama => {
+        if (cls.trim() === '1111') return;
+        (dashState.studentsByClass[cls] || []).forEach(nama => {
           if (!doneSet.has(`${cls}|${nama}`)) missing.push({ kelas: cls, namaSiswa: nama, paketId });
         });
       });
       dashState.missingList = missing;
       $('badgeMissingCount').textContent = missing.length;
       if (missing.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--success); font-weight:700; padding:20px;">All registered students in the selected class(es) have completed this test package!</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--success); font-weight:700; padding:20px;">All registered students have completed this package!</td></tr>';
         return;
       }
-      tbody.innerHTML = missing.map((m, idx) => `
+      tbody.innerHTML = missing.map((m, i) => `
         <tr>
-          <td>${idx + 1}</td>
+          <td>${i + 1}</td>
           <td><strong>${escapeHtml(m.namaSiswa)}</strong></td>
           <td>${escapeHtml(m.kelas)}</td>
           <td><span class="badge badge-neutral">${escapeHtml(m.paketId)}</span></td>
           <td><span class="badge badge-warn">Not Taken</span></td>
-        </tr>
-      `).join('');
+        </tr>`).join('');
     }
-
     function copyMissingToClipboard() {
       if (dashState.missingList.length === 0) {
-        showToast('There are no pending students to copy.');
+        showToast('No pending students.');
         return;
       }
       const paketId = $('missingPaketSelect').value || $('filterPaket').value;
@@ -1930,25 +796,20 @@
       });
       let text = `*STUDENTS WHO HAVE NOT TAKEN THE TEST*\nPackage: ${paketName} (${paketId})\n`;
       Object.keys(grouped).forEach(cls => {
-        text += `\n*Class ${cls}* (${grouped[cls].length} student(s)):\n`;
+        text += `\n*Class ${cls}* (${grouped[cls].length}):\n`;
         grouped[cls].forEach((n, i) => { text += `${i + 1}. ${n}\n`; });
       });
-      const fallbackCopy = () => {
+      const fallback = () => {
         const ta = document.createElement('textarea');
-        ta.value = text;
-        ta.style.position = 'fixed';
-        ta.style.opacity = '0';
-        document.body.appendChild(ta);
-        ta.select();
-        try { document.execCommand('copy'); showToast('List copied (fallback).'); }
+        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); showToast('Copied (fallback).'); }
         catch (e) { alert(text); }
         document.body.removeChild(ta);
       };
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(() => showToast('Student list copied to clipboard.')).catch(fallbackCopy);
-      } else {
-        fallbackCopy();
-      }
+        navigator.clipboard.writeText(text).then(() => showToast('Copied.')).catch(fallback);
+      } else fallback();
     }
 
     // =========================================================================
@@ -1958,82 +819,66 @@
       try {
         const res = await callApi('getActiveSessions', dashState.token);
         renderActiveSessions(res.sessions || []);
-        showToast('Active sessions refreshed.');
-      } catch (err) {
-        showToast(err.message);
-      }
+        showToast('Sessions refreshed.');
+      } catch (err) { showToast(err.message); }
     }
-
     function renderActiveSessions(sessions) {
       dashState.activeSessions = Array.isArray(sessions) ? sessions : [];
       const activeOnly = dashState.activeSessions.filter(s => (Number(s.menit) || 0) <= SESSION_EXPIRE_MINUTES);
       const expiredCount = dashState.activeSessions.length - activeOnly.length;
       $('badgeActiveCount').textContent = activeOnly.length;
-      const filterMode = $('activeSessionFilter').value;
-      const listToShow = filterMode === 'ALL' ? dashState.activeSessions : activeOnly;
+      const mode = $('activeSessionFilter').value;
+      const list = mode === 'ALL' ? dashState.activeSessions : activeOnly;
       const tbody = $('activeSessionsBody');
-      if (listToShow.length === 0) {
-        const extraNote = expiredCount > 0
-          ? ` (${expiredCount} expired session(s) &gt; ${SESSION_EXPIRE_MINUTES} min hidden)`
-          : '';
-        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted); padding:20px;">No active sessions currently running${extraNote}.</td></tr>`;
+      if (list.length === 0) {
+        const extra = expiredCount > 0 ? ` (${expiredCount} expired hidden)` : '';
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted); padding:20px;">No active sessions${extra}.</td></tr>`;
         return;
       }
-      tbody.innerHTML = listToShow.map(s => {
+      tbody.innerHTML = list.map(s => {
         const menit = Number(s.menit) || 0;
-        const isExpired = menit > SESSION_EXPIRE_MINUTES;
-        const timeBadge = isExpired
+        const expired = menit > SESSION_EXPIRE_MINUTES;
+        const badge = expired
           ? `<span class="badge badge-remedial">${menit} min (Expired)</span>`
           : `<span class="badge badge-passed">${menit} min elapsed</span>`;
-        return `
-          <tr>
-            <td><strong>${escapeHtml(s.namaSiswa)}</strong></td>
-            <td>${escapeHtml(s.kelas)}</td>
-            <td><span class="badge badge-neutral">${escapeHtml(s.paketId)}</span></td>
-            <td>${timeBadge}</td>
-            <td class="action-cell" style="text-align:center;">
-              <button type="button" class="btn btn-danger-soft btn-xs"
-                data-end-name="${escapeHtml(s.namaSiswa)}"
-                data-end-kelas="${escapeHtml(s.kelas)}"
-                data-end-paket="${escapeHtml(s.paketId)}">End Session</button>
-            </td>
-          </tr>`;
+        return `<tr>
+          <td><strong>${escapeHtml(s.namaSiswa)}</strong></td>
+          <td>${escapeHtml(s.kelas)}</td>
+          <td><span class="badge badge-neutral">${escapeHtml(s.paketId)}</span></td>
+          <td>${badge}</td>
+          <td class="action-cell" style="text-align:center;">
+            <button type="button" class="btn btn-danger-soft btn-xs"
+              data-end-name="${escapeHtml(s.namaSiswa)}"
+              data-end-kelas="${escapeHtml(s.kelas)}"
+              data-end-paket="${escapeHtml(s.paketId)}">End Session</button>
+          </td>
+        </tr>`;
       }).join('');
       tbody.querySelectorAll('button[data-end-name]').forEach(btn => {
-        btn.addEventListener('click', () => handleEndSession(
-          btn.dataset.endName, btn.dataset.endKelas, btn.dataset.endPaket
-        ));
+        btn.addEventListener('click', () => handleEndSession(btn.dataset.endName, btn.dataset.endKelas, btn.dataset.endPaket));
       });
     }
-
     async function handleEndSession(namaSiswa, kelas, paketId) {
-      if (!confirm(`Akhiri dan hapus sesi pengerjaan milik ${namaSiswa} (${kelas} - ${paketId})?`)) return;
+      if (!confirm(`End session for ${namaSiswa} (${kelas} - ${paketId})?`)) return;
       showLoading(`Ending session for ${namaSiswa}...`);
       try {
         const res = await callApi('endActiveSession', dashState.token, namaSiswa, kelas, paketId);
-        showToast(res.message || 'Session ended.');
+        showToast(res.message || 'Ended.');
         const activeRes = await callApi('getActiveSessions', dashState.token);
         renderActiveSessions(activeRes.sessions || []);
-      } catch (err) {
-        showToast(err.message);
-      } finally {
-        hideLoading();
-      }
+      } catch (err) { showToast(err.message); }
+      finally { hideLoading(); }
     }
-
     async function handleClearExpiredSessions() {
-      if (!confirm(`Hapus permanen semua sesi yang sudah berjalan lebih dari ${SESSION_EXPIRE_MINUTES} menit dari Google Sheets?`)) return;
+      if (!confirm(`Hapus semua sesi yang > ${SESSION_EXPIRE_MINUTES} menit?`)) return;
       showLoading('Clearing expired sessions...');
       try {
         const res = await callApi('endActiveSession', dashState.token, '__EXPIRED__', '', '');
-        showToast(res.message || 'Expired sessions cleared.');
+        showToast(res.message || 'Cleared.');
         const activeRes = await callApi('getActiveSessions', dashState.token);
         renderActiveSessions(activeRes.sessions || []);
-      } catch (err) {
-        showToast(err.message);
-      } finally {
-        hideLoading();
-      }
+      } catch (err) { showToast(err.message); }
+      finally { hideLoading(); }
     }
 
     // =========================================================================
@@ -2048,16 +893,13 @@
         if (['B', 'FALSE', 'SALAH', '0', 'F'].indexOf(k) !== -1) return ['B'];
         return [];
       }
-      if (t === 'PGK') {
-        return k.replace(/[^A-E,|;]/g, '').split(/[,|;]/).map(s => s.trim()).filter(Boolean);
-      }
+      if (t === 'PGK') return k.replace(/[^A-E,|;]/g, '').split(/[,|;]/).map(s => s.trim()).filter(Boolean);
       if (t === 'PG' || t === 'MENJODOHKAN') {
         const clean = k.replace(/[^A-E]/g, '');
         return clean ? [clean[0]] : [];
       }
       return [];
     }
-
     function renderItemAnalysis() {
       const paketId = $('filterPaket').value;
       const kelasFilter = $('filterKelas').value;
@@ -2065,92 +907,79 @@
       const tbody = $('analysisTableBody');
       const notice = $('analysisNotice');
       const summaryGrid = $('analysisSummaryGrid');
-
       if (!paketId) {
         dashState.analysisReport = [];
         notice.classList.remove('hidden');
         summaryGrid.classList.add('hidden');
-        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:var(--text-muted); padding:20px;">Please select a specific test package in the filter bar above (or click any gauge card).</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:var(--text-muted); padding:20px;">Select a package.</td></tr>';
         return;
       }
       notice.classList.add('hidden');
-
-      const rawQuestions = dashState.bankSoal[paketId] || [];
-      const questions = resolveQuestionPassages(rawQuestions);
-
+      const questions = resolveQuestionPassages(dashState.bankSoal[paketId] || []);
       let pool = dashState.rawRows.filter(r => {
         if (r.paketId !== paketId) return false;
         if (kelasFilter && r.kelas !== kelasFilter) return false;
+        if (isDummyRow(r)) return false; // exclude dummy dari analysis
         return true;
       });
       if (basis === 'FIRST') {
-        const firstMap = new Map();
+        const m = new Map();
         pool.forEach(r => {
           const key = `${r.kelas}|${r.namaSiswa}`;
-          const prev = firstMap.get(key);
-          if (!prev || r.percobaanKe < prev.percobaanKe) firstMap.set(key, r);
+          const prev = m.get(key);
+          if (!prev || r.percobaanKe < prev.percobaanKe) m.set(key, r);
         });
-        pool = Array.from(firstMap.values());
+        pool = Array.from(m.values());
       } else if (basis === 'LATEST') {
-        const latestMap = new Map();
+        const m = new Map();
         pool.forEach(r => {
           const key = `${r.kelas}|${r.namaSiswa}`;
-          const prev = latestMap.get(key);
-          if (!prev || r.percobaanKe > prev.percobaanKe) latestMap.set(key, r);
+          const prev = m.get(key);
+          if (!prev || r.percobaanKe > prev.percobaanKe) m.set(key, r);
         });
-        pool = Array.from(latestMap.values());
+        pool = Array.from(m.values());
       }
       if (questions.length === 0) {
         dashState.analysisReport = [];
         summaryGrid.classList.add('hidden');
-        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:var(--text-muted); padding:20px;">No questions were found for this test package.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:var(--text-muted); padding:20px;">No questions.</td></tr>';
         return;
       }
-
       const sortedPool = pool.slice().sort((a, b) => (b.skorMentah - a.skorMentah) || (b.jumlahBenar - a.jumlahBenar));
       const nTotal = sortedPool.length;
       const canCalcD = nTotal >= 4;
       const groupSize = canCalcD ? Math.min(Math.floor(nTotal / 2), Math.max(1, Math.round(nTotal * 0.27))) : 0;
       const upperIds = new Set(sortedPool.slice(0, groupSize).map(r => r.id));
       const lowerIds = new Set(sortedPool.slice(nTotal - groupSize).map(r => r.id));
-
-      // Pre-index detail: key = "rowId|noSoal" -> detail
       const detailIndex = new Map();
       pool.forEach(r => {
-        (r.details || []).forEach(d => {
-          detailIndex.set(`${r.id}|${String(d.noSoal)}`, d);
-        });
+        (r.details || []).forEach(d => detailIndex.set(`${r.id}|${String(d.noSoal)}`, d));
       });
-
       let countLayak = 0, countRevisi = 0, countKunci = 0;
       const report = [];
-
       questions.forEach((q, idx) => {
         const qNo = String(q.noSoal || (idx + 1));
         const t = String(q.tipeSoal || 'PG').toUpperCase();
         const keyLetters = getExpectedKeyLetters(q);
-        let totalScore = 0, count = 0;
-        let upperSum = 0, upperN = 0, lowerSum = 0, lowerN = 0;
+        let totalScore = 0, count = 0, upSum = 0, upN = 0, lowSum = 0, lowN = 0;
         const optionCounts = { A: 0, B: 0, C: 0, D: 0, E: 0, KOSONG: 0 };
-        const shortAnsMap = new Map();
+        const shortMap = new Map();
         const matrixStats = { penuh: 0, parsial: 0, salah: 0 };
-
         pool.forEach(r => {
           const det = detailIndex.get(`${r.id}|${qNo}`);
           if (!det || typeof det.score !== 'number') return;
-          totalScore += det.score;
-          count++;
+          totalScore += det.score; count++;
           if (canCalcD) {
-            if (upperIds.has(r.id)) { upperSum += det.score; upperN++; }
-            if (lowerIds.has(r.id)) { lowerSum += det.score; lowerN++; }
+            if (upperIds.has(r.id)) { upSum += det.score; upN++; }
+            if (lowerIds.has(r.id)) { lowSum += det.score; lowN++; }
           }
           if (t === 'IS') {
-            const rawAns = normalizeApostrophes(det.studentAns).trim() || '(Unanswered)';
-            const normKey = rawAns.toLowerCase();
-            const cur = shortAnsMap.get(normKey) || { text: rawAns, count: 0, correct: det.score >= 1 };
+            const raw = normalizeApostrophes(det.studentAns).trim() || '(Unanswered)';
+            const key = raw.toLowerCase();
+            const cur = shortMap.get(key) || { text: raw, count: 0, correct: det.score >= 1 };
             cur.count++;
             if (det.score >= 1) cur.correct = true;
-            shortAnsMap.set(normKey, cur);
+            shortMap.set(key, cur);
           } else if (t === 'MATRIKS') {
             if (det.score >= 1) matrixStats.penuh++;
             else if (det.score > 0) matrixStats.parsial++;
@@ -2158,98 +987,77 @@
           } else {
             const picked = Array.isArray(det.picked) ? det.picked : [];
             if (picked.length === 0) optionCounts.KOSONG++;
-            else picked.forEach(opt => {
-              if (Object.prototype.hasOwnProperty.call(optionCounts, opt)) optionCounts[opt]++;
-            });
+            else picked.forEach(o => { if (o in optionCounts) optionCounts[o]++; });
           }
         });
-
-        const pIndex = count > 0 ? (totalScore / count) : 0;
-        const pPct = Math.round(pIndex * 100);
+        const pPct = count > 0 ? Math.round((totalScore / count) * 100) : 0;
         let diffLabel = 'No Data';
         if (count > 0) {
           if (pPct >= 70) diffLabel = 'Easy';
           else if (pPct >= 30) diffLabel = 'Moderate';
           else diffLabel = 'Difficult';
         }
-
         let dVal = null, dLabel = 'N < 4';
-        if (canCalcD && upperN > 0 && lowerN > 0) {
-          dVal = Math.round(((upperSum / upperN) - (lowerSum / lowerN)) * 100) / 100;
+        if (canCalcD && upN > 0 && lowN > 0) {
+          dVal = Math.round(((upSum / upN) - (lowSum / lowN)) * 100) / 100;
           if (dVal >= 0.40) dLabel = 'Excellent';
           else if (dVal >= 0.30) dLabel = 'Good';
           else if (dVal >= 0.20) dLabel = 'Fair';
           else if (dVal >= 0) dLabel = 'Poor';
           else dLabel = 'Negative!';
         }
-
-        let hasDeadDistractor = false, hasDominantDistractor = false;
-        const activeLetters = t === 'BS'
-          ? ['A', 'B']
+        let hasDead = false, hasDominant = false;
+        const activeLetters = t === 'BS' ? ['A', 'B']
           : ((optionCounts.E > 0 || keyLetters.indexOf('E') !== -1 || (q.options && q.options.E && q.options.E !== '-'))
-              ? ['A', 'B', 'C', 'D', 'E'] : ['A', 'B', 'C', 'D']);
-        const allActiveAreKey = keyLetters.length >= activeLetters.length;
-
+            ? ['A', 'B', 'C', 'D', 'E'] : ['A', 'B', 'C', 'D']);
+        const allKey = keyLetters.length >= activeLetters.length;
         if (count > 0 && ['PG', 'PGK', 'BS', 'MENJODOHKAN'].indexOf(t) !== -1) {
-          const minKeyCount = keyLetters.length > 0
-            ? Math.min.apply(null, keyLetters.map(k => optionCounts[k] || 0)) : 0;
+          const minKey = keyLetters.length > 0 ? Math.min.apply(null, keyLetters.map(k => optionCounts[k] || 0)) : 0;
           activeLetters.forEach(l => {
             if (keyLetters.indexOf(l) === -1) {
-              const pctOpt = (optionCounts[l] / count) * 100;
-              if (count >= 5 && pctOpt < 5) hasDeadDistractor = true;
-              if (!allActiveAreKey && t !== 'PGK' && keyLetters.length > 0 && optionCounts[l] > minKeyCount) {
-                hasDominantDistractor = true;
-              }
+              const pct = (optionCounts[l] / count) * 100;
+              if (count >= 5 && pct < 5) hasDead = true;
+              if (!allKey && t !== 'PGK' && keyLetters.length > 0 && optionCounts[l] > minKey) hasDominant = true;
             }
           });
         }
-
         let statusCode = 'EMPTY', statusText = 'No Data', badgeCls = 'badge-neutral';
-        let note = 'No student answers recorded under the selected filters.';
-
+        let note = 'No answers.';
         if (count > 0) {
-          if ((dVal !== null && dVal < 0) || hasDominantDistractor) {
+          if ((dVal !== null && dVal < 0) || hasDominant) {
             statusCode = 'CHECK_KEY'; statusText = 'Check Key'; badgeCls = 'badge-remedial'; countKunci++;
             note = dVal !== null && dVal < 0
-              ? `Negative discrimination (D = ${dVal.toFixed(2)}): lower-scoring students answered this correctly more often than high-scoring students. Please verify the answer key.`
-              : 'A wrong option (distractor) was chosen more often than the answer key. Please review the question wording or answer key.';
+              ? `Negative discrimination (D = ${dVal.toFixed(2)}). Verify answer key.`
+              : 'A distractor chosen more than key.';
           } else if ((pPct > 85 || pPct < 20) && (dVal === null || dVal >= 0.20)) {
             statusCode = 'REV_DIFF'; statusText = 'Revise Diff.'; badgeCls = 'badge-warn'; countRevisi++;
-            note = pPct > 85
-              ? `Question is too easy (${pPct}% correct). Consider making it slightly more challenging.`
-              : `Question is too difficult (${pPct}% correct). Check if the passage or wording is clear enough.`;
-          } else if ((dVal !== null && dVal < 0.20) || hasDeadDistractor) {
+            note = pPct > 85 ? `Too easy (${pPct}%).` : `Too difficult (${pPct}%).`;
+          } else if ((dVal !== null && dVal < 0.20) || hasDead) {
             statusCode = 'REV_DIST'; statusText = 'Revise Dist.'; badgeCls = 'badge-warn'; countRevisi++;
             note = (dVal !== null && dVal < 0.20)
-              ? `Low discrimination index (D = ${dVal.toFixed(2)}). This question does not clearly separate strong and weak students.`
-              : 'Contains non-functioning distractor(s) chosen by < 5% of students. Replace weak options with more plausible choices.';
+              ? `Low discrimination (D = ${dVal.toFixed(2)}).`
+              : 'Dead distractor (<5%).';
           } else {
             statusCode = 'GOOD'; statusText = 'Good to Keep'; badgeCls = 'badge-passed'; countLayak++;
-            note = 'Difficulty, discrimination index, and answer distribution are all well-balanced.';
+            note = 'Well balanced.';
           }
         }
-
         report.push({
           idx, qNo, tipeSoal: t, kunciJawaban: q.kunciJawaban,
-          rawPertanyaan: q.pertanyaan,
-          pertanyaan: stripMediaTags(q.pertanyaan),
-          passage: q._passage || '',
-          options: q.options || {},
-          pembahasan: q.pembahasan || '',
-          sheetRow: q.sheetRow || '',
+          rawPertanyaan: q.pertanyaan, pertanyaan: stripMediaTags(q.pertanyaan),
+          passage: q._passage || '', options: q.options || {},
+          pembahasan: q.pembahasan || '', sheetRow: q.sheetRow || '',
           count, pPct, diffLabel, dVal, dLabel, statusCode, statusText, badgeCls, note,
           keyLetters, activeLetters, optionCounts,
-          shortAnswers: Array.from(shortAnsMap.values()).sort((a, b) => b.count - a.count),
+          shortAnswers: Array.from(shortMap.values()).sort((a, b) => b.count - a.count),
           matrixStats
         });
       });
-
       dashState.analysisReport = report;
       summaryGrid.classList.remove('hidden');
       $('sumLayakCount').textContent = `${countLayak} Qs`;
       $('sumRevisiCount').textContent = `${countRevisi} Qs`;
       $('sumKunciCount').textContent = `${countKunci} Qs`;
-
       tbody.innerHTML = report.map(item => {
         const dDisplay = item.dVal === null
           ? `<span style="color:var(--text-muted); font-size:11.5px;">${item.dLabel}</span>`
@@ -2278,10 +1086,8 @@
           </tr>
           <tr id="analysis-detail-${item.idx}" class="detail-drawer-row hidden">
             <td colspan="8">${buildDistractorDetailHtml(item)}</td>
-          </tr>
-        `;
+          </tr>`;
       }).join('');
-
       tbody.querySelectorAll('button[data-preview-idx]').forEach(btn => {
         btn.addEventListener('click', () => openItemPreviewModal(Number(btn.dataset.previewIdx)));
       });
@@ -2289,78 +1095,62 @@
         btn.addEventListener('click', () => toggleAnalysisDetail(Number(btn.dataset.detailIdx)));
       });
     }
-
     function buildDistractorDetailHtml(item) {
-      if (item.count === 0) {
-        return `<div style="font-size:12.5px; color:var(--text-muted);">${escapeHtml(item.note)}</div>`;
-      }
-      let bodyHtml = '';
+      if (item.count === 0) return `<div style="font-size:12.5px; color:var(--text-muted);">${escapeHtml(item.note)}</div>`;
+      let body = '';
       if (item.tipeSoal === 'IS') {
-        const topList = item.shortAnswers.slice(0, 10).map(sa => {
+        const top = item.shortAnswers.slice(0, 10).map(sa => {
           const pct = Math.round((sa.count / item.count) * 100);
-          const tag = sa.correct
-            ? '<span class="badge badge-passed">Marked Correct</span>'
-            : '<span class="badge badge-remedial">Marked Incorrect</span>';
+          const tag = sa.correct ? '<span class="badge badge-passed">Correct</span>' : '<span class="badge badge-remedial">Wrong</span>';
           return `<div class="dist-box ${sa.correct ? 'is-key' : ''}">
             <div style="display:flex; justify-content:space-between; gap:6px; align-items:center;">
               <strong>"${escapeHtml(sa.text)}"</strong>${tag}
             </div>
-            <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">${sa.count} student(s) (${pct}%)</div>
+            <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">${sa.count} (${pct}%)</div>
           </div>`;
         }).join('');
-        bodyHtml = `<div style="font-size:12px; font-weight:700; margin-top:6px;">Student Answer Variations (Top 10):</div>
-          <div class="distractor-grid">${topList}</div>`;
+        body = `<div style="font-size:12px; font-weight:700; margin-top:6px;">Top Answers:</div><div class="distractor-grid">${top}</div>`;
       } else if (item.tipeSoal === 'MATRIKS') {
         const m = item.matrixStats;
-        bodyHtml = `<div class="distractor-grid">
-          <div class="dist-box is-key"><strong>Full Score</strong><div>${m.penuh} (${Math.round(m.penuh / item.count * 100)}%)</div></div>
-          <div class="dist-box"><strong>Partial Score</strong><div>${m.parsial} (${Math.round(m.parsial / item.count * 100)}%)</div></div>
-          <div class="dist-box is-danger"><strong>Zero Score</strong><div>${m.salah} (${Math.round(m.salah / item.count * 100)}%)</div></div>
+        body = `<div class="distractor-grid">
+          <div class="dist-box is-key"><strong>Full</strong><div>${m.penuh} (${Math.round(m.penuh / item.count * 100)}%)</div></div>
+          <div class="dist-box"><strong>Partial</strong><div>${m.parsial} (${Math.round(m.parsial / item.count * 100)}%)</div></div>
+          <div class="dist-box is-danger"><strong>Zero</strong><div>${m.salah} (${Math.round(m.salah / item.count * 100)}%)</div></div>
         </div>`;
       } else {
-        const minKeyCount = item.keyLetters.length > 0
-          ? Math.min.apply(null, item.keyLetters.map(k => item.optionCounts[k] || 0)) : 0;
+        const minKey = item.keyLetters.length > 0 ? Math.min.apply(null, item.keyLetters.map(k => item.optionCounts[k] || 0)) : 0;
         const cards = item.activeLetters.map(l => {
           const cnt = item.optionCounts[l] || 0;
           const pct = Math.round((cnt / item.count) * 100);
           const isKey = item.keyLetters.indexOf(l) !== -1;
-          const isDominant = !isKey && item.tipeSoal !== 'PGK' && item.keyLetters.length > 0 && cnt > minKeyCount;
+          const isDom = !isKey && item.tipeSoal !== 'PGK' && item.keyLetters.length > 0 && cnt > minKey;
           const isDead = !isKey && item.count >= 5 && pct < 5;
-          let subNote = isKey ? 'Answer Key' : 'Distractor';
-          if (isDominant) subNote = 'Chosen More Than Key!';
-          else if (isDead) subNote = 'Weak Distractor (<5%)';
-          return `<div class="dist-box ${isKey ? 'is-key' : (isDominant ? 'is-danger' : '')}">
+          let sub = isKey ? 'Answer Key' : 'Distractor';
+          if (isDom) sub = 'Chosen More Than Key!';
+          else if (isDead) sub = 'Weak Distractor (<5%)';
+          return `<div class="dist-box ${isKey ? 'is-key' : (isDom ? 'is-danger' : '')}">
             <div style="display:flex; justify-content:space-between; font-size:12px;">
-              <strong>Option ${l} ${isKey ? '✓' : ''}</strong>
-              <span><strong>${cnt}</strong> (${pct}%)</span>
+              <strong>Option ${l} ${isKey ? '✓' : ''}</strong><span><strong>${cnt}</strong> (${pct}%)</span>
             </div>
             <div class="dist-bar-track"><div class="dist-bar-fill" style="width:${pct}%;"></div></div>
-            <div style="font-size:10.5px; color:${isDominant ? 'var(--danger)' : 'var(--text-muted)'}; font-weight:600;">${subNote}</div>
+            <div style="font-size:10.5px; color:${isDom ? 'var(--danger)' : 'var(--text-muted)'}; font-weight:600;">${sub}</div>
           </div>`;
         }).join('');
-        const kosongPct = Math.round((item.optionCounts.KOSONG / item.count) * 100);
-        const kosongCard = item.optionCounts.KOSONG > 0
-          ? `<div class="dist-box"><div style="display:flex; justify-content:space-between; font-size:12px;"><strong>Unanswered</strong><span><strong>${item.optionCounts.KOSONG}</strong> (${kosongPct}%)</span></div><div class="dist-bar-track"><div class="dist-bar-fill" style="width:${kosongPct}%;"></div></div></div>`
+        const kp = Math.round((item.optionCounts.KOSONG / item.count) * 100);
+        const kc = item.optionCounts.KOSONG > 0
+          ? `<div class="dist-box"><div style="display:flex; justify-content:space-between; font-size:12px;"><strong>Unanswered</strong><span><strong>${item.optionCounts.KOSONG}</strong> (${kp}%)</span></div><div class="dist-bar-track"><div class="dist-bar-fill" style="width:${kp}%;"></div></div></div>`
           : '';
-        bodyHtml = `<div class="distractor-grid">${cards}${kosongCard}</div>`;
+        body = `<div class="distractor-grid">${cards}${kc}</div>`;
       }
-      return `<div style="font-size:12px; margin-bottom:6px;"><strong>Analysis Note:</strong> ${escapeHtml(item.note)}</div>${bodyHtml}`;
+      return `<div style="font-size:12px; margin-bottom:6px;"><strong>Note:</strong> ${escapeHtml(item.note)}</div>${body}`;
     }
-
     function toggleAnalysisDetail(idx) {
       const row = $(`analysis-detail-${idx}`);
       if (row) row.classList.toggle('hidden');
     }
-
-    // =========================================================================
-    // ITEM PREVIEW MODAL
-    // =========================================================================
     function pauseItemPreviewAudio() {
-      document.querySelectorAll('#itemPreviewBody audio').forEach(a => {
-        try { a.pause(); } catch (e) {}
-      });
+      document.querySelectorAll('#itemPreviewBody audio').forEach(a => { try { a.pause(); } catch (e) {} });
     }
-
     function openItemPreviewModal(idx) {
       const report = dashState.analysisReport || [];
       if (idx < 0 || idx >= report.length) return;
@@ -2369,60 +1159,52 @@
       const item = report[idx];
       const paketId = $('filterPaket').value || '';
       const typeLabel = TYPE_LABELS[item.tipeSoal] || item.tipeSoal;
-      $('itemPreviewTitle').textContent = `Question ${item.qNo} Preview (${typeLabel})`;
-      $('itemPreviewMeta').textContent = `Package: ${getPackageName(paketId)} (${paketId}) • Sheet Row: ${item.sheetRow || '-'} • Students: ${item.count}`;
-
+      $('itemPreviewTitle').textContent = `Q${item.qNo} Preview (${typeLabel})`;
+      $('itemPreviewMeta').textContent = `Package: ${getPackageName(paketId)} (${paketId}) • Row: ${item.sheetRow || '-'} • Students: ${item.count}`;
       const passageHtml = item.passage
-        ? `<div class="passage-preview-box">
-             <div style="font-size:10.5px; font-weight:800; color:var(--teal-dark); text-transform:uppercase; letter-spacing:0.4px; margin-bottom:5px;">Reading Passage / Stimulus</div>
-             <div>${formatRichMedia(item.passage)}</div>
-           </div>` : '';
-
-      let stemAndOptionsHtml = '';
+        ? `<div class="passage-preview-box"><div style="font-size:10.5px; font-weight:800; color:var(--teal-dark); text-transform:uppercase; margin-bottom:5px;">Passage</div><div>${formatRichMedia(item.passage)}</div></div>`
+        : '';
+      let stemHtml = '';
       if (item.tipeSoal === 'MATRIKS') {
         let raw = String(item.rawPertanyaan || '');
         let headers = [];
-        const headerMatch = raw.match(/\[(?:HEADER:\s*)?([^\]]+)\]/i);
-        if (headerMatch) {
-          headers = headerMatch[1].split('|').map(s => s.trim()).filter(Boolean);
-          raw = raw.replace(headerMatch[0], '').trim();
+        const hm = raw.match(/\[(?:HEADER:\s*)?([^\]]+)\]/i);
+        if (hm) {
+          headers = hm[1].split('|').map(s => s.trim()).filter(Boolean);
+          raw = raw.replace(hm[0], '').trim();
         }
         const parts = raw.split(/[\|\n]/).map(s => s.trim()).filter(Boolean);
-        const promptText = parts.length > 1 ? parts[0] : 'Matrix / Category Question';
-        const statements = parts.length > 1 ? parts.slice(1) : parts;
-        const filledLetters = ['A', 'B', 'C', 'D', 'E'].filter(l => {
+        const prompt = parts.length > 1 ? parts[0] : 'Matrix Question';
+        const stmts = parts.length > 1 ? parts.slice(1) : parts;
+        const filled = ['A', 'B', 'C', 'D', 'E'].filter(l => {
           const v = String((item.options && item.options[l]) || '').trim();
           return v !== '' && v !== '-';
         });
-        const colLabels = filledLetters.length > 0
-          ? filledLetters.map(l => item.options[l].trim())
+        const colLabels = filled.length > 0 ? filled.map(l => item.options[l].trim())
           : (headers.length > 1 ? headers.slice(1) : ['True', 'False']);
         const letters = colLabels.map((_, i) => String.fromCharCode(65 + i));
-        const firstColTitle = headers.length > 0 ? headers[0] : 'Statement';
+        const firstCol = headers.length > 0 ? headers[0] : 'Statement';
         const keySeq = String(item.kunciJawaban || '').replace(/[^A-E,|;]/gi, '').split(/[,|;]/).map(s => s.trim().toUpperCase()).filter(Boolean);
-        stemAndOptionsHtml = `
-          <div class="stem-preview-box" style="font-size:14px; font-weight:700; margin-bottom:10px; white-space:pre-line;">${formatRichMedia(promptText)}</div>
+        stemHtml = `
+          <div class="stem-preview-box" style="font-size:14px; font-weight:700; margin-bottom:10px; white-space:pre-line;">${formatRichMedia(prompt)}</div>
           <div class="table-wrap" style="margin-bottom:10px;">
             <table>
-              <thead><tr><th>${escapeHtml(firstColTitle)}</th>${colLabels.map(lbl => `<th style="text-align:center;">${formatRichMedia(lbl)}</th>`).join('')}</tr></thead>
-              <tbody>
-                ${statements.map((stmt, rIdx) => `
-                  <tr>
-                    <td>${formatRichMedia(stmt)}</td>
-                    ${letters.map(l => {
-                      const isKeyCell = keySeq[rIdx] === l;
-                      return `<td style="text-align:center; ${isKeyCell ? 'background:var(--success-soft); color:var(--success); font-weight:800;' : ''}">${isKeyCell ? '✓ Key' : '—'}</td>`;
-                    }).join('')}
-                  </tr>
-                `).join('')}
-              </tbody>
+              <thead><tr><th>${escapeHtml(firstCol)}</th>${colLabels.map(l => `<th style="text-align:center;">${formatRichMedia(l)}</th>`).join('')}</tr></thead>
+              <tbody>${stmts.map((s, ri) => `
+                <tr>
+                  <td>${formatRichMedia(s)}</td>
+                  ${letters.map(l => {
+                    const isKey = keySeq[ri] === l;
+                    return `<td style="text-align:center; ${isKey ? 'background:var(--success-soft); color:var(--success); font-weight:800;' : ''}">${isKey ? '✓ Key' : '—'}</td>`;
+                  }).join('')}
+                </tr>`).join('')}</tbody>
             </table>
           </div>`;
       } else if (item.tipeSoal === 'IS') {
         const accepted = String(item.kunciJawaban || '').split('|').map(s => s.trim()).filter(Boolean);
-        stemAndOptionsHtml = `
+        stemHtml = `
           <div class="stem-preview-box" style="font-size:14px; font-weight:700; margin-bottom:10px; white-space:pre-line;">${formatRichMedia(item.rawPertanyaan)}</div>
-          <div class="opt-pill is-key">Accepted Answer(s): ${escapeHtml(accepted.join('  |  '))}</div>`;
+          <div class="opt-pill is-key">Accepted: ${escapeHtml(accepted.join(' | '))}</div>`;
       } else {
         const letters = item.tipeSoal === 'BS' ? ['A', 'B'] : ['A', 'B', 'C', 'D', 'E'];
         const opts = Object.assign({}, item.options || {});
@@ -2431,120 +1213,81 @@
           if (!opts.B || opts.B === '-') opts.B = 'False';
         }
         const optHtml = letters.map(l => {
-          const val = String(opts[l] || '').trim();
-          if (!val || val === '-') return '';
+          const v = String(opts[l] || '').trim();
+          if (!v || v === '-') return '';
           const isKey = item.keyLetters.indexOf(l) !== -1;
-          const pickCount = item.optionCounts[l] || 0;
-          const pickPct = item.count > 0 ? Math.round((pickCount / item.count) * 100) : 0;
-          return `
-            <div class="opt-pill ${isKey ? 'is-key' : ''}">
-              <div class="opt-pill-main">
-                <span class="opt-letter-tag">${l}</span>
-                <div>${formatRichMedia(val)}</div>
-              </div>
-              <div style="display:flex; align-items:center; gap:5px; flex-shrink:0;">
-                ${isKey ? '<span class="opt-key-pill">✓ KEY</span>' : ''}
-                <span style="font-size:11px; white-space:nowrap; opacity:0.85;">${pickCount} (${pickPct}%)</span>
-              </div>
-            </div>`;
+          const cnt = item.optionCounts[l] || 0;
+          const pct = item.count > 0 ? Math.round((cnt / item.count) * 100) : 0;
+          return `<div class="opt-pill ${isKey ? 'is-key' : ''}">
+            <div class="opt-pill-main"><span class="opt-letter-tag">${l}</span><div>${formatRichMedia(v)}</div></div>
+            <div style="display:flex; align-items:center; gap:5px; flex-shrink:0;">
+              ${isKey ? '<span class="opt-key-pill">✓ KEY</span>' : ''}
+              <span style="font-size:11px; opacity:0.85;">${cnt} (${pct}%)</span>
+            </div>
+          </div>`;
         }).join('');
-        stemAndOptionsHtml = `
+        stemHtml = `
           <div class="stem-preview-box" style="font-size:14px; font-weight:700; margin-bottom:10px; white-space:pre-line;">${formatRichMedia(item.rawPertanyaan)}</div>
           <div class="preview-opts-grid">${optHtml}</div>`;
       }
-
-      const explanationHtml = item.pembahasan
+      const expHtml = item.pembahasan
         ? `<div class="preview-explanation" style="margin-top:10px;"><strong>Explanation:</strong><br>${formatRichMedia(item.pembahasan)}</div>`
         : '';
-
       const dText = item.dVal === null ? item.dLabel : `${item.dVal.toFixed(2)} (${item.dLabel})`;
-      const navFooterHtml = `
+      const navHtml = `
         <div style="margin-top:12px; padding:10px 12px; background:var(--bg-cream); border:1px solid var(--border-line); display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:8px;">
           <div style="font-size:11.5px;">
-            <strong>Difficulty (P):</strong> ${item.pPct}% (${item.diffLabel}) &nbsp;|&nbsp;
-            <strong>Discrim. (D):</strong> ${dText} &nbsp;|&nbsp;
+            <strong>P:</strong> ${item.pPct}% (${item.diffLabel}) &nbsp;|&nbsp;
+            <strong>D:</strong> ${dText} &nbsp;|&nbsp;
             <span class="badge ${item.badgeCls}">${item.statusText}</span>
           </div>
           <div style="display:flex; gap:6px;">
-            <button type="button" class="btn btn-outline btn-xs" ${idx === 0 ? 'disabled' : ''} onclick="openItemPreviewModal(${idx - 1})">&larr; Previous</button>
+            <button type="button" class="btn btn-outline btn-xs" ${idx === 0 ? 'disabled' : ''} onclick="openItemPreviewModal(${idx - 1})">&larr; Prev</button>
             <button type="button" class="btn btn-outline btn-xs" ${idx >= report.length - 1 ? 'disabled' : ''} onclick="openItemPreviewModal(${idx + 1})">Next &rarr;</button>
           </div>
         </div>`;
-
-      $('itemPreviewBody').innerHTML = passageHtml + stemAndOptionsHtml + explanationHtml + navFooterHtml;
+      $('itemPreviewBody').innerHTML = passageHtml + stemHtml + expHtml + navHtml;
       $('itemPreviewModal').classList.remove('hidden');
     }
 
     // =========================================================================
-    // EXPORT ANALYSIS CSV
-    // =========================================================================
-    function exportAnalysisCsv() {
-      const list = dashState.analysisReport || [];
-      if (list.length === 0) {
-        showToast('Please select a test package before exporting Item Analysis.');
-        return;
-      }
-      const paketId = $('filterPaket').value || 'package';
-      const headers = [
-        'Question_No', 'Type', 'Answer_Key', 'Question_Text', 'Students_Count',
-        'Difficulty_P_Pct', 'Difficulty_Level',
-        'Discrimination_D', 'Discrimination_Level',
-        'Status', 'Note'
-      ];
-      const rows = list.map(it => [
-        it.qNo, it.tipeSoal, it.kunciJawaban,
-        it.pertanyaan.replace(/"/g, '""'),
-        it.count, it.pPct, it.diffLabel,
-        it.dVal === null ? '' : it.dVal,
-        it.dLabel, it.statusText,
-        it.note.replace(/"/g, '""')
-      ]);
-      const csv = [headers, ...rows]
-        .map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(','))
-        .join('\r\n');
-      const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `item_analysis_${paketId}_${new Date().toISOString().slice(0, 10)}.csv`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      setTimeout(() => URL.revokeObjectURL(url), 5000);
-      showToast('Analysis CSV downloaded.');
-    }
-
-    // =========================================================================
-    // EXPORT RESULTS CSV
+    // EXPORTS
     // =========================================================================
     function exportResultsCsv() {
       const rows = dashState.filteredRows || [];
-      if (rows.length === 0) {
-        showToast('No results to export under the current filters.');
-        return;
-      }
-      const headers = ['Name', 'Class', 'Package', 'Attempt', 'Correct', 'Total', 'Score', 'Status', 'Duration', 'TabSwitches', 'Timestamp'];
+      if (rows.length === 0) { showToast('No results to export.'); return; }
+      const headers = ['Name', 'Class', 'Package', 'Attempt', 'Correct', 'Total', 'Score', 'Status', 'Duration', 'TabSwitches', 'Timestamp', 'IsDummy'];
       const csvRows = rows.map(r => [
         r.namaSiswa, r.kelas, r.paketId, r.percobaanKe, r.jumlahBenar, r.totalSoal,
-        r.skorAkhir, r.status, r.durasi, r.pindahTab, r.timestamp
+        r.skorAkhir, r.status, r.durasi, r.pindahTab, r.timestamp, isDummyRow(r) ? 'YES' : 'NO'
       ]);
-      const csv = [headers, ...csvRows]
-        .map(r => r.map(c => `"${String(c == null ? '' : c).replace(/"/g, '""')}"`).join(','))
-        .join('\r\n');
+      downloadCsv([headers, ...csvRows], `results_${new Date().toISOString().slice(0, 10)}.csv`);
+    }
+    function exportAnalysisCsv() {
+      const list = dashState.analysisReport || [];
+      if (list.length === 0) { showToast('Select package first.'); return; }
+      const paketId = $('filterPaket').value || 'package';
+      const headers = ['Question_No', 'Type', 'Answer_Key', 'Question_Text', 'Students_Count',
+        'Difficulty_P_Pct', 'Difficulty_Level', 'Discrimination_D', 'Discrimination_Level', 'Status', 'Note'];
+      const rows = list.map(it => [
+        it.qNo, it.tipeSoal, it.kunciJawaban, it.pertanyaan.replace(/"/g, '""'),
+        it.count, it.pPct, it.diffLabel, it.dVal === null ? '' : it.dVal, it.dLabel, it.statusText, it.note.replace(/"/g, '""')
+      ]);
+      downloadCsv([headers, ...rows], `item_analysis_${paketId}_${new Date().toISOString().slice(0, 10)}.csv`);
+    }
+    function downloadCsv(rows, filename) {
+      const csv = rows.map(r => r.map(c => `"${String(c == null ? '' : c).replace(/"/g, '""')}"`).join(',')).join('\r\n');
       const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.href = url;
-      a.download = `results_${new Date().toISOString().slice(0, 10)}.csv`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
+      a.href = url; a.download = filename;
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
       setTimeout(() => URL.revokeObjectURL(url), 5000);
-      showToast('Results CSV downloaded.');
+      showToast('CSV downloaded.');
     }
 
     // =========================================================================
-    // PACKAGE MANAGEMENT (NEW: actually uses backend)
+    // PACKAGES TAB
     // =========================================================================
     async function renderPackagesTab() {
       const tbody = $('packagesTableBody');
@@ -2553,32 +1296,27 @@
         const res = await callApi('getPaketManagementData', dashState.token);
         dashState.packageManagement = res.packages || [];
         if (dashState.packageManagement.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:var(--text-muted); padding:20px;">No test packages found in Bank_Soal.</td></tr>';
+          tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:var(--text-muted); padding:20px;">No packages.</td></tr>';
           return;
         }
         tbody.innerHTML = dashState.packageManagement.map(pkg => {
           const isActive = pkg.status === 'ACTIVE';
-          const statusBadge = isActive
-            ? '<span class="badge badge-passed">ACTIVE</span>'
-            : '<span class="badge badge-neutral">INACTIVE</span>';
-          return `
-            <tr>
-              <td><strong>${escapeHtml(pkg.id)}</strong></td>
-              <td>${escapeHtml(pkg.name)}</td>
-              <td>${pkg.jumlahSoal}</td>
-              <td>${pkg.jumlahPengerjaan}</td>
-              <td>${statusBadge}</td>
-              <td class="action-cell">
-                <div style="display:flex; gap:4px; flex-wrap:nowrap;">
-                  <button type="button" class="btn btn-outline btn-xs"
-                    data-action="preview" data-paket="${escapeHtml(pkg.id)}">Preview</button>
-                  <button type="button" class="btn ${isActive ? 'btn-danger-soft' : 'btn-success'} btn-xs"
-                    data-action="toggle" data-paket="${escapeHtml(pkg.id)}" data-status="${isActive ? 'INACTIVE' : 'ACTIVE'}">
-                    ${isActive ? 'Deactivate' : 'Activate'}
-                  </button>
-                </div>
-              </td>
-            </tr>`;
+          const statusBadge = isActive ? '<span class="badge badge-passed">ACTIVE</span>' : '<span class="badge badge-neutral">INACTIVE</span>';
+          return `<tr>
+            <td><strong>${escapeHtml(pkg.id)}</strong></td>
+            <td>${escapeHtml(pkg.name)}</td>
+            <td>${pkg.jumlahSoal}</td>
+            <td>${pkg.jumlahPengerjaan}</td>
+            <td>${statusBadge}</td>
+            <td class="action-cell">
+              <div style="display:flex; gap:4px; flex-wrap:nowrap;">
+                <button type="button" class="btn btn-outline btn-xs" data-action="preview" data-paket="${escapeHtml(pkg.id)}">Preview</button>
+                <button type="button" class="btn ${isActive ? 'btn-danger-soft' : 'btn-success'} btn-xs" data-action="toggle" data-paket="${escapeHtml(pkg.id)}" data-status="${isActive ? 'INACTIVE' : 'ACTIVE'}">
+                  ${isActive ? 'Deactivate' : 'Activate'}
+                </button>
+              </div>
+            </td>
+          </tr>`;
         }).join('');
         tbody.querySelectorAll('button[data-action]').forEach(btn => {
           btn.addEventListener('click', () => {
@@ -2592,35 +1330,28 @@
         tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--danger); padding:20px;">${escapeHtml(err.message)}</td></tr>`;
       }
     }
-
     async function togglePackageStatus(paketId, newStatus) {
-      if (!confirm(`Ubah status paket ${paketId} menjadi ${newStatus}?`)) return;
-      showLoading('Updating package status...');
+      if (!confirm(`Change ${paketId} to ${newStatus}?`)) return;
+      showLoading('Updating...');
       try {
         const res = await callApi('togglePaketStatus', dashState.token, paketId, newStatus);
-        showToast(res.message || 'Package updated.');
+        showToast(res.message || 'Updated.');
         await renderPackagesTab();
-        // Refresh dropdowns karena status paket berubah
         const dashRes = await callApi('getDashboardData', dashState.token, { sinceDays: Number($('filterDays').value) || 0 });
         dashState.allPackages = dashRes.allPackages || [];
         dashState.aggCacheKey = '';
         populateFilterDropdowns();
-      } catch (err) {
-        showToast(err.message);
-      } finally {
-        hideLoading();
-      }
+      } catch (err) { showToast(err.message); }
+      finally { hideLoading(); }
     }
-
     async function openPackagePreview(paketId, forceFresh) {
       const reqId = ++dashState.previewReqId;
       dashState.currentPreviewPaketId = paketId;
       $('previewPanel').classList.remove('hidden');
-      $('previewTitle').textContent = `Loading preview for ${paketId}...`;
+      $('previewTitle').textContent = `Loading ${paketId}...`;
       $('previewStatsBadges').innerHTML = '';
       $('previewJumpBar').classList.add('hidden');
       $('previewQuestionsList').innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-muted);">Loading questions...</div>';
-
       try {
         const res = await callApi('getPaketPreview', dashState.token, paketId, Boolean(forceFresh));
         if (reqId !== dashState.previewReqId) return;
@@ -2631,29 +1362,21 @@
         $('previewQuestionsList').innerHTML = `<div class="alert-error">${escapeHtml(err.message)}</div>`;
       }
     }
-
     function renderPackagePreview(data) {
       const pkg = data.paket || {};
       const questions = data.questions || [];
       $('previewTitle').textContent = `${pkg.name || pkg.id} (${pkg.id})`;
-
       const issueCount = questions.filter(q => (q.issues || []).length > 0).length;
-      const badges = [
-        `<span class="badge badge-neutral">${questions.length} questions</span>`,
-        pkg.status === 'ACTIVE'
-          ? '<span class="badge badge-passed">ACTIVE</span>'
-          : '<span class="badge badge-neutral">INACTIVE</span>'
-      ];
+      const badges = [`<span class="badge badge-neutral">${questions.length} Qs</span>`,
+        pkg.status === 'ACTIVE' ? '<span class="badge badge-passed">ACTIVE</span>' : '<span class="badge badge-neutral">INACTIVE</span>'];
       if (issueCount > 0) badges.push(`<span class="badge badge-remedial">${issueCount} with issues</span>`);
       $('previewStatsBadges').innerHTML = badges.join('');
-
       const jumpBar = $('previewJumpBar');
       if (questions.length > 0) {
         jumpBar.classList.remove('hidden');
-        jumpBar.innerHTML = questions.map((q, idx) => {
-          const hasIssue = (q.issues || []).length > 0;
-          return `<button type="button" class="jump-pill ${hasIssue ? 'has-issue' : ''}"
-            data-idx="${idx}" title="${hasIssue ? escapeHtml(q.issues.join(' | ')) : 'OK'}">${escapeHtml(q.noSoal || (idx + 1))}</button>`;
+        jumpBar.innerHTML = questions.map((q, i) => {
+          const has = (q.issues || []).length > 0;
+          return `<button type="button" class="jump-pill ${has ? 'has-issue' : ''}" data-idx="${i}" title="${has ? escapeHtml(q.issues.join(' | ')) : 'OK'}">${escapeHtml(q.noSoal || (i + 1))}</button>`;
         }).join('');
         jumpBar.querySelectorAll('.jump-pill').forEach(btn => {
           btn.addEventListener('click', () => {
@@ -2661,112 +1384,81 @@
             if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
           });
         });
-      } else {
-        jumpBar.classList.add('hidden');
-      }
-
-      const list = $('previewQuestionsList');
-      const issuesOnly = dashState.previewFilterIssuesOnly;
-      const visible = issuesOnly ? questions.filter(q => (q.issues || []).length > 0) : questions;
+      } else jumpBar.classList.add('hidden');
+      const visible = dashState.previewFilterIssuesOnly ? questions.filter(q => (q.issues || []).length > 0) : questions;
       if (visible.length === 0) {
-        list.innerHTML = `<div style="text-align:center; padding:20px; color:var(--text-muted);">${issuesOnly ? 'No questions with issues. 🎉' : 'No questions in this package.'}</div>`;
+        $('previewQuestionsList').innerHTML = `<div style="text-align:center; padding:20px; color:var(--text-muted);">${dashState.previewFilterIssuesOnly ? 'No issues. 🎉' : 'No questions.'}</div>`;
         return;
       }
-      list.innerHTML = visible.map(q => {
-        const originalIdx = questions.indexOf(q);
-        return renderPreviewQuestionCard(q, originalIdx);
-      }).join('');
+      $('previewQuestionsList').innerHTML = visible.map(q => renderPreviewQuestionCard(q, questions.indexOf(q))).join('');
     }
-
     function renderPreviewQuestionCard(q, idx) {
       const t = String(q.tipeSoal || 'PG').toUpperCase();
       const issues = q.issues || [];
-      const hasIssue = issues.length > 0;
+      const has = issues.length > 0;
       const keyLetters = (q.key && q.key.letters) || [];
       const accepted = (q.key && q.key.accepted) || [];
-
-      let optionsHtml = '';
+      let optHtml = '';
       if (t === 'IS') {
-        optionsHtml = accepted.length > 0
+        optHtml = accepted.length > 0
           ? `<div class="opt-pill is-key"><strong>Accepted:</strong> ${escapeHtml(accepted.join(' | '))}</div>`
-          : '<div class="opt-pill" style="color:var(--danger);">No accepted answers defined.</div>';
+          : '<div class="opt-pill" style="color:var(--danger);">No accepted answers.</div>';
       } else if (t === 'MATRIKS') {
-        optionsHtml = '<div class="opt-pill"><em>Matrix question — key sequence:</em> ' + escapeHtml(keyLetters.join(', ')) + '</div>';
+        optHtml = '<div class="opt-pill"><em>Matrix — key sequence:</em> ' + escapeHtml(keyLetters.join(', ')) + '</div>';
       } else {
         const letters = ['A', 'B', 'C', 'D', 'E'].filter(l => q.options && q.options[l] && q.options[l] !== '-');
-        optionsHtml = letters.map(l => {
+        optHtml = letters.map(l => {
           const isKey = keyLetters.indexOf(l) !== -1;
           return `<div class="opt-pill ${isKey ? 'is-key' : ''}">
-            <div class="opt-pill-main">
-              <span class="opt-letter-tag">${l}</span>
-              <div>${formatRichMedia(q.options[l])}</div>
-            </div>
+            <div class="opt-pill-main"><span class="opt-letter-tag">${l}</span><div>${formatRichMedia(q.options[l])}</div></div>
             ${isKey ? '<span class="opt-key-pill">✓ KEY</span>' : ''}
           </div>`;
         }).join('');
       }
-
-      const passageHtml = q.teksBacaan && q.teksBacaan !== '-' && q.teksBacaan.trim() !== ''
-        ? `<div class="passage-group-card">
-             <div class="passage-group-head"><span class="badge badge-teal">PASSAGE</span></div>
-             <div class="passage-group-body">${formatRichMedia(q.teksBacaan)}</div>
-           </div>` : '';
-
-      const explanationHtml = dashState.previewShowExplanations && q.pembahasan
+      const passHtml = q.teksBacaan && q.teksBacaan !== '-' && q.teksBacaan.trim() !== ''
+        ? `<div class="passage-group-card"><div class="passage-group-head"><span class="badge badge-teal">PASSAGE</span></div><div class="passage-group-body">${formatRichMedia(q.teksBacaan)}</div></div>`
+        : '';
+      const expHtml = dashState.previewShowExplanations && q.pembahasan
         ? `<div class="preview-explanation"><strong>Explanation:</strong> ${formatRichMedia(q.pembahasan)}</div>` : '';
-
-      const issueHtml = hasIssue
-        ? `<div class="preview-issue-bar">⚠ ${issues.map(escapeHtml).join(' • ')}</div>` : '';
-
-      return `
-        <div class="preview-q ${hasIssue ? 'has-issue' : ''}" id="preview-q-${idx}">
-          <div class="preview-q-head">
-            <div style="display:flex; align-items:center; gap:6px;">
-              <span class="preview-q-num">Q${escapeHtml(q.noSoal || (idx + 1))}</span>
-              <span class="badge badge-neutral">${escapeHtml(t)}</span>
-              <span style="font-size:11px; color:var(--text-muted);">Row ${q.sheetRow || '-'}</span>
-            </div>
-          </div>
-          ${passageHtml}
-          <div class="preview-q-stem">${formatRichMedia(q.pertanyaan)}</div>
-          <div class="preview-opts-grid">${optionsHtml}</div>
-          ${explanationHtml}
-          ${issueHtml}
-        </div>`;
+      const issueHtml = has ? `<div class="preview-issue-bar">⚠ ${issues.map(escapeHtml).join(' • ')}</div>` : '';
+      return `<div class="preview-q ${has ? 'has-issue' : ''}" id="preview-q-${idx}">
+        <div class="preview-q-head"><div style="display:flex; align-items:center; gap:6px;">
+          <span class="preview-q-num">Q${escapeHtml(q.noSoal || (idx + 1))}</span>
+          <span class="badge badge-neutral">${escapeHtml(t)}</span>
+          <span style="font-size:11px; color:var(--text-muted);">Row ${q.sheetRow || '-'}</span>
+        </div></div>
+        ${passHtml}
+        <div class="preview-q-stem">${formatRichMedia(q.pertanyaan)}</div>
+        <div class="preview-opts-grid">${optHtml}</div>
+        ${expHtml}${issueHtml}
+      </div>`;
     }
 
     // =========================================================================
-    // SETTINGS — security & validator
+    // SETTINGS
     // =========================================================================
     function syncSecurityUI() {
       const sec = dashState.security || {};
       $('settingStudentPin').value = (String(sec.requireStudentPin).toUpperCase() === 'YES') ? 'YES' : 'NO';
       $('settingTeacherPin').value = (String(sec.requireTeacherPin).toUpperCase() === 'NO') ? 'NO' : 'YES';
-      const isHidden = (String(sec.showKey).toUpperCase() === 'HIDE');
-      $('settingHideAnswerKey').checked = isHidden;
-      $('hideKeyStatusText').textContent = isHidden
+      const hidden = (String(sec.showKey).toUpperCase() === 'HIDE');
+      $('settingHideAnswerKey').checked = hidden;
+      $('hideKeyStatusText').textContent = hidden
         ? 'Active (ON) — Answer keys & explanations are HIDDEN from students.'
         : 'Inactive (OFF) — Answer keys & explanations are VISIBLE to students.';
-      const validPin = Number(sec.validPinCount) || 0;
-      const totalPin = Number(sec.totalStudentCount) || 0;
-      $('pinCoverageBadge').textContent = totalPin > 0
-        ? `${validPin} / ${totalPin} student(s) have valid birth-date PINs.`
-        : 'No student data found.';
+      const vp = Number(sec.validPinCount) || 0;
+      const tp = Number(sec.totalStudentCount) || 0;
+      $('pinCoverageBadge').textContent = tp > 0
+        ? `${vp} / ${tp} student(s) have valid birth-date PINs.`
+        : 'No student data.';
     }
-
     async function handleSaveSecurity() {
-      const requireStudentPin = $('settingStudentPin').value;
-      const requireTeacherPin = $('settingTeacherPin').value;
-      const hideAnswerKey = $('settingHideAnswerKey').checked ? 'HIDE' : 'SHOW';
-      showLoading('Saving security settings...');
+      const reqStudent = $('settingStudentPin').value;
+      const reqTeacher = $('settingTeacherPin').value;
+      const showKey = $('settingHideAnswerKey').checked ? 'HIDE' : 'SHOW';
+      showLoading('Saving...');
       try {
-        const res = await callApi(
-          'updateSecuritySettings',
-          dashState.token,
-          requireStudentPin,
-          requireTeacherPin,
-          hideAnswerKey
-        );
+        const res = await callApi('updateSecuritySettings', dashState.token, reqStudent, reqTeacher, showKey);
         if (res.settings) {
           dashState.security.requireStudentPin = res.settings.REQUIRE_STUDENT_PIN;
           dashState.security.requireTeacherPin = res.settings.REQUIRE_TEACHER_PIN;
@@ -2777,48 +1469,36 @@
           dashState.security.totalStudentCount = res.pinCoverage.total;
         }
         syncSecurityUI();
-        showToast('Security settings saved.');
-      } catch (err) {
-        showToast(err.message);
-      } finally {
-        hideLoading();
-      }
+        showToast('Settings saved.');
+      } catch (err) { showToast(err.message); }
+      finally { hideLoading(); }
     }
-
     async function handleRunValidation() {
-      showLoading('Auditing question bank...');
+      showLoading('Validating...');
       try {
         const res = await callApi('getBankValidation', dashState.token);
         const issues = res.issues || [];
         const container = $('validationResultList');
         if (issues.length === 0) {
-          container.innerHTML = '<div style="color:var(--success); font-weight:700;">✓ No issues found. Question bank is clean.</div>';
+          container.innerHTML = '<div style="color:var(--success); font-weight:700;">✓ No issues. Clean.</div>';
         } else {
-          container.innerHTML = `
-            <div style="color:var(--danger); font-weight:800; margin-bottom:6px;">${issues.length} issue(s) found:</div>
-            <ul style="padding-left:18px; font-size:11.5px; line-height:1.55;">
-              ${issues.map(msg => `<li>${escapeHtml(msg)}</li>`).join('')}
-            </ul>`;
+          container.innerHTML = `<div style="color:var(--danger); font-weight:800; margin-bottom:6px;">${issues.length} issue(s):</div>
+            <ul style="padding-left:18px; font-size:11.5px; line-height:1.55;">${issues.map(m => `<li>${escapeHtml(m)}</li>`).join('')}</ul>`;
         }
       } catch (err) {
         $('validationResultList').innerHTML = `<div class="alert-error">${escapeHtml(err.message)}</div>`;
-      } finally {
-        hideLoading();
-      }
+      } finally { hideLoading(); }
     }
 
     // =========================================================================
-    // TAB SWITCHING
+    // TABS
     // =========================================================================
     function switchTab(tabName) {
       dashState.activeTab = tabName;
-      document.querySelectorAll('.tab-btn').forEach(b => {
-        b.classList.toggle('active', b.dataset.tab === tabName);
-      });
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tabName));
       document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
       const target = $(`tab-${tabName}`);
       if (target) target.classList.remove('hidden');
-
       if (tabName === 'packages') renderPackagesTab();
       if (tabName === 'active') refreshActiveSessionsOnly();
       if (tabName === 'analysis') renderItemAnalysis();
@@ -2826,43 +1506,35 @@
     }
 
     // =========================================================================
-    // EVENT LISTENERS
+    // EVENTS
     // =========================================================================
     document.querySelectorAll('.tab-btn').forEach(btn => {
       btn.addEventListener('click', () => switchTab(btn.dataset.tab));
     });
-
     document.querySelectorAll('#resultsTable th.sortable-th').forEach(th => {
       th.addEventListener('click', () => {
         const field = th.dataset.sort;
-        if (dashState.sortField === field) {
-          dashState.sortDir = dashState.sortDir === 'asc' ? 'desc' : 'asc';
-        } else {
-          dashState.sortField = field;
-          dashState.sortDir = 'desc';
-        }
+        if (dashState.sortField === field) dashState.sortDir = dashState.sortDir === 'asc' ? 'desc' : 'asc';
+        else { dashState.sortField = field; dashState.sortDir = 'desc'; }
         applyFiltersAndRender();
       });
     });
-
     $('loginForm').addEventListener('submit', handleLoginSubmit);
     $('btnLogout').addEventListener('click', handleLogout);
-
     $('btnRefresh').addEventListener('click', loadAllDashboardData);
     $('btnToggleCharts').addEventListener('click', () => {
-      const isHidden = $('chartsRowSection').classList.toggle('hidden');
-      $('btnToggleCharts').textContent = isHidden ? 'Show Charts' : 'Hide Charts';
-      safeSetStorage('neng_eva_hide_charts', isHidden ? '1' : '0');
+      const hidden = $('chartsRowSection').classList.toggle('hidden');
+      $('btnToggleCharts').textContent = hidden ? 'Show Charts' : 'Hide Charts';
+      safeSetStorage('neng_eva_hide_charts', hidden ? '1' : '0');
     });
-
     $('btnExportCsv').addEventListener('click', exportResultsCsv);
     $('btnExportAnalysisCsv').addEventListener('click', exportAnalysisCsv);
-
     $('filterPaket').addEventListener('change', applyFiltersAndRender);
     $('filterKelas').addEventListener('change', applyFiltersAndRender);
     $('filterDays').addEventListener('change', loadAllDashboardData);
     $('filterStatus').addEventListener('change', applyFiltersAndRender);
     $('filterAttemptMode').addEventListener('change', applyFiltersAndRender);
+    $('filterDummyMode').addEventListener('change', applyFiltersAndRender);
     $('filterSortBy').addEventListener('change', () => {
       const val = $('filterSortBy').value || 'timestamp_desc';
       const parts = val.split('_');
@@ -2870,25 +1542,19 @@
       dashState.sortField = parts.join('_') || 'timestamp';
       applyFiltersAndRender();
     });
-
-    // Debounce search
     $('filterSearch').addEventListener('input', () => {
       clearTimeout(dashState.searchDebounce);
       dashState.searchDebounce = setTimeout(applyFiltersAndRender, 180);
     });
-
     $('missingPaketSelect').addEventListener('change', renderMissingStudents);
     $('btnCopyMissing').addEventListener('click', copyMissingToClipboard);
-
     $('activeSessionFilter').addEventListener('change', () => renderActiveSessions(dashState.activeSessions));
     $('btnRefreshActive').addEventListener('click', refreshActiveSessionsOnly);
     $('btnClearExpiredSessions').addEventListener('click', handleClearExpiredSessions);
-
     $('analysisAttemptBasis').addEventListener('change', () => {
       dashState.lastAnalysisKey = '';
       renderItemAnalysis();
     });
-
     $('btnCloseDetailModal').addEventListener('click', () => {
       dashState.detailRequestId++;
       $('detailModal').classList.add('hidden');
@@ -2897,10 +1563,8 @@
       pauseItemPreviewAudio();
       $('itemPreviewModal').classList.add('hidden');
     });
-
     $('btnSaveSecurity').addEventListener('click', handleSaveSecurity);
     $('btnRunValidation').addEventListener('click', handleRunValidation);
-
     $('btnReloadPackages').addEventListener('click', renderPackagesTab);
     $('btnTogglePreviewIssues').addEventListener('click', () => {
       dashState.previewFilterIssuesOnly = !dashState.previewFilterIssuesOnly;
@@ -2920,17 +1584,13 @@
       dashState.previewData = null;
       dashState.currentPreviewPaketId = '';
     });
-
-    // Gauge click delegation
     $('packageGaugesContainer').addEventListener('click', (e) => {
       const item = e.target.closest('.gauge-item');
       if (item && item.dataset.paketId) togglePackageFilterFromGauge(item.dataset.paketId);
     });
-
-    // Hide answer key toggle: update status text immediately
     $('settingHideAnswerKey').addEventListener('change', () => {
-      const isHidden = $('settingHideAnswerKey').checked;
-      $('hideKeyStatusText').textContent = isHidden
+      const hidden = $('settingHideAnswerKey').checked;
+      $('hideKeyStatusText').textContent = hidden
         ? 'Active (ON) — Answer keys & explanations are HIDDEN from students.'
         : 'Inactive (OFF) — Answer keys & explanations are VISIBLE to students.';
     });
